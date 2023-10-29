@@ -11,7 +11,7 @@ namespace TurtleAPI.AlphaVantage
 {
     public class AlphaVantageAPI : IMarketAPI
     {
-        public IEnumerable<MarketDetail> GetMarketDetails(string ticker, DateTime startDate, DateTime endDate)
+        public IEnumerable<MarketDetail>? GetMarketDetails(string ticker, DateTime startDate, DateTime endDate)
         {
             throw new NotImplementedException();
         }

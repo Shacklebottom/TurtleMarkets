@@ -10,6 +10,6 @@ namespace TurtleAPI.Interfaces
     public interface IMarketAPI
     {
         //IEnumerable<MarketDetail> ParseJson(string json);
-        IEnumerable<MarketDetail> GetMarketDetails(string ticker, DateTime startDate, DateTime endDate);
+        IEnumerable<MarketDetail>? GetMarketDetails(string ticker, DateTime startDate, DateTime endDate);
     }
 }

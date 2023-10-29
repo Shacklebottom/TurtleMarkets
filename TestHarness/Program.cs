@@ -4,16 +4,31 @@ using TurtleAPI.PolygonIO;
 using TurtleAPI.AlphaVantage;
 using TurtleAPI.Interfaces;
 
-IMarketAPI poly = new PolygonAPI();
-IMarketAPI alpha = new AlphaVantageAPI();
-var marketDetails = new List<IEnumerable<MarketDetail>>();
+var apis = new List<IMarketAPI>
+{
+    new PolygonAPI(),
+    //new AlphaVantageAPI()
+};
 
 var ticker = "MSFT";
 var startDate = DateTime.Now;
 var endDate = DateTime.Now.AddDays(-7);
+var marketDetails = new List<IEnumerable<MarketDetail>?>();
 
-marketDetails.Add(poly.GetMarketDetails(ticker, startDate, endDate));
-marketDetails.Add(alpha.GetMarketDetails(ticker, startDate, endDate));
+apis.ForEach(api => marketDetails.Add(api.GetMarketDetails(ticker, startDate, endDate)));
+
+foreach(var detailSet in marketDetails)
+{
+    if (detailSet == null) continue;
+
+    foreach(var detail in detailSet)
+    {
+        Console.WriteLine($"Ticker: {ticker}\tDate: {detail.Date}\tOpen: {detail.Open}\tClose: {detail.Close}");
+    }
+}
+
+Console.WriteLine("\n\n-=> END OF LINE <=-");
+
 /****************************************/
 //var json = File.ReadAllText("C:\\Code\\c#\\TurtleMarkets\\testdata.json");
 //var bob = SourceHeader.ParseJson(json);
