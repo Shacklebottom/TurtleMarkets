@@ -9,7 +9,7 @@ namespace MarketDomain
 {
     public class MarketDetail
     {
-        public DateTime Date { get; set; }
+        public DateTime? Date { get; set; }
 
         public float? Open { get; set; }
 

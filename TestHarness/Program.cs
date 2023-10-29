@@ -3,6 +3,7 @@ using TurtleAPI;
 using TurtleAPI.PolygonIO;
 using TurtleAPI.AlphaVantage;
 using TurtleAPI.Interfaces;
+using TurtleSQL;
 
 var apis = new List<IMarketAPI>
 {
@@ -13,6 +14,7 @@ var apis = new List<IMarketAPI>
 var ticker = "MSFT";
 var startDate = DateTime.Now;
 var endDate = DateTime.Now.AddDays(-7);
+var sqlRepo = new Repository();
 var marketDetails = new List<IEnumerable<MarketDetail>?>();
 
 apis.ForEach(api => marketDetails.Add(api.GetMarketDetails(ticker, startDate, endDate)));
@@ -20,6 +22,10 @@ apis.ForEach(api => marketDetails.Add(api.GetMarketDetails(ticker, startDate, en
 foreach(var detailSet in marketDetails)
 {
     if (detailSet == null) continue;
+
+    var dict = new Dictionary<string, IEnumerable<MarketDetail>>();
+    dict.Add(ticker, detailSet);
+    sqlRepo.SaveAll(dict);
 
     foreach(var detail in detailSet)
     {
