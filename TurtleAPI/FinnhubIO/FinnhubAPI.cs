@@ -25,7 +25,10 @@ namespace TurtleAPI.FinnhubIO
             client.DefaultRequestHeaders.Add("X-Finnhub-Secret", AuthData.SECRET_FINNHUB);
             var response = client.GetAsync(uri).Result;
             var responseString = response.Content.ReadAsStringAsync().Result;
-            var baseData = JsonConvert.DeserializeObject<FinnhubMarketDetail>(responseString);
+            
+            var baseData = JsonConvert.DeserializeObject<FinnhubMarketDetail>(responseString) ?? 
+                throw new Exception("could not parse Finnhub response");
+
             var marketDetail = new PreviousClose
             {
                 Ticker = ticker,
