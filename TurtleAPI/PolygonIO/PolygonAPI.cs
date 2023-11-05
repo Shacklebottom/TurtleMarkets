@@ -12,7 +12,7 @@ namespace TurtleAPI.PolygonIO
     public class PolygonAPI
     {
 
-        public MarketDetail? GetPreviousClose(string ticker)
+        public PreviousClose? GetPreviousClose(string ticker)
         {
             var uri = new Uri($"https://api.polygon.io/v2/aggs/ticker/{ticker}/prev?adjusted=true&apiKey={AuthData.API_KEY_POLYGON}");
 
@@ -25,7 +25,7 @@ namespace TurtleAPI.PolygonIO
             var responseString = response.Content.ReadAsStringAsync().Result;
 
             var baseData = JsonConvert.DeserializeObject<PolygonMarketResponse>(responseString);
-            var marketDetails = baseData?.results?.Select(r => new MarketDetail
+            var marketDetails = baseData?.results?.Select(r => new PreviousClose
             {
                 Close = r.c,
                 Date = ParseUnixTimestamp(r.t),

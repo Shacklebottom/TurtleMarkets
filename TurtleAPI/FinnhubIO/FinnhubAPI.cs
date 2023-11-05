@@ -11,7 +11,7 @@ namespace TurtleAPI.FinnhubIO
 {
     public class FinnhubAPI
     {
-        public IEnumerable<MarketDetail>? GetMarketDetails(string ticker, DateTime startDate, DateTime endDate)
+        public IEnumerable<PreviousClose>? GetMarketDetails(string ticker, DateTime startDate, DateTime endDate)
         {
             var uri = new Uri($"https://finnhub.io/api/v1/quote?symbol={ticker}");
 

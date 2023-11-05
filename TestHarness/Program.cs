@@ -11,5 +11,5 @@ using TurtleSQL;
 //Console.WriteLine(marketDetail);
 
 var AlphaVantage = new AlphaVantageAPI();
-MarketDetail? marketDetail = AlphaVantage.GetPreviousClose("MSFT");
+PreviousClose? marketDetail = AlphaVantage.GetPreviousClose("MSFT");
 Console.WriteLine(marketDetail);

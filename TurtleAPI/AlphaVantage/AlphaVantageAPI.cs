@@ -11,7 +11,7 @@ namespace TurtleAPI.AlphaVantage
 {
     public class AlphaVantageAPI
     {
-        public MarketDetail? GetPreviousClose(string ticker)
+        public PreviousClose? GetPreviousClose(string ticker)
         {
             var uri = new Uri($"https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol={ticker}&apikey={AuthData.API_KEY_ALPHAVANTAGE}");
             var client = new HttpClient
@@ -23,7 +23,7 @@ namespace TurtleAPI.AlphaVantage
             var responseString = response.Content.ReadAsStringAsync().Result;
             var baseData = JsonConvert.DeserializeObject<AlphaVMarketResponse>(responseString);
             var results = baseData?.results;
-            var marketDetails = new MarketDetail
+            var marketDetails = new PreviousClose
             {
                 Ticker = ticker,
                 Date = results?.latest,
