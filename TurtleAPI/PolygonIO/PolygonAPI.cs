@@ -27,6 +27,7 @@ namespace TurtleAPI.PolygonIO
             var baseData = JsonConvert.DeserializeObject<PolygonMarketResponse>(responseString);
             var marketDetails = baseData?.results?.Select(r => new PreviousClose
             {
+                Ticker = ticker,
                 Close = r.c,
                 Date = ParseUnixTimestamp(r.t),
                 High = r.h,
