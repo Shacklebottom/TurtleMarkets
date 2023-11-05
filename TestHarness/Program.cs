@@ -17,12 +17,16 @@ IRepository<PreviousClose> pcRepo = new PreviousCloseRepository();
 //PreviousClose? marketDetail = AlphaVantage.GetPreviousClose("MSFT");
 //Console.WriteLine(marketDetail);
 
-var Finnhub = new FinnhubAPI();
-PreviousClose previousClose = Finnhub.GetPreviousClose("MSFT") ?? 
-    throw new Exception("previousClose is NULL");
-Console.WriteLine(previousClose);
+//var Finnhub = new FinnhubAPI();
+//PreviousClose previousClose = Finnhub.GetPreviousClose("MSFT") ?? 
+//    throw new Exception("previousClose is NULL");
+//Console.WriteLine(previousClose);
 
-var recordId = pcRepo.Save(previousClose);
-Console.WriteLine($"Saved Finnhub result as record {recordId}");
+//var recordId = pcRepo.Save(previousClose);
+//Console.WriteLine($"Saved Finnhub result as record {recordId}");
 
-var record = pcRepo.GetById(recordId);
+var pc = pcRepo.GetById(5) ?? throw new Exception("Couldn't find Id 5");
+pc.Ticker = "XXXX";
+pcRepo.Save(pc);
+Console.WriteLine("Updated.");
+

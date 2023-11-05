@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TurtleSQL.Extensions;
 
 namespace TurtleSQL
 {
@@ -99,12 +100,13 @@ namespace TurtleSQL
             fields.Add("Id");
 
             var updateClause = $"UPDATE {TableName} SET";
-            var values = string.Join(',', fields.Where(fn => fn != "Id").Select(fn => $"{fn}=@{fn}"));
+            var values = string.Join(',', fields.Where(fn => fn != "Id").Select(fn => $"[{fn}]=@{fn}"));
             var whereClause = "WHERE Id = @Id";
             cmd.CommandText = $"{updateClause} {values} {whereClause}";
 
             var parms = this.SqlParameters(entity).Where(p => p.ParameterName != "@Id").ToArray();
             cmd.Parameters.AddRange(parms);
+            cmd.Parameters.AddWithValue("@Id", entity.Id.DBValue());
 
             _sqlConnection.Open();
             cmd.ExecuteNonQuery();
