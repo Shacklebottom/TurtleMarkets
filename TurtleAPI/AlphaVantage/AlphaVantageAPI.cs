@@ -5,37 +5,25 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TurtleAPI.Interfaces;
 
 namespace TurtleAPI.AlphaVantage
 {
-    public class AlphaVantageAPI : IMarketAPI
+    public class AlphaVantageAPI
     {
-        public IEnumerable<MarketDetail>? GetMarketDetails(string ticker, DateTime startDate, DateTime endDate)
+        public MarketDetail? GetPreviousClose(string ticker)
         {
-            throw new NotImplementedException();
+            var uri = new Uri($"https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=IBM&apikey={AuthData.API_KEY_ALPHAVANTAGE}");
+            var client = new HttpClient
+            {
+                BaseAddress = uri
+            };
+
+            var response = client.GetAsync(uri).Result;
+            var responseString = response.Content.ReadAsStringAsync().Result;
+            Console.WriteLine(responseString);
+            return null;
         }
 
-        public IEnumerable<MarketDetail> ParseJson(string json)
-        {
-            return Parse(new Dictionary<DateTime, TimeDetail>());
-        }
-
-        private IEnumerable<MarketDetail> Parse(Dictionary<DateTime, TimeDetail> data)
-        {
-            return new List<MarketDetail>();
-        }
-        //private SourceHeader ParseSourceHeader(string json)
-        //{
-        //    var jsonobject = JsonConvert.DeserializeObject<AlphaVantageFormat>(json) ?? throw new Exception("oh no!");
-        //    var sourceHeader = new SourceHeader
-        //    {
-        //        Source = AlphaVantageFormat.Source,
-        //        MetaData = jsonobject.MetaData,
-        //        MarketDetails = AlphaVantageResult.Parse(jsonobject.TimeSeries)
-        //    };
-        //    return sourceHeader;
-        //}
 
     }
 }
