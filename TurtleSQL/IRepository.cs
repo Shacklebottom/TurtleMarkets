@@ -9,8 +9,8 @@ namespace TurtleSQL
 {
     public interface IRepository<T> where T : IEntity
     {
-        T? Get(int id);
+        T? GetById(int id);
         IEnumerable<T>? GetAll();
-
+        int Save(T entity);
     }
 }

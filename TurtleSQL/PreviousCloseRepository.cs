@@ -12,9 +12,26 @@ namespace TurtleSQL
     public class PreviousCloseRepository : Repository<PreviousClose>, IRepository<PreviousClose>
     {
         protected override string TableName => "PreviousClose";
-        protected override IEnumerable<PreviousClose> AllFromReader(SqlDataReader rdr) 
+        protected override IEnumerable<SqlParameter> SqlParameters(PreviousClose entity)
         {
-            while(rdr.Read())
+            var parms = new List<SqlParameter>
+            {
+                new SqlParameter("@Close", entity.Close.DBValue()),
+                new SqlParameter("@Date", entity.Date.DBValue()),
+                new SqlParameter("@High", entity.High.DBValue()),
+                new SqlParameter("@Low", entity.Low.DBValue()),
+                new SqlParameter("@Open", entity.Open.DBValue()),
+                new SqlParameter("@Ticker", entity.Ticker.DBValue()),
+                new SqlParameter("@Volume", entity.Volume.DBValue())
+            };
+
+            return parms;
+        }
+        protected override List<string> FieldList => new() { "Close", "Date", "High", "Low", "Open", "Ticker", "Volume" };
+
+        protected override IEnumerable<PreviousClose> AllFromReader(SqlDataReader rdr)
+        {
+            while (rdr.Read())
             {
                 yield return new PreviousClose
                 {

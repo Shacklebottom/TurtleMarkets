@@ -7,7 +7,7 @@ using TurtleSQL;
 
 IRepository<PreviousClose> pcRepo = new PreviousCloseRepository();
 
-Console.WriteLine(pcRepo.Get(1)?.ToString());
+//Console.WriteLine(pcRepo.GetById(1)?.ToString());
 
 //var Polygon = new PolygonAPI();
 //MarketDetail? marketDetail = Polygon.GetPreviousClose("MSFT");
@@ -18,5 +18,11 @@ Console.WriteLine(pcRepo.Get(1)?.ToString());
 //Console.WriteLine(marketDetail);
 
 var Finnhub = new FinnhubAPI();
-PreviousClose? marketDetail = Finnhub.GetPreviousClose("MSFT");
-Console.WriteLine(marketDetail);
+PreviousClose previousClose = Finnhub.GetPreviousClose("MSFT") ?? 
+    throw new Exception("previousClose is NULL");
+Console.WriteLine(previousClose);
+
+var recordId = pcRepo.Save(previousClose);
+Console.WriteLine($"Saved Finnhub result as record {recordId}");
+
+var record = pcRepo.GetById(recordId);
