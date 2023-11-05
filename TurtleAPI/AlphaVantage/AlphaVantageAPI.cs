@@ -35,7 +35,5 @@ namespace TurtleAPI.AlphaVantage
             };
             return marketDetails;
         }
-
-
     }
 }
