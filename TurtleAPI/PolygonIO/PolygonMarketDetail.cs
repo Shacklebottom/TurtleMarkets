@@ -13,13 +13,13 @@ namespace TurtleAPI.PolygonIO
     internal class PolygonMarketDetail
     {
         public string? T { get; set; }
-        public float o { get; set; }
-        public float c { get; set; }
-        public float h { get; set; }
-        public float l { get; set; }
-        public float n { get; set; }
-        public float t { get; set; } //unix timestamp
-        public float v { get; set; }
+        public decimal o { get; set; }
+        public decimal c { get; set; }
+        public decimal h { get; set; }
+        public decimal l { get; set; }
+        public decimal n { get; set; }
+        public decimal t { get; set; } //unix timestamp
+        public long v { get; set; }
 
     }
 }
