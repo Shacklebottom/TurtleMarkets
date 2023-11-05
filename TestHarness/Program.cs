@@ -3,7 +3,7 @@ using TurtleAPI;
 using TurtleAPI.PolygonIO;
 using TurtleAPI.AlphaVantage;
 using TurtleAPI.FinnhubIO;
-using Microsoft.Identity.Client;
+using TurtleSQL;
 
 
 //var Polygon = new PolygonAPI();
