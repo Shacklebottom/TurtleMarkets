@@ -11,6 +11,6 @@ namespace MarketDomain
     {
         public string? Source { get; set; }
         public MetaData? MetaData { get; set; }
-        public IEnumerable<MarketDetail>? MarketDetails { get; set; }
+        public IEnumerable<PreviousClose>? MarketDetails { get; set; }
     }
 }

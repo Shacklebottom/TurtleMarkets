@@ -10,10 +10,11 @@ using TurtleSQL;
 //MarketDetail? marketDetail = Polygon.GetPreviousClose("MSFT");
 //Console.WriteLine(marketDetail);
 
+
 //var AlphaVantage = new AlphaVantageAPI();
 //MarketDetail? marketDetail = AlphaVantage.GetPreviousClose("MSFT");
 //Console.WriteLine(marketDetail);
 
 var Finnhub = new FinnhubAPI();
-MarketDetail? marketDetail = Finnhub.GetPreviousClose("MSFT");
+PreviousClose? marketDetail = Finnhub.GetPreviousClose("MSFT");
 Console.WriteLine(marketDetail);

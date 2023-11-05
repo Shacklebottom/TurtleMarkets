@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MarketDomain
 {
-    public class MarketDetail
+    public class PreviousClose : IEntity
     {
         public override string ToString()
         {

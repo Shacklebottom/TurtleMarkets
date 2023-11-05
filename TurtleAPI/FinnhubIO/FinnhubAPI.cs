@@ -12,21 +12,21 @@ namespace TurtleAPI.FinnhubIO
 {
     public class FinnhubAPI
     {
-        public MarketDetail? GetPreviousClose(string ticker)
+        public PreviousClose? GetPreviousClose(string ticker)
         {
             var uri = new Uri($"https://finnhub.io/api/v1/quote?symbol={ticker}");
 
             var client = new HttpClient()
             {
                 BaseAddress = uri,
-                
+
             };
             client.DefaultRequestHeaders.Add("X-Finnhub-Token", AuthData.API_KEY_FINNHUB);
             client.DefaultRequestHeaders.Add("X-Finnhub-Secret", AuthData.SECRET_FINNHUB);
             var response = client.GetAsync(uri).Result;
             var responseString = response.Content.ReadAsStringAsync().Result;
             var baseData = JsonConvert.DeserializeObject<FinnhubMarketDetail>(responseString);
-            var marketDetail = new MarketDetail
+            var marketDetail = new PreviousClose
             {
                 Ticker = ticker,
                 Date = ParseUnixTimestamp(baseData.t),
