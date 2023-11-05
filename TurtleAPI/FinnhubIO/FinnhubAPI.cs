@@ -1,4 +1,5 @@
 ﻿using MarketDomain;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -11,22 +12,38 @@ namespace TurtleAPI.FinnhubIO
 {
     public class FinnhubAPI
     {
-        public IEnumerable<PreviousClose>? GetMarketDetails(string ticker, DateTime startDate, DateTime endDate)
+        public PreviousClose? GetPreviousClose(string ticker)
         {
             var uri = new Uri($"https://finnhub.io/api/v1/quote?symbol={ticker}");
 
             var client = new HttpClient()
             {
                 BaseAddress = uri,
-                
+
             };
             client.DefaultRequestHeaders.Add("X-Finnhub-Token", AuthData.API_KEY_FINNHUB);
             client.DefaultRequestHeaders.Add("X-Finnhub-Secret", AuthData.SECRET_FINNHUB);
             var response = client.GetAsync(uri).Result;
             var responseString = response.Content.ReadAsStringAsync().Result;
-            Console.WriteLine(responseString);
-            return null;
+            var baseData = JsonConvert.DeserializeObject<FinnhubMarketDetail>(responseString);
+            var marketDetail = new PreviousClose
+            {
+                Ticker = ticker,
+                Date = ParseUnixTimestamp(baseData.t),
+                Open = baseData?.o,
+                Close = baseData?.c,
+                High = baseData?.h,
+                Low = baseData?.l,
+                Volume = null,
+            };
+            return marketDetail;
         }
-
+        private static DateTime ParseUnixTimestamp(decimal t)
+        {
+            //if (t == null) return DateTime.Now;
+            var epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+            var dateTime = epoch.AddMilliseconds((float)t);
+            return dateTime;
+        }
     }
 }

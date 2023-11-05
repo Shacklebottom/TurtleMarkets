@@ -16,3 +16,7 @@ Console.WriteLine(pcRepo.Get(1)?.ToString());
 //var AlphaVantage = new AlphaVantageAPI();
 //PreviousClose? marketDetail = AlphaVantage.GetPreviousClose("MSFT");
 //Console.WriteLine(marketDetail);
+
+var Finnhub = new FinnhubAPI();
+PreviousClose? marketDetail = Finnhub.GetPreviousClose("MSFT");
+Console.WriteLine(marketDetail);
