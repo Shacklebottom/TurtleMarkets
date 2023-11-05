@@ -39,10 +39,10 @@ namespace TurtleAPI.PolygonIO
             return marketDetails?.First();
 
         }
-        private static DateTime ParseUnixTimestamp(float t)
+        private static DateTime ParseUnixTimestamp(decimal t)
         {
             var epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
-            var dateTime = epoch.AddMilliseconds(t);
+            var dateTime = epoch.AddMilliseconds((float)t);
 
             return dateTime;
         }

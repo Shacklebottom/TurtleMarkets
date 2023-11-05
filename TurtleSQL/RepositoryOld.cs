@@ -88,12 +88,12 @@ VALUES (
             {
                 var detail = new PreviousClose
                 {
-                    Close = reader.Parse<float>("Close"),
+                    Close = reader.Parse<decimal>("Close"),
                     Date = reader.Parse<DateTime>("Date"),
-                    High = reader.Parse<float>("High"),
-                    Low = reader.Parse<float>("Low"),
-                    Open = reader.Parse<float>("Open"),
-                    Volume = reader.Parse<float>("Volume"),
+                    High = reader.Parse<decimal>("High"),
+                    Low = reader.Parse<decimal>("Low"),
+                    Open = reader.Parse<decimal>("Open"),
+                    Volume = reader.Parse<long>("Volume"),
                 };
 
                 yield return detail;

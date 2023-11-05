@@ -10,13 +10,13 @@ namespace TurtleAPI.FinnhubIO
     [SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "<Pending>")]
     public class FinnhubMarketDetail
     {
-        public float? c { get; set; }
-        public float? d { get; set; }
-        public float? dp { get; set; }
-        public float? h { get; set; }
-        public float? l { get; set; }
-        public float? o { get; set; }
-        public float? pc { get; set; }
-        public float t { get; set; }
+        public decimal c { get; set; }
+        public decimal d { get; set; }
+        public decimal dp { get; set; }
+        public decimal h { get; set; }
+        public decimal l { get; set; }
+        public decimal o { get; set; }
+        public decimal pc { get; set; }
+        public decimal t { get; set; }
     }
 }

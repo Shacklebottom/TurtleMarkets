@@ -7,7 +7,10 @@ using System.Threading.Tasks;
 
 namespace TurtleSQL
 {
-    public class QuoteRepository : Repository<PreviousClose>
+    public interface IRepository<T> where T : IEntity
     {
+        T? Get(int id);
+        IEnumerable<T>? GetAll();
+
     }
 }
