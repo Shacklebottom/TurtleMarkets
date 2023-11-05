@@ -14,7 +14,7 @@ namespace MarketDomain
             return $"Ticker: {Ticker}\tDate: {Date}\tOpen: {Open}\tClose: {Close}";
         }
         public string? Ticker { get; set; }
-        public DateTime Date { get; set; }
+        public DateTime? Date { get; set; }
 
         public float? Open { get; set; }
 

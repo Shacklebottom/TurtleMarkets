@@ -11,4 +11,5 @@ using Microsoft.Identity.Client;
 //Console.WriteLine(marketDetail);
 
 var AlphaVantage = new AlphaVantageAPI();
-AlphaVantage.GetPreviousClose("MSFT");
+MarketDetail? marketDetail = AlphaVantage.GetPreviousClose("MSFT");
+Console.WriteLine(marketDetail);
