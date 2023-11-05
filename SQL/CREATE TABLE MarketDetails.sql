@@ -12,3 +12,5 @@ create table MarketDetails(
     Volume float null,
     VolumeWeighted float null
 )
+
+declare @bob int
