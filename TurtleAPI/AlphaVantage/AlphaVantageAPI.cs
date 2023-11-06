@@ -18,10 +18,10 @@ namespace TurtleAPI.AlphaVantage
             {
                 BaseAddress = uri
             };
-
             var response = client.GetAsync(uri).Result;
             var responseString = response.Content.ReadAsStringAsync().Result;
-            var baseData = JsonConvert.DeserializeObject<AlphaVPrevCloseResponse>(responseString);
+            var baseData = JsonConvert.DeserializeObject<AlphaVPrevCloseResponse>(responseString) ??
+                throw new Exception("could not parse Alpha Vantage response");
             var results = baseData?.results;
             var marketDetails = new PreviousClose
             {
@@ -42,10 +42,10 @@ namespace TurtleAPI.AlphaVantage
             {
                 BaseAddress = uri
             };
-
             var response = client.GetAsync(uri).Result;
             var responseString = response.Content.ReadAsStringAsync().Result;
-            var baseData = JsonConvert.DeserializeObject<AlphaVMarketStatusResponse>(responseString);
+            var baseData = JsonConvert.DeserializeObject<AlphaVMarketStatusResponse>(responseString) ??
+                throw new Exception("could not parse Alpha Vantage response");
             var results = baseData?.results?.Select(r => new MarketStatus
             {
                 MarketType = r.market_type,
@@ -56,7 +56,6 @@ namespace TurtleAPI.AlphaVantage
                 Status = r.current_status,
                 Notes = r.notes
             });
-
             return results.FirstOrDefault();
         }
     }

@@ -16,16 +16,14 @@ namespace TurtleAPI.PolygonIO
         public PreviousClose? GetPreviousClose(string ticker)
         {
             var uri = new Uri($"https://api.polygon.io/v2/aggs/ticker/{ticker}/prev?adjusted=true&apiKey={AuthData.API_KEY_POLYGON}");
-
             var client = new HttpClient
             {
                 BaseAddress = uri
             };
-
             var response = client.GetAsync(uri).Result;
             var responseString = response.Content.ReadAsStringAsync().Result;
-
-            var baseData = JsonConvert.DeserializeObject<PolygonPrevCloseResponse>(responseString);
+            var baseData = JsonConvert.DeserializeObject<PolygonPrevCloseResponse>(responseString) ??
+                throw new Exception("could not parse Polygon response");
             var marketDetails = baseData?.results?.Select(r => new PreviousClose
             {
                 Ticker = ticker,
@@ -36,9 +34,7 @@ namespace TurtleAPI.PolygonIO
                 Open = r.o,
                 Volume = r.v,
             });
-
             return marketDetails?.First();
-
         }
         public TickerDetail? GetTickerDetails(string ticker)
         {
@@ -47,12 +43,10 @@ namespace TurtleAPI.PolygonIO
             {
                 BaseAddress = uri
             };
-
             var response = client.GetAsync(uri).Result;
             var responseString = response.Content.ReadAsStringAsync().Result;
-
-            var baseData = JsonConvert.DeserializeObject<PolygonTickerDetailResponse>(responseString);
-            
+            var baseData = JsonConvert.DeserializeObject<PolygonTickerDetailResponse>(responseString) ??
+                throw new Exception("could not parse Polygon response");
             var tickerDetail = new TickerDetail
             {
                 Ticker = ticker,
@@ -61,7 +55,6 @@ namespace TurtleAPI.PolygonIO
                 Address = baseData?.results?.address,
                 TotalEmployees = baseData?.results?.total_employees,
                 ListDate = baseData?.results?.list_date
-
             };
                return tickerDetail;
         }
@@ -69,7 +62,6 @@ namespace TurtleAPI.PolygonIO
         {
             var epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
             var dateTime = epoch.AddMilliseconds((float)t);
-
             return dateTime;
         }
     }
