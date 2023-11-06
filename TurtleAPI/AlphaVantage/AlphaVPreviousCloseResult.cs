@@ -5,7 +5,7 @@ using System.Diagnostics.CodeAnalysis;
 namespace TurtleAPI.AlphaVantage
 {
     [SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "<Pending>")]
-    public class AlphaVPreviousClose
+    public class AlphaVPreviousCloseResult
     {
         [JsonProperty("02. open")]
         public decimal open { get; set; }

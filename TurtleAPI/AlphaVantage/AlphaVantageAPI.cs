@@ -35,5 +35,29 @@ namespace TurtleAPI.AlphaVantage
             };
             return marketDetails;
         }
+        public MarketStatus? GetMarketStatus()
+        {
+            var uri = new Uri($"https://www.alphavantage.co/query?function=MARKET_STATUS&apikey={AuthData.API_KEY_ALPHAVANTAGE}");
+            var client = new HttpClient
+            {
+                BaseAddress = uri
+            };
+
+            var response = client.GetAsync(uri).Result;
+            var responseString = response.Content.ReadAsStringAsync().Result;
+            var baseData = JsonConvert.DeserializeObject<AlphaVMarketStatusResponse>(responseString);
+            var results = baseData?.results?.Select(r => new MarketStatus
+            {
+                MarketType = r.market_type,
+                Region = r.region,
+                Exchange = r.primary_exchanges,
+                LocalOpen = r.local_open,
+                LocalClose = r.local_close,
+                Status = r.current_status,
+                Notes = r.notes
+            });
+
+            return results.FirstOrDefault();
+        }
     }
 }

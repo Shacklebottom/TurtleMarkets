@@ -30,9 +30,11 @@ IRepository<PreviousClose> pcRepo = new PreviousCloseRepository();
 //pcRepo.Save(pc);
 //Console.WriteLine("Updated.");
 
-var Polygon = new PolygonAPI();
-TickerDetail? tickerDetail = Polygon.GetTickerDetails("MSFT");
-Console.WriteLine(tickerDetail);
+//var Polygon = new PolygonAPI();
+//TickerDetail? tickerDetail = Polygon.GetTickerDetails("MSFT");
+//Console.WriteLine(tickerDetail);
 
-
+var AlphaV = new AlphaVantageAPI();
+MarketStatus? marketStatus = AlphaV.GetMarketStatus();
+Console.WriteLine(marketStatus);
 

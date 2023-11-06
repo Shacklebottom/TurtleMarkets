@@ -12,6 +12,6 @@ namespace TurtleAPI.AlphaVantage
     public class AlphaVPrevCloseResponse
     {
         [JsonProperty("Global Quote")]
-        public AlphaVPreviousClose? results { get; set; }
+        public AlphaVPreviousCloseResult? results { get; set; }
     }
 }
