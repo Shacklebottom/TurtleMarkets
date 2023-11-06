@@ -21,7 +21,7 @@ namespace TurtleAPI.AlphaVantage
 
             var response = client.GetAsync(uri).Result;
             var responseString = response.Content.ReadAsStringAsync().Result;
-            var baseData = JsonConvert.DeserializeObject<AlphaVMarketResponse>(responseString);
+            var baseData = JsonConvert.DeserializeObject<AlphaVPrevCloseResponse>(responseString);
             var results = baseData?.results;
             var marketDetails = new PreviousClose
             {

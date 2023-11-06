@@ -26,7 +26,7 @@ namespace TurtleAPI.FinnhubIO
             var response = client.GetAsync(uri).Result;
             var responseString = response.Content.ReadAsStringAsync().Result;
             
-            var baseData = JsonConvert.DeserializeObject<FinnhubMarketDetail>(responseString) ?? 
+            var baseData = JsonConvert.DeserializeObject<FinnhubPrevCloseResponse>(responseString) ?? 
                 throw new Exception("could not parse Finnhub response");
 
             var marketDetail = new PreviousClose
@@ -43,7 +43,6 @@ namespace TurtleAPI.FinnhubIO
         }
         private static DateTime ParseUnixTimestamp(decimal t)
         {
-            //if (t == null) return DateTime.Now;
             var epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
             var dateTime = epoch.AddMilliseconds((float)t);
             return dateTime;

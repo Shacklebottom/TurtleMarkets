@@ -6,11 +6,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TurtleAPI.FinnhubIO
+namespace TurtleAPI.AlphaVantage
 {
     [SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "<Pending>")]
-    public class FinnhubMarketResponse
+    public class AlphaVPrevCloseResponse
     {
-        public FinnhubMarketDetail? results { get; set; }
+        [JsonProperty("Global Quote")]
+        public AlphaVPreviousClose? results { get; set; }
     }
 }

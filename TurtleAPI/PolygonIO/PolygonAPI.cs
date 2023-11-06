@@ -24,7 +24,7 @@ namespace TurtleAPI.PolygonIO
             var response = client.GetAsync(uri).Result;
             var responseString = response.Content.ReadAsStringAsync().Result;
 
-            var baseData = JsonConvert.DeserializeObject<PolygonMarketResponse>(responseString);
+            var baseData = JsonConvert.DeserializeObject<PolygonPrevCloseResponse>(responseString);
             var marketDetails = baseData?.results?.Select(r => new PreviousClose
             {
                 Ticker = ticker,

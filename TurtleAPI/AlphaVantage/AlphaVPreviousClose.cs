@@ -5,33 +5,15 @@ using System.Diagnostics.CodeAnalysis;
 namespace TurtleAPI.AlphaVantage
 {
     [SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "<Pending>")]
-    public class AlphaVMarketDetail
+    public class AlphaVPreviousClose
     {
-        /*
-         * {
-    "Global Quote": {
-        "01. symbol": "MSFT",
-        "02. open": "349.6300",
-        "03. high": "354.3900",
-        "04. low": "347.3300",
-        "05. price": "352.8000",
-        "06. volume": "23637673",
-        "07. latest trading day": "2023-11-03",
-        "08. previous close": "348.3200",
-        "09. change": "4.4800",
-        "10. change percent": "1.2862%"
-    }
-}
-         */
-        [JsonProperty("01. symbol")]
-        public string? symbol { get; set; }
         [JsonProperty("02. open")]
         public decimal open { get; set; }
         [JsonProperty("03. high")]
         public decimal high { get; set; }
         [JsonProperty("04. low")]
         public decimal low { get; set; }
-        [JsonProperty("05. price")]
+        [JsonProperty("05. price")] //we have this set as "previous close" when there is a "previous close," below.
         public decimal price { get; set; }
         [JsonProperty("06. volume")]
         public long volume { get; set; }
