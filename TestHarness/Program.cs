@@ -43,4 +43,5 @@ IRepository<PreviousClose> pcRepo = new PreviousCloseRepository();
 //Console.WriteLine(recommendedTrend);
 
 var AlphaV = new AlphaVantageAPI();
-AlphaV.GetPolarizedMarkets();
+Prominence? Prominence = AlphaV.GetPolarizedMarkets().First();
+Console.WriteLine(Prominence.ToString());

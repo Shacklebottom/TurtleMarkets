@@ -8,6 +8,10 @@ namespace MarketDomain
 {
     public class Prominence : IEntity
     {
+        public override string ToString()
+        {
+            return $"Ticker: {Ticker}\tPrice {Price}\tChange Amount {ChangeAmount}\tPrestige {Prestige}";
+        }
         public string? Ticker { get; set; }
         public decimal? Price { get; set; }
         public decimal? ChangeAmount { get; set; }
