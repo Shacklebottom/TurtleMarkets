@@ -38,6 +38,9 @@ IRepository<PreviousClose> pcRepo = new PreviousCloseRepository();
 //MarketStatus? marketStatus = AlphaV.GetMarketStatus();
 //Console.WriteLine(marketStatus);
 
-var Finnhub = new FinnhubAPI();
-RecommendedTrend? recommendedTrend = Finnhub.GetRecommendedTrend("MSFT");
-Console.WriteLine(recommendedTrend);
+//var Finnhub = new FinnhubAPI();
+//RecommendedTrend? recommendedTrend = Finnhub.GetRecommendedTrend("MSFT");
+//Console.WriteLine(recommendedTrend);
+
+var AlphaV = new AlphaVantageAPI();
+AlphaV.GetPolarizedMarkets();
