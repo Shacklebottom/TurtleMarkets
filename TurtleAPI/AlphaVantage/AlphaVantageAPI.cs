@@ -1,8 +1,13 @@
-﻿using MarketDomain;
+﻿using CsvHelper;
+using MarketDomain;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Formats.Asn1;
+using System.Globalization;
 using System.Linq;
+using System.Net;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using TurtleAPI.PolygonIO;
@@ -97,6 +102,47 @@ namespace TurtleAPI.AlphaVantage
                 Prestige = "Most Actively Traded"
             }));
             return polarizedMarkets;
+        }
+        /// <summary>
+        /// Provides a list of all active or delisted tickers as of the latest trading day.
+        /// </summary>
+        /// <param name="statusRequest">active or delisted</param>
+        /// <returns>IEnumberable of all active or delisted tickers</returns>
+        public IEnumerable<Champion> GetChampionStatus(string statusRequest)
+        { 
+
+            var uri = new Uri($"https://www.alphavantage.co/query?function=LISTING_STATUS&state={statusRequest}&apikey={AuthData.API_KEY_ALPHAVANTAGE}");
+            var client = new HttpClient
+            {
+                BaseAddress = uri
+            };
+            var response = client.GetStreamAsync(uri).Result;
+            var reader = new StreamReader(response);
+            var csv = new CsvReader(reader, CultureInfo.InvariantCulture);
+            var records = csv.GetRecords<AlphaVListingResponse>();
+            List<Champion> champions = new List<Champion>();
+            foreach (var record in records)
+            {
+                var champion = new Champion
+                {
+                    Ticker = record.symbol,
+                    Name = record.name,
+                    Exchange = record.exchange,
+                    Type = record.assetType,
+                    IPOdate = record.ipoDate,
+                    DelistingDate = record.delistingDate,
+                    Status = record.status,
+                };
+                champions.Add(champion);
+            }
+            var champReturn = champions.AsEnumerable<Champion>();
+            return champReturn;
+
+
+
+
+
+
         }
     }
 }
