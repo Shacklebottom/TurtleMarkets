@@ -34,7 +34,10 @@ IRepository<PreviousClose> pcRepo = new PreviousCloseRepository();
 //TickerDetail? tickerDetail = Polygon.GetTickerDetails("MSFT");
 //Console.WriteLine(tickerDetail);
 
-var AlphaV = new AlphaVantageAPI();
-MarketStatus? marketStatus = AlphaV.GetMarketStatus();
-Console.WriteLine(marketStatus);
+//var AlphaV = new AlphaVantageAPI();
+//MarketStatus? marketStatus = AlphaV.GetMarketStatus();
+//Console.WriteLine(marketStatus);
 
+var Finnhub = new FinnhubAPI();
+RecommendedTrend? recommendedTrend = Finnhub.GetRecommendedTrend("MSFT");
+Console.WriteLine(recommendedTrend);
