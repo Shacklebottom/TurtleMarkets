@@ -9,6 +9,7 @@ namespace MarketDomain
 {
     public class TickerAddress
     {
+        //not sure if this belongs here tbh.
         [JsonProperty("address1")]
         public string? Address { get; set; }
         [JsonProperty("city")]

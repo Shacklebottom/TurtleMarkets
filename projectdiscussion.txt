@@ -1,0 +1,5 @@
+Possible API additions by interest:
+
+-Polygon: Market Holidays, Ticker News.
+-Alpha Vantage: Top Gainers & Losers, News & Sentiments, Company Overview, Listing & Delisting Status.
+-Finnhub: possibly crypto?
