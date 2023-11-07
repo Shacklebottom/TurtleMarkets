@@ -19,6 +19,7 @@ namespace TurtleAPI.AlphaVantage
     {
         public PreviousClose? GetPreviousClose(string ticker)
         {
+            //has a repository
             var uri = new Uri($"https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol={ticker}&apikey={AuthData.API_KEY_ALPHAVANTAGE}");
             var client = new HttpClient
             {
@@ -68,7 +69,7 @@ namespace TurtleAPI.AlphaVantage
         public Dictionary<PrestigeType, IEnumerable<Prominence>?> GetPolarizedMarkets()
         {
             //returns the top and bottom 20 tickers, and the 20 most traded.
-            Dictionary<PrestigeType, IEnumerable<Prominence>?>? results_array = new();
+            Dictionary<PrestigeType, IEnumerable<Prominence>?>? prominenceDetail = new();
             var uri = new Uri($"https://www.alphavantage.co/query?function=TOP_GAINERS_LOSERS&apikey={AuthData.API_KEY_ALPHAVANTAGE}");
             var client = new HttpClient
             {
@@ -78,10 +79,10 @@ namespace TurtleAPI.AlphaVantage
             var responseString = response.Content.ReadAsStringAsync().Result;
             var baseData = JsonConvert.DeserializeObject<AlphaVProminenceResponse>(responseString) ??
                 throw new Exception("could not parse Alpha Vantage response");
-            results_array.Add(PrestigeType.TopGainer, baseData.top_gainers?.Select(tg => BuildProminence(tg)));
-            results_array.Add(PrestigeType.TopLoser, baseData.top_losers?.Select(tl => BuildProminence(tl)));
-            results_array.Add(PrestigeType.MostTraded, baseData.most_actively_traded?.Select(m => BuildProminence(m)));
-            return results_array;
+            prominenceDetail.Add(PrestigeType.TopGainer, baseData.top_gainers?.Select(tg => BuildProminence(tg)));
+            prominenceDetail.Add(PrestigeType.TopLoser, baseData.top_losers?.Select(tl => BuildProminence(tl)));
+            prominenceDetail.Add(PrestigeType.MostTraded, baseData.most_actively_traded?.Select(m => BuildProminence(m)));
+            return prominenceDetail;
         }
         private Prominence BuildProminence(AlphaVProminenceResult r)
         {
@@ -99,8 +100,9 @@ namespace TurtleAPI.AlphaVantage
         /// </summary>
         /// <param name="statusRequest">active or delisted</param>
         /// <returns>IEnumberable of all active or delisted tickers</returns>
-        public IEnumerable<ListedStatus> GetListedStatus(string statusRequest)
+        public IEnumerable<ListedStatus>? GetListedStatus(string statusRequest)
         {
+            //has a repository
             var uri = new Uri($"https://www.alphavantage.co/query?function=LISTING_STATUS&state={statusRequest}&apikey={AuthData.API_KEY_ALPHAVANTAGE}");
             var client = new HttpClient
             {
@@ -112,13 +114,13 @@ namespace TurtleAPI.AlphaVantage
             var records = csv.GetRecords<AlphaVListingResponse>();
             var statusDetail = records.Select(r => new ListedStatus
             {
-                Ticker = r.symbol,
-                Name = r.name,
-                Exchange = r.exchange,
-                Type = r.assetType,
-                IPOdate = r.ipoDate,
-                DelistingDate = r.delistingDate,
-                Status = r.status,
+                Ticker = r?.symbol,
+                Name = r?.name,
+                Exchange = r?.exchange,
+                Type = r?.assetType,
+                IPOdate = r?.ipoDate,
+                DelistingDate = r?.delistingDate,
+                Status = r?.status,
             });
             return statusDetail;
         }

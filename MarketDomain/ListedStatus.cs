@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MarketDomain
 {
-    public class ListedStatus
+    public class ListedStatus : IEntity
     {
         public override string ToString()
         {
@@ -18,9 +18,9 @@ namespace MarketDomain
         public string? Exchange { get; set; }
         public string? Type { get; set; }
         public DateOnly? IPOdate { get; set; }
-        public string? DelistingDate { get; set; }
+        public DateOnly? DelistingDate { get; set; }
         public string? Status { get; set; }
-
+        public int Id { get; set; }
 
     }
 }

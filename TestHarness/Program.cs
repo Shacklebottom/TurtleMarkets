@@ -50,6 +50,6 @@ IRepository<PreviousClose> pcRepo = new PreviousCloseRepository();
 //ListedStatus? ListedStatus = AlphaV.GetListedStatus("active").First();
 //Console.WriteLine(ListedStatus);
 
-var Polygon = new PolygonAPI();
-MarketHoliday? MarketHoliday = Polygon.GetMarketHoliday().First();
-Console.WriteLine(MarketHoliday);
+//var Polygon = new PolygonAPI();
+//MarketHoliday? MarketHoliday = Polygon.GetMarketHoliday().First();
+//Console.WriteLine(MarketHoliday);
