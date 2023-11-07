@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MarketDomain
 {
-    public class Champion
+    public class ListedStatus
     {
         public override string ToString()
         {

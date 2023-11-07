@@ -64,5 +64,27 @@ namespace TurtleAPI.PolygonIO
             var dateTime = epoch.AddMilliseconds((float)t);
             return dateTime;
         }
+        public IEnumerable<MarketHoliday>? GetMarketHoliday()
+        {
+            var uri = new Uri($"https://api.polygon.io/v1/marketstatus/upcoming?apiKey={AuthData.API_KEY_POLYGON}");
+            var client = new HttpClient
+            {
+                BaseAddress = uri
+            };
+            var response = client.GetAsync(uri).Result;
+            var responseString = response.Content.ReadAsStringAsync().Result;
+            var baseData = JsonConvert.DeserializeObject<List<PolygonMarketHolidayResponse>>(responseString) ??
+                throw new Exception("could not parse Polygon response");
+            var holidayDetail = baseData?.Select(r => new MarketHoliday
+            {
+                Exchange = r?.exchange,
+                Date = r?.date,
+                Holiday = r?.name,
+                Status = r?.status,
+                Open = r?.open,
+                Close = r?.close,
+            });
+            return holidayDetail;
+        }
     }
 }

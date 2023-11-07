@@ -42,10 +42,14 @@ IRepository<PreviousClose> pcRepo = new PreviousCloseRepository();
 //RecommendedTrend? recommendedTrend = Finnhub.GetRecommendedTrend("MSFT");
 //Console.WriteLine(recommendedTrend);
 
-var AlphaV = new AlphaVantageAPI();
-Prominence? Prominence = AlphaV.GetPolarizedMarkets()[PrestigeType.TopGainer]?.First();
-Console.WriteLine(Prominence);
+//var AlphaV = new AlphaVantageAPI();
+//Prominence? Prominence = AlphaV.GetPolarizedMarkets()[PrestigeType.TopGainer]?.First();
+//Console.WriteLine(Prominence);
 
 //var AlphaV = new AlphaVantageAPI();
-//Champion? Champion = AlphaV.GetChampionStatus("active").First();
-//Console.WriteLine(Champion);
+//ListedStatus? ListedStatus = AlphaV.GetListedStatus("active").First();
+//Console.WriteLine(ListedStatus);
+
+var Polygon = new PolygonAPI();
+MarketHoliday? MarketHoliday = Polygon.GetMarketHoliday().First();
+Console.WriteLine(MarketHoliday);

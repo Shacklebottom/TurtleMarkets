@@ -43,6 +43,7 @@ namespace TurtleAPI.AlphaVantage
         }
         public MarketStatus? GetMarketStatus()
         {
+            //this is set up to return only USA as of right now, but could be easily modified to return all market status
             var uri = new Uri($"https://www.alphavantage.co/query?function=MARKET_STATUS&apikey={AuthData.API_KEY_ALPHAVANTAGE}");
             var client = new HttpClient
             {
@@ -98,7 +99,7 @@ namespace TurtleAPI.AlphaVantage
         /// </summary>
         /// <param name="statusRequest">active or delisted</param>
         /// <returns>IEnumberable of all active or delisted tickers</returns>
-        public IEnumerable<Champion> GetChampionStatus(string statusRequest)
+        public IEnumerable<ListedStatus> GetListedStatus(string statusRequest)
         {
             var uri = new Uri($"https://www.alphavantage.co/query?function=LISTING_STATUS&state={statusRequest}&apikey={AuthData.API_KEY_ALPHAVANTAGE}");
             var client = new HttpClient
@@ -109,10 +110,10 @@ namespace TurtleAPI.AlphaVantage
             var reader = new StreamReader(response);
             var csv = new CsvReader(reader, CultureInfo.InvariantCulture);
             var records = csv.GetRecords<AlphaVListingResponse>();
-            List<Champion> champions = new List<Champion>();
+            List<ListedStatus> compiledList = new List<ListedStatus>();
             foreach (var record in records)
             {
-                var champion = new Champion
+                var status = new ListedStatus
                 {
                     Ticker = record.symbol,
                     Name = record.name,
@@ -122,10 +123,10 @@ namespace TurtleAPI.AlphaVantage
                     DelistingDate = record.delistingDate,
                     Status = record.status,
                 };
-                champions.Add(champion);
+                compiledList.Add(status);
             }
-            var champReturn = champions.AsEnumerable<Champion>();
-            return champReturn;
+            var listedStatus = compiledList.AsEnumerable<ListedStatus>();
+            return listedStatus;
         }
     }
 }
