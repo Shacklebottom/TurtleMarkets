@@ -110,23 +110,17 @@ namespace TurtleAPI.AlphaVantage
             var reader = new StreamReader(response);
             var csv = new CsvReader(reader, CultureInfo.InvariantCulture);
             var records = csv.GetRecords<AlphaVListingResponse>();
-            List<ListedStatus> compiledList = new List<ListedStatus>();
-            foreach (var record in records)
+            var statusDetail = records.Select(r => new ListedStatus
             {
-                var status = new ListedStatus
-                {
-                    Ticker = record.symbol,
-                    Name = record.name,
-                    Exchange = record.exchange,
-                    Type = record.assetType,
-                    IPOdate = record.ipoDate,
-                    DelistingDate = record.delistingDate,
-                    Status = record.status,
-                };
-                compiledList.Add(status);
-            }
-            var listedStatus = compiledList.AsEnumerable<ListedStatus>();
-            return listedStatus;
+                Ticker = r.symbol,
+                Name = r.name,
+                Exchange = r.exchange,
+                Type = r.assetType,
+                IPOdate = r.ipoDate,
+                DelistingDate = r.delistingDate,
+                Status = r.status,
+            });
+            return statusDetail;
         }
     }
 }
