@@ -7,6 +7,7 @@ using System.Formats.Asn1;
 using System.Globalization;
 using System.Linq;
 using System.Net;
+using System.Net.Http.Headers;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
@@ -63,10 +64,10 @@ namespace TurtleAPI.AlphaVantage
             });
             return results.FirstOrDefault();
         }
-        public IEnumerable<Prominence>? GetPolarizedMarkets()
+        public Dictionary<PrestigeType, IEnumerable<Prominence>?> GetPolarizedMarkets()
         {
             //returns the top and bottom 20 tickers, and the 20 most traded.
-            IEnumerable<Prominence>? polarizedMarkets = new List<Prominence>();
+            Dictionary<PrestigeType, IEnumerable<Prominence>?>? results_array = new();
             var uri = new Uri($"https://www.alphavantage.co/query?function=TOP_GAINERS_LOSERS&apikey={AuthData.API_KEY_ALPHAVANTAGE}");
             var client = new HttpClient
             {
@@ -76,32 +77,21 @@ namespace TurtleAPI.AlphaVantage
             var responseString = response.Content.ReadAsStringAsync().Result;
             var baseData = JsonConvert.DeserializeObject<AlphaVProminenceResponse>(responseString) ??
                 throw new Exception("could not parse Alpha Vantage response");
-            polarizedMarkets = baseData?.top_gainers?.Select(tg => new Prominence
+            results_array.Add(PrestigeType.TopGainer, baseData.top_gainers?.Select(tg => BuildProminence(tg)));
+            results_array.Add(PrestigeType.TopLoser, baseData.top_losers?.Select(tl => BuildProminence(tl)));
+            results_array.Add(PrestigeType.MostTraded, baseData.most_actively_traded?.Select(m => BuildProminence(m)));
+            return results_array;
+        }
+        private Prominence BuildProminence(AlphaVProminenceResult r)
+        {
+            return new Prominence
             {
-                Ticker = tg.ticker,
-                Price = tg.price,
-                ChangeAmount = tg.change_amount,
-                ChangePercentage = tg.change_percentage,
-                Volume = tg.volume,
-                Prestige = "Top Gainer"
-            }).Concat(baseData.top_losers.Select(tl => new Prominence
-            {
-                Ticker = tl.ticker,
-                Price = tl.price,
-                ChangeAmount = tl.change_amount,
-                ChangePercentage = tl.change_percentage,
-                Volume = tl.volume,
-                Prestige = "Top Loser"
-            })).Concat(baseData.most_actively_traded.Select(m => new Prominence
-            {
-                Ticker = m.ticker,
-                Price = m.price,
-                ChangeAmount = m.change_amount,
-                ChangePercentage = m.change_percentage,
-                Volume = m.volume,
-                Prestige = "Most Actively Traded"
-            }));
-            return polarizedMarkets;
+                Ticker = r.ticker,
+                Price = r.price,
+                ChangeAmount = r.change_amount,
+                ChangePercentage = r.change_percentage,
+                Volume = r.volume,
+            };
         }
         /// <summary>
         /// Provides a list of all active or delisted tickers as of the latest trading day.
@@ -109,8 +99,7 @@ namespace TurtleAPI.AlphaVantage
         /// <param name="statusRequest">active or delisted</param>
         /// <returns>IEnumberable of all active or delisted tickers</returns>
         public IEnumerable<Champion> GetChampionStatus(string statusRequest)
-        { 
-
+        {
             var uri = new Uri($"https://www.alphavantage.co/query?function=LISTING_STATUS&state={statusRequest}&apikey={AuthData.API_KEY_ALPHAVANTAGE}");
             var client = new HttpClient
             {
@@ -137,12 +126,6 @@ namespace TurtleAPI.AlphaVantage
             }
             var champReturn = champions.AsEnumerable<Champion>();
             return champReturn;
-
-
-
-
-
-
         }
     }
 }

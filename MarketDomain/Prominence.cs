@@ -10,14 +10,13 @@ namespace MarketDomain
     {
         public override string ToString()
         {
-            return $"Ticker: {Ticker}\tPrice {Price}\tChange Amount {ChangeAmount}\tPrestige {Prestige}";
+            return $"Ticker: {Ticker}\tPrice {Price}\tChange Amount {ChangeAmount}";
         }
         public string? Ticker { get; set; }
         public decimal? Price { get; set; }
         public decimal? ChangeAmount { get; set; }
         public string? ChangePercentage { get; set; }
         public long? Volume { get; set; }
-        public string? Prestige { get; set; }
         public int Id { get; set; }
     }
 }
