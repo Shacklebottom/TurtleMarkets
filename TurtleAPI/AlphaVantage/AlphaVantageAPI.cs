@@ -68,6 +68,7 @@ namespace TurtleAPI.AlphaVantage
         }
         public Dictionary<PrestigeType, IEnumerable<Prominence>?> GetPolarizedMarkets()
         {
+            //has a repository
             //returns the top and bottom 20 tickers, and the 20 most traded.
             Dictionary<PrestigeType, IEnumerable<Prominence>?>? prominenceDetail = new();
             var uri = new Uri($"https://www.alphavantage.co/query?function=TOP_GAINERS_LOSERS&apikey={AuthData.API_KEY_ALPHAVANTAGE}");

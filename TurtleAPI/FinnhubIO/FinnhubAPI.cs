@@ -14,6 +14,7 @@ namespace TurtleAPI.FinnhubIO
     {
         public PreviousClose? GetPreviousClose(string ticker)
         {
+            //has a repository
             var uri = new Uri($"https://finnhub.io/api/v1/quote?symbol={ticker}");
             var client = new HttpClient()
             {

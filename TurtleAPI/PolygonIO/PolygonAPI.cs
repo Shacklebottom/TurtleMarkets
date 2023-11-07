@@ -15,6 +15,7 @@ namespace TurtleAPI.PolygonIO
 
         public PreviousClose? GetPreviousClose(string ticker)
         {
+            //has a repository
             var uri = new Uri($"https://api.polygon.io/v2/aggs/ticker/{ticker}/prev?adjusted=true&apiKey={AuthData.API_KEY_POLYGON}");
             var client = new HttpClient
             {
@@ -38,6 +39,7 @@ namespace TurtleAPI.PolygonIO
         }
         public TickerDetail? GetTickerDetails(string ticker)
         {
+            //has repository
             var uri = new Uri($"https://api.polygon.io/v3/reference/tickers/{ticker}?apiKey={AuthData.API_KEY_POLYGON}");
             var client = new HttpClient
             {
