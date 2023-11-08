@@ -17,7 +17,7 @@ namespace TurtleAPI.AlphaVantage
 {
     public class AlphaVantageAPI
     {
-        public PreviousClose? GetPreviousClose(string ticker)
+        public static PreviousClose? GetPreviousClose(string ticker)
         {
             //has a repository
             var uri = new Uri($"https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol={ticker}&apikey={AuthData.API_KEY_ALPHAVANTAGE}");
@@ -42,7 +42,7 @@ namespace TurtleAPI.AlphaVantage
             };
             return marketDetails;
         }
-        public MarketStatus? GetMarketStatus()
+        public static MarketStatus? GetMarketStatus()
         {
             //this is set up to return only USA as of right now, but could be easily modified to return all market status
             var uri = new Uri($"https://www.alphavantage.co/query?function=MARKET_STATUS&apikey={AuthData.API_KEY_ALPHAVANTAGE}");
@@ -66,7 +66,7 @@ namespace TurtleAPI.AlphaVantage
             });
             return results.FirstOrDefault();
         }
-        public Dictionary<PrestigeType, IEnumerable<Prominence>?> GetPolarizedMarkets()
+        public static Dictionary<PrestigeType, IEnumerable<Prominence>?> GetPolarizedMarkets()
         {
             //has a repository
             //returns the top and bottom 20 tickers, and the 20 most traded.
@@ -85,7 +85,7 @@ namespace TurtleAPI.AlphaVantage
             prominenceDetail.Add(PrestigeType.MostTraded, baseData.most_actively_traded?.Select(m => BuildProminence(m)));
             return prominenceDetail;
         }
-        private Prominence BuildProminence(AlphaVProminenceResult r)
+        private static Prominence BuildProminence(AlphaVProminenceResult r)
         {
             return new Prominence
             {
@@ -101,7 +101,7 @@ namespace TurtleAPI.AlphaVantage
         /// </summary>
         /// <param name="statusRequest">active or delisted</param>
         /// <returns>IEnumberable of all active or delisted tickers</returns>
-        public IEnumerable<ListedStatus>? GetListedStatus(string statusRequest)
+        public static IEnumerable<ListedStatus>? GetListedStatus(string statusRequest)
         {
             //has a repository
             var uri = new Uri($"https://www.alphavantage.co/query?function=LISTING_STATUS&state={statusRequest}&apikey={AuthData.API_KEY_ALPHAVANTAGE}");

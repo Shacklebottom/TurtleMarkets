@@ -5,7 +5,7 @@ using TurtleAPI.AlphaVantage;
 using TurtleAPI.FinnhubIO;
 using TurtleSQL;
 
-IRepository<PreviousClose> pcRepo = new PreviousCloseRepository();
+//IRepository<PreviousClose> pcRepo = new PreviousCloseRepository();
 
 //Console.WriteLine(pcRepo.GetById(1)?.ToString());
 

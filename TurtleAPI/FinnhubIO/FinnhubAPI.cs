@@ -12,7 +12,7 @@ namespace TurtleAPI.FinnhubIO
 {
     public class FinnhubAPI
     {
-        public PreviousClose? GetPreviousClose(string ticker)
+        public static PreviousClose? GetPreviousClose(string ticker)
         {
             //has a repository
             var uri = new Uri($"https://finnhub.io/api/v1/quote?symbol={ticker}");
@@ -44,7 +44,7 @@ namespace TurtleAPI.FinnhubIO
             var dateTime = epoch.AddMilliseconds((float)t);
             return dateTime;
         }
-        public RecommendedTrend? GetRecommendedTrend(string ticker)
+        public static RecommendedTrend? GetRecommendedTrend(string ticker)
         {
             //has a repository
             var uri = new Uri($"https://finnhub.io/api/v1/stock/recommendation?symbol={ticker}&token={AuthData.API_KEY_FINNHUB}");

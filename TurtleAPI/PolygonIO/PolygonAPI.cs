@@ -12,7 +12,7 @@ namespace TurtleAPI.PolygonIO
 {
     public class PolygonAPI
     {
-        public PreviousClose? GetPreviousClose(string ticker)
+        public static PreviousClose? GetPreviousClose(string ticker)
         {
             //has a repository
             var uri = new Uri($"https://api.polygon.io/v2/aggs/ticker/{ticker}/prev?adjusted=true&apiKey={AuthData.API_KEY_POLYGON}");
@@ -36,7 +36,7 @@ namespace TurtleAPI.PolygonIO
             });
             return marketDetails?.First();
         }
-        public TickerDetail? GetTickerDetails(string ticker)
+        public static TickerDetail? GetTickerDetails(string ticker)
         {
             //has repository
             var uri = new Uri($"https://api.polygon.io/v3/reference/tickers/{ticker}?apiKey={AuthData.API_KEY_POLYGON}");
@@ -65,7 +65,7 @@ namespace TurtleAPI.PolygonIO
             var dateTime = epoch.AddMilliseconds((float)t);
             return dateTime;
         }
-        public IEnumerable<MarketHoliday>? GetMarketHoliday()
+        public static IEnumerable<MarketHoliday>? GetMarketHoliday()
         {
             //has a repository
             var uri = new Uri($"https://api.polygon.io/v1/marketstatus/upcoming?apiKey={AuthData.API_KEY_POLYGON}");

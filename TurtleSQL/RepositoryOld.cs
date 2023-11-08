@@ -53,16 +53,16 @@ VALUES (
     @splitCoefficient, @volume, @volumeWeighted)
 ";
             var tickerParm = command.Parameters.Add("ticker", SqlDbType.VarChar);
-            var adjustedCloseParm = command.Parameters.Add("adjustedClose", SqlDbType.Float);
+            //var adjustedCloseParm = command.Parameters.Add("adjustedClose", SqlDbType.Float);
             var closeParm = command.Parameters.Add("close", SqlDbType.Float);
             var dateParm = command.Parameters.Add("date", SqlDbType.DateTime);
-            var dividendAmountParm = command.Parameters.Add("dividendAmount", SqlDbType.Float);
+            //var dividendAmountParm = command.Parameters.Add("dividendAmount", SqlDbType.Float);
             var highParm = command.Parameters.Add("high", SqlDbType.Float);
             var lowParm = command.Parameters.Add("low", SqlDbType.Float);
             var openParm = command.Parameters.Add("open", SqlDbType.Float);
-            var splitCoefficientParm = command.Parameters.Add("splitCoefficient", SqlDbType.Float);
+            //var splitCoefficientParm = command.Parameters.Add("splitCoefficient", SqlDbType.Float);
             var volumeParm = command.Parameters.Add("volume", SqlDbType.Float);
-            var volumeWeightedParm = command.Parameters.Add("volumeWeighted", SqlDbType.Float);
+            //var volumeWeightedParm = command.Parameters.Add("volumeWeighted", SqlDbType.Float);
 
             _connection.Open();
             foreach(var kvp in data)
