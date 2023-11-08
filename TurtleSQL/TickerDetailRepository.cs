@@ -22,7 +22,7 @@ namespace TurtleSQL
                 new SqlParameter("Ticker", entity.Ticker.DBValue()),
                 new SqlParameter("Name", entity.Name.DBValue()),
                 new SqlParameter("Description", entity.Description.DBValue()),
-                new SqlParameter("Address1", entity.Address.Address1.DBValue()),
+                new SqlParameter("Address", entity.Address.DBValue()),
                 new SqlParameter("TotalEmployees", entity.TotalEmployees.DBValue()),
                 new SqlParameter("ListDate", entity.ListDate.DBValue())
             };

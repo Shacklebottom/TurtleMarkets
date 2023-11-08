@@ -64,7 +64,7 @@ namespace TurtleAPI.AlphaVantage
                 Status = r.current_status,
                 Notes = r.notes
             });
-            return results.FirstOrDefault();
+            return results?.FirstOrDefault();
         }
         public static Dictionary<PrestigeType, IEnumerable<Prominence>?> GetPolarizedMarkets()
         {
