@@ -9,6 +9,7 @@ namespace MarketDomain
 {
     public class RecommendedTrend : IEntity
     {
+        //this has a repository
         public override string ToString()
         {
             return $"Ticker: {Ticker}\tPeriod: {Period}\tBuy: {Buy}\tHold: {Hold}\tSell {Sell}";

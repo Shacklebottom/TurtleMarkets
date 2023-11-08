@@ -12,7 +12,6 @@ namespace TurtleAPI.PolygonIO
 {
     public class PolygonAPI
     {
-
         public PreviousClose? GetPreviousClose(string ticker)
         {
             //has a repository
@@ -68,6 +67,7 @@ namespace TurtleAPI.PolygonIO
         }
         public IEnumerable<MarketHoliday>? GetMarketHoliday()
         {
+            //has a repository
             var uri = new Uri($"https://api.polygon.io/v1/marketstatus/upcoming?apiKey={AuthData.API_KEY_POLYGON}");
             var client = new HttpClient
             {

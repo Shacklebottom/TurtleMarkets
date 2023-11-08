@@ -9,6 +9,7 @@ namespace MarketDomain
 {
     public class TickerDetail : IEntity
     {
+        //has a repository
         public override string ToString()
         {
             return $"Ticker: {Ticker}\tListDate: {ListDate}\tName: {Name}\tDescription: {Description}";

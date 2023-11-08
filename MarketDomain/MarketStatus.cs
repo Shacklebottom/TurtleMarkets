@@ -9,6 +9,7 @@ namespace MarketDomain
 {
     public class MarketStatus : IEntity
     {
+        //this will probably be used as a variable for logic gates, and not placed in a repo
         public override string ToString()
         {
             return $"Market Type: {MarketType}\tLocal Open: {LocalOpen}\tLocal Close: {LocalClose}\tStatus: {Status}";

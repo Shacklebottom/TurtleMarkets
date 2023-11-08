@@ -8,6 +8,7 @@ namespace MarketDomain
 {
     public class Prominence : IEntity
     {
+        //has a repository
         public override string ToString()
         {
             return $"Ticker: {Ticker}\tPrice {Price}\tChange Amount {ChangeAmount}";

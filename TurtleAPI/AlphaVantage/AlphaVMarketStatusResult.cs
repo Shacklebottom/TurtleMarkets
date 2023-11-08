@@ -10,6 +10,7 @@ namespace TurtleAPI.AlphaVantage
 
     public class AlphaVMarketStatusResult
     {
+
         public string? market_type { get; set; }
         public string? region { get; set; }
         public string? primary_exchanges { get; set; }

@@ -9,6 +9,7 @@ namespace MarketDomain
 {
     public class PreviousClose : IEntity
     {
+        //has a repository
         public override string ToString()
         {
             return $"Ticker: {Ticker}\tDate: {Date}\tOpen: {Open}\tClose: {Close}";
