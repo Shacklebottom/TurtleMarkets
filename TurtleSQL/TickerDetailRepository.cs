@@ -10,7 +10,7 @@ using TurtleSQL.Extensions;
 
 namespace TurtleSQL
 {
-    //This should work, but needs to be validated! FURTHER, wut do with AddressDetail? Separate repo?
+    //This should work, but needs to be validated! FURTHER, I think I did the 'AllFromReader' TickerDetail properly.
     public class TickerDetailRepository : Repository<TickerDetail>, IRepository<TickerDetail>
     {
         protected override string TableName => "TickerDetail";
@@ -22,13 +22,13 @@ namespace TurtleSQL
                 new SqlParameter("Ticker", entity.Ticker.DBValue()),
                 new SqlParameter("Name", entity.Name.DBValue()),
                 new SqlParameter("Description", entity.Description.DBValue()),
-                new SqlParameter("Address", entity.Address.DBValue()),
+                new SqlParameter("Address1", entity.Address.Address1.DBValue()),
                 new SqlParameter("TotalEmployees", entity.TotalEmployees.DBValue()),
                 new SqlParameter("ListDate", entity.ListDate.DBValue())
             };
             return parms;
         }
-        protected virtual IEnumerable<TickerDetail> AllFromReader(SqlDataReader rdr)
+        protected override IEnumerable<TickerDetail?> AllFromReader(SqlDataReader rdr)
         {
             while (rdr.Read())
             {
@@ -37,7 +37,12 @@ namespace TurtleSQL
                     Ticker = rdr["Ticker"].ToString(),
                     Name = rdr["Name"].ToString(),
                     Description = rdr["Description"].ToString(),
-                    //Address = rdr. Literal wut do
+                    Address = new TickerAddress
+                    {
+                        Address1 = rdr["Address1"].ToString(),
+                        City = rdr["City"].ToString(),
+                        State = rdr["State"].ToString()
+                    },
                     TotalEmployees = rdr.Parse<Int64>("TotalEmployees"),
                     ListDate = rdr.Parse<DateOnly>("ListDate"),
                     Id = rdr.Parse<int>("Id") ?? 0

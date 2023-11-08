@@ -11,7 +11,7 @@ namespace MarketDomain
     {
         //not sure if this belongs here tbh.
         [JsonProperty("address1")]
-        public string? Address { get; set; }
+        public string? Address1 { get; set; }
         [JsonProperty("city")]
         public string? City { get; set; }
         [JsonProperty("state")]
