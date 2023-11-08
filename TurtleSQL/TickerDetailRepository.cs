@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Schema;
-using MarketDomain;
+﻿using MarketDomain;
 using Microsoft.Data.SqlClient;
 using TurtleSQL.Extensions;
 
@@ -28,7 +22,7 @@ namespace TurtleSQL
             };
             return parms;
         }
-        protected override IEnumerable<TickerDetail?> AllFromReader(SqlDataReader rdr)
+        protected override IEnumerable<TickerDetail> AllFromReader(SqlDataReader rdr)
         {
             while (rdr.Read())
             {

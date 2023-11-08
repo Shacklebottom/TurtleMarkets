@@ -1,5 +1,4 @@
-﻿using MarketDomain;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using System.Diagnostics.CodeAnalysis;
 
 namespace TurtleAPI.AlphaVantage
