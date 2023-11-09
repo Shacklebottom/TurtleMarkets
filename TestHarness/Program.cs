@@ -46,9 +46,13 @@ using TurtleSQL;
 
 //VALIDATED!
 //IRepository<ListedStatus> lsRepo = new ListedStatusRepository();
-//ListedStatus? ListedStatus = AlphaVantageAPI.GetListedStatus("active").First();
-//lsRepo.Save(ListedStatus);
-//Console.WriteLine($"Entry Submitted as {ListedStatus}");
+//IEnumerable<ListedStatus>? ListedStatus = AlphaVantageAPI.GetListedStatus("active");
+//foreach (var item in ListedStatus)
+//{
+//    lsRepo.Save(item);
+//    Console.WriteLine($"Entry Submitted as {item}");
+//}
+//Console.WriteLine("<======END OF CALL======>");
 
 //VALIDATED!
 //IRepository<MarketHoliday> mhRepo = new MarketHolidayRepository();
