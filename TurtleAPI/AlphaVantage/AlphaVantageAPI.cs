@@ -90,7 +90,7 @@ namespace TurtleAPI.AlphaVantage
         /// <summary>
         /// Provides a list of all active or delisted tickers as of the latest trading day.
         /// </summary>
-        /// <param name="statusRequest">active or delisted</param>
+        /// <param name="statusRequest">Activity.Active or Activity.Delisted</param>
         /// <returns>IEnumberable of all active or delisted tickers</returns>
         public static IEnumerable<ListedStatus>? GetListedStatus(string statusRequest)
         {

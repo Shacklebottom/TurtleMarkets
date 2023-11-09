@@ -32,11 +32,15 @@ using TurtleSQL;
 //Console.WriteLine("Entry Submitted");
 
 //VALIDATED!
-//Prominence? Prominence = AlphaVantageAPI.GetPolarizedMarkets()[PrestigeType.TopGainer]?.First();
-//Console.WriteLine(Prominence);
 //IRepository<Prominence> proRepo = new ProminenceRepository();
-//proRepo.Save(Prominence);
-//Console.WriteLine("Entry Submitted");
+//IEnumerable<Prominence>? Prominence = AlphaVantageAPI.GetPolarizedMarkets()[PrestigeType.TopGainer];
+//IEnumerable<Prominence>? Prominence = AlphaVantageAPI.GetPolarizedMarkets()[PrestigeType.TopLoser];
+//IEnumerable<Prominence>? Prominence = AlphaVantageAPI.GetPolarizedMarkets()[PrestigeType.MostTraded];
+//foreach (var item in Prominence)
+//{
+//    proRepo.Save(item);
+//    Console.WriteLine($"Entry Submitted as {item}");
+//}
 
 //VALIDATED!
 //IRepository<RecommendedTrend> rtRepo = new RecommendedTrendRepository();
@@ -46,7 +50,9 @@ using TurtleSQL;
 
 //VALIDATED!
 //IRepository<ListedStatus> lsRepo = new ListedStatusRepository();
-//IEnumerable<ListedStatus>? ListedStatus = AlphaVantageAPI.GetListedStatus("active");
+//IEnumerable<ListedStatus>? ListedStatus = AlphaVantageAPI.GetListedStatus(Activity.Active);
+//IEnumerable<ListedStatus>? ListedStatus = AlphaVantageAPI.GetListedStatus(Activity.Delisted);
+
 //foreach (var item in ListedStatus)
 //{
 //    lsRepo.Save(item);
@@ -56,8 +62,12 @@ using TurtleSQL;
 
 //VALIDATED!
 //IRepository<MarketHoliday> mhRepo = new MarketHolidayRepository();
-//MarketHoliday? MarketHoliday = PolygonAPI.GetMarketHoliday().First();
-//mhRepo.Save(MarketHoliday);
-//Console.WriteLine($"Entry Submitted as {MarketHoliday}");
+//IEnumerable<MarketHoliday>? MarketHoliday = PolygonAPI.GetMarketHoliday();
+//foreach (var item in MarketHoliday)
+//{
+//    mhRepo.Save(item);
+//    Console.WriteLine($"Entry Submitted as {item}");
+//}
+
 
 #endregion
