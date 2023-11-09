@@ -1,5 +1,4 @@
-﻿using MarketDomain;
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
 
 namespace TurtleAPI.PolygonIO
 {
@@ -14,7 +13,7 @@ namespace TurtleAPI.PolygonIO
         public string? active { get; set; }
         public string? currency_name { get; set; }
         public string? phone_number { get; set; }
-        public TickerAddress? address { get; set; }
+        public PolygonTickerAddress? address { get; set; }
         public string? description { get; set; }
         public long total_employees { get; set; }
         public DateOnly list_date { get; set; }

@@ -8,7 +8,7 @@ namespace TurtleSQL
     public class TickerDetailRepository : Repository<TickerDetail>, IRepository<TickerDetail>
     {
         protected override string TableName => "TickerDetail";
-        protected override List<string> FieldList => new() { "Ticker", "Name", "Description", "Address", "TotalEmployees", "ListDate" };
+        protected override List<string> FieldList => new() { "Ticker", "Name", "Description", "Address", "City", "State", "TotalEmployees", "ListDate" };
         protected override IEnumerable<SqlParameter> SqlParameters(TickerDetail entity)
         {
             var parms = new List<SqlParameter>
@@ -16,7 +16,9 @@ namespace TurtleSQL
                 new SqlParameter("Ticker", entity.Ticker.DBValue()),
                 new SqlParameter("Name", entity.Name.DBValue()),
                 new SqlParameter("Description", entity.Description.DBValue()),
-                new SqlParameter("Address", entity.Address.DBValue()),
+                new SqlParameter("Address", entity.Address?.DBValue()),
+                new SqlParameter("City", entity.Address?.DBValue()),
+                new SqlParameter("State", entity.Address?.DBValue()),
                 new SqlParameter("TotalEmployees", entity.TotalEmployees.DBValue()),
                 new SqlParameter("ListDate", entity.ListDate.DBValue())
             };
@@ -31,12 +33,9 @@ namespace TurtleSQL
                     Ticker = rdr["Ticker"].ToString(),
                     Name = rdr["Name"].ToString(),
                     Description = rdr["Description"].ToString(),
-                    Address = new TickerAddress
-                    {
-                        Address1 = rdr["Address1"].ToString(),
-                        City = rdr["City"].ToString(),
-                        State = rdr["State"].ToString()
-                    },
+                    Address = rdr["Address"].ToString(),
+                    City = rdr["City"].ToString(),
+                    State = rdr["State"].ToString(),
                     TotalEmployees = rdr.Parse<Int64>("TotalEmployees"),
                     ListDate = rdr.Parse<DateOnly>("ListDate"),
                     Id = rdr.Parse<int>("Id") ?? 0

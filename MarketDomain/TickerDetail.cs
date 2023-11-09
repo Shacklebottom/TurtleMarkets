@@ -12,7 +12,9 @@ namespace MarketDomain
         public string? Ticker { get; set; }
         public string? Name { get; set; }
         public string? Description { get; set; }
-        public TickerAddress? Address { get; set; }
+        public string? Address { get; set; }
+        public string? City { get; set; }
+        public string? State { get; set; }
         public long? TotalEmployees { get; set; }
         public DateOnly? ListDate { get; set; }
         public int Id { get; set; }

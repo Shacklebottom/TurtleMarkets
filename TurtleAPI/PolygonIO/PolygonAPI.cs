@@ -47,7 +47,9 @@ namespace TurtleAPI.PolygonIO
                 Ticker = ticker,
                 Name = baseData?.results?.name,
                 Description = baseData?.results?.description,
-                Address = baseData?.results?.address,
+                Address = baseData?.results?.address?.Address1,
+                City = baseData?.results?.address?.City,
+                State = baseData?.results?.address?.State,
                 TotalEmployees = baseData?.results?.total_employees,
                 ListDate = baseData?.results?.list_date
             };
