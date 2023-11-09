@@ -7,7 +7,7 @@ namespace MarketDomain
         //this will probably be used as a variable for logic gates, and not placed in a repo
         public override string ToString()
         {
-            return $"Market Type: {MarketType}\tLocal Open: {LocalOpen}\tLocal Close: {LocalClose}\tStatus: {Status}";
+            return $"Market Type: {MarketType}\tRegion: {Region}\tExchange: {Exchange}\tLocal Open: {LocalOpen}\tLocal Close: {LocalClose}\tStatus: {Status}";
         }
         public string? MarketType { get; set; }
         public string? Region { get; set; }

@@ -33,7 +33,7 @@ namespace TurtleSQL
                     Name = rdr["Name"].ToString(),
                     Exchange = rdr["Exchange"].ToString(),
                     Type = rdr["Type"].ToString(),
-                    IPOdate = rdr.Parse<DateOnly>("IPOdate"),
+                    IPOdate = rdr.Parse<DateTime>("IPOdate"),
                     DelistingDate = rdr["DelistingDate"].ToString(),
                     Status = rdr["Status"].ToString(),
                     Id = rdr.Parse<int>("Id") ?? 0

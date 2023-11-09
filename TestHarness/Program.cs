@@ -7,14 +7,22 @@ using TurtleSQL;
 
 
 
-//This is not meant to be a repo, but a checker/driver
-//var AlphaV = new AlphaVantageAPI();
-//MarketStatus? marketStatus = AlphaV.GetMarketStatus();
-//Console.WriteLine(marketStatus);
+#region SHACKLE WORKSPACE
 
 
 
-#region VALIDATED REPOSITORIES
+#endregion
+
+#region FUNCTION CHECK
+//This API call is not meant to be a repo, but a checker/driver
+//IEnumerable<MarketStatus>? marketStatus = AlphaVantageAPI.GetMarketStatus();
+//foreach (var item in marketStatus)
+//{
+//    Console.WriteLine(item);
+//}
+#endregion
+
+#region VALIDATION
 
 //VALIDATED!
 //IRepository<PreviousClose> pcRepo = new PreviousCloseRepository();
@@ -69,5 +77,18 @@ using TurtleSQL;
 //    Console.WriteLine($"Entry Submitted as {item}");
 //}
 
+//VALIDATED!
+//IRepository<ListedStatus> lsRepo = new ListedStatusRepository();
+//IRepository<WorkTicker> wtRepo = new WorkTickerRepository();
+//var loadedRepo = lsRepo.GetAll();
+//var strippedTicker = loadedRepo.Where(s => s.Status == Activity.Active).Select(t => new WorkTicker
+//{
+//    Ticker = t.Ticker,
+//});
+//foreach (var item in strippedTicker)
+//{
+//    wtRepo.Save(item);
+//    Console.WriteLine($"Active Ticker Recorded: {item.Ticker}");
+//}
 
 #endregion

@@ -37,7 +37,7 @@ namespace TurtleSQL
                     City = rdr["City"].ToString(),
                     State = rdr["State"].ToString(),
                     TotalEmployees = rdr.Parse<Int64>("TotalEmployees"),
-                    ListDate = rdr.Parse<DateOnly>("ListDate"),
+                    ListDate = rdr.Parse<DateTime>("ListDate"),
                     Id = rdr.Parse<int>("Id") ?? 0
                 };
             };

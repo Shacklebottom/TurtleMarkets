@@ -16,6 +16,6 @@ namespace TurtleAPI.PolygonIO
         public PolygonTickerAddress? address { get; set; }
         public string? description { get; set; }
         public long total_employees { get; set; }
-        public DateOnly list_date { get; set; }
+        public DateTime list_date { get; set; }
     }
 }

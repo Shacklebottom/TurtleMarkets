@@ -32,7 +32,7 @@ namespace TurtleAPI.AlphaVantage
             };
             return marketDetails;
         }
-        public static MarketStatus? GetMarketStatus()
+        public static IEnumerable<MarketStatus>? GetMarketStatus()
         {
             //this does not have a repo!
             //this is set up to return only USA as of right now, but could be easily modified to return all market status
@@ -55,7 +55,7 @@ namespace TurtleAPI.AlphaVantage
                 Status = r.current_status,
                 Notes = r.notes
             });
-            return results?.FirstOrDefault();
+            return results;
         }
         public static Dictionary<PrestigeType, IEnumerable<Prominence>?> GetPolarizedMarkets()
         {

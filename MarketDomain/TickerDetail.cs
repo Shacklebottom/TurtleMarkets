@@ -16,7 +16,7 @@ namespace MarketDomain
         public string? City { get; set; }
         public string? State { get; set; }
         public long? TotalEmployees { get; set; }
-        public DateOnly? ListDate { get; set; }
+        public DateTime? ListDate { get; set; }
         public int Id { get; set; }
     }
 }

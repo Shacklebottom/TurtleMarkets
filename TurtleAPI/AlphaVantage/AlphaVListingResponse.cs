@@ -9,7 +9,7 @@ namespace TurtleAPI.AlphaVantage
         public string? name { get; set; }
         public string? exchange { get; set; }
         public string? assetType { get; set; }
-        public DateOnly? ipoDate { get; set; }
+        public DateTime? ipoDate { get; set; }
         public string? delistingDate { get; set; }
         public string? status { get; set; }
     }
