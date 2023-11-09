@@ -9,7 +9,7 @@ namespace TurtleAPI.AlphaVantage
     {
         public static PreviousClose? GetPreviousClose(string ticker)
         {
-            //has a repository
+            //has a repository : Validated!
             var uri = new Uri($"https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol={ticker}&apikey={AuthData.API_KEY_ALPHAVANTAGE}");
             var client = new HttpClient
             {
@@ -34,6 +34,7 @@ namespace TurtleAPI.AlphaVantage
         }
         public static MarketStatus? GetMarketStatus()
         {
+            //this does not have a repo!
             //this is set up to return only USA as of right now, but could be easily modified to return all market status
             var uri = new Uri($"https://www.alphavantage.co/query?function=MARKET_STATUS&apikey={AuthData.API_KEY_ALPHAVANTAGE}");
             var client = new HttpClient
@@ -58,7 +59,7 @@ namespace TurtleAPI.AlphaVantage
         }
         public static Dictionary<PrestigeType, IEnumerable<Prominence>?> GetPolarizedMarkets()
         {
-            //has a repository
+            //has a repository : Validated!
             //returns the top and bottom 20 tickers, and the 20 most traded.
             Dictionary<PrestigeType, IEnumerable<Prominence>?>? prominenceDetail = new();
             var uri = new Uri($"https://www.alphavantage.co/query?function=TOP_GAINERS_LOSERS&apikey={AuthData.API_KEY_ALPHAVANTAGE}");
@@ -93,7 +94,7 @@ namespace TurtleAPI.AlphaVantage
         /// <returns>IEnumberable of all active or delisted tickers</returns>
         public static IEnumerable<ListedStatus>? GetListedStatus(string statusRequest)
         {
-            //has a repository
+            //has a repository : Validated!
             var uri = new Uri($"https://www.alphavantage.co/query?function=LISTING_STATUS&state={statusRequest}&apikey={AuthData.API_KEY_ALPHAVANTAGE}");
             var client = new HttpClient
             {

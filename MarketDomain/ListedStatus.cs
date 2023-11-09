@@ -14,7 +14,7 @@ namespace MarketDomain
         public string? Exchange { get; set; }
         public string? Type { get; set; }
         public DateOnly? IPOdate { get; set; }
-        public DateOnly? DelistingDate { get; set; }
+        public string? DelistingDate { get; set; }
         public string? Status { get; set; }
         public int Id { get; set; }
 

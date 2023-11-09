@@ -7,7 +7,7 @@ namespace TurtleAPI.FinnhubIO
     {
         public static PreviousClose? GetPreviousClose(string ticker)
         {
-            //has a repository
+            //has a repository : Validated!
             var uri = new Uri($"https://finnhub.io/api/v1/quote?symbol={ticker}");
             var client = new HttpClient()
             {
@@ -39,7 +39,7 @@ namespace TurtleAPI.FinnhubIO
         }
         public static RecommendedTrend? GetRecommendedTrend(string ticker)
         {
-            //has a repository
+            //has a repository : Validated!
             var uri = new Uri($"https://finnhub.io/api/v1/stock/recommendation?symbol={ticker}&token={AuthData.API_KEY_FINNHUB}");
             var client = new HttpClient()
             {

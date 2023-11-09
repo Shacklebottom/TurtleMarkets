@@ -6,4 +6,6 @@ CREATE TABLE PreviousClose(
 	[Close] money,
 	[High] money,
 	[Low] money,
-	[Volume] bigint)
+	[Volume] bigint
+	)
+	Declare @MarketData int

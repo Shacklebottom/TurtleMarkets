@@ -5,51 +5,55 @@ using TurtleAPI.AlphaVantage;
 using TurtleAPI.FinnhubIO;
 using TurtleSQL;
 
-//IRepository<PreviousClose> pcRepo = new PreviousCloseRepository();
 
-//Console.WriteLine(pcRepo.GetById(1)?.ToString());
 
-//var Polygon = new PolygonAPI();
-//MarketDetail? marketDetail = Polygon.GetPreviousClose("MSFT");
-//Console.WriteLine(marketDetail);
-
-//var AlphaVantage = new AlphaVantageAPI();
-//PreviousClose? marketDetail = AlphaVantage.GetPreviousClose("MSFT");
-//Console.WriteLine(marketDetail);
-
-//var Finnhub = new FinnhubAPI();
-//PreviousClose previousClose = Finnhub.GetPreviousClose("MSFT") ?? 
-//    throw new Exception("previousClose is NULL");
-//Console.WriteLine(previousClose);
-
-//var recordId = pcRepo.Save(previousClose);
-//Console.WriteLine($"Saved Finnhub result as record {recordId}");
-
-//var pc = pcRepo.GetById(5) ?? throw new Exception("Couldn't find Id 5");
-//pc.Ticker = "XXXX";
-//pcRepo.Save(pc);
-//Console.WriteLine("Updated.");
-
-//var Polygon = new PolygonAPI();
-//TickerDetail? tickerDetail = Polygon.GetTickerDetails("MSFT");
-//Console.WriteLine(tickerDetail);
-
+//This is not meant to be a repo, but a checker/driver
 //var AlphaV = new AlphaVantageAPI();
 //MarketStatus? marketStatus = AlphaV.GetMarketStatus();
 //Console.WriteLine(marketStatus);
 
-//var Finnhub = new FinnhubAPI();
-//RecommendedTrend? recommendedTrend = Finnhub.GetRecommendedTrend("MSFT");
-//Console.WriteLine(recommendedTrend);
 
-//var AlphaV = new AlphaVantageAPI();
-//Prominence? Prominence = AlphaV.GetPolarizedMarkets()[PrestigeType.TopGainer]?.First();
+
+#region VALIDATED REPOSITORIES
+
+//VALIDATED!
+//IRepository<PreviousClose> pcRepo = new PreviousCloseRepository();
+//PreviousClose? marketDetail = AlphaVantageAPI.GetPreviousClose("MSFT");
+//PreviousClose? marketDetail = PolygonAPI.GetPreviousClose("MSFT");
+//PreviousClose? marketDetail = FinnhubAPI.GetPreviousClose("MSFT");
+//pcRepo.Save(marketDetail);
+//Console.WriteLine($"Entry Submitted as {marketDetail}");
+
+//VALIDATED!
+//TickerDetail? tickerDetail = PolygonAPI.GetTickerDetails("MSFT");
+//Console.WriteLine(tickerDetail);
+//IRepository<TickerDetail> tdRepo = new TickerDetailRepository();
+//tdRepo.Save(tickerDetail);
+//Console.WriteLine("Entry Submitted");
+
+//VALIDATED!
+//Prominence? Prominence = AlphaVantageAPI.GetPolarizedMarkets()[PrestigeType.TopGainer]?.First();
 //Console.WriteLine(Prominence);
+//IRepository<Prominence> proRepo = new ProminenceRepository();
+//proRepo.Save(Prominence);
+//Console.WriteLine("Entry Submitted");
 
-//var AlphaV = new AlphaVantageAPI();
-//ListedStatus? ListedStatus = AlphaV.GetListedStatus("active").First();
-//Console.WriteLine(ListedStatus);
+//VALIDATED!
+//IRepository<RecommendedTrend> rtRepo = new RecommendedTrendRepository();
+//RecommendedTrend? recommendedTrend = FinnhubAPI.GetRecommendedTrend("MSFT");
+//rtRepo.Save(recommendedTrend);
+//Console.WriteLine($"Entry Submitted as {recommendedTrend}");
 
-//var Polygon = new PolygonAPI();
-//MarketHoliday? MarketHoliday = Polygon.GetMarketHoliday().First();
-//Console.WriteLine(MarketHoliday);
+//VALIDATED!
+//IRepository<ListedStatus> lsRepo = new ListedStatusRepository();
+//ListedStatus? ListedStatus = AlphaVantageAPI.GetListedStatus("active").First();
+//lsRepo.Save(ListedStatus);
+//Console.WriteLine($"Entry Submitted as {ListedStatus}");
+
+//VALIDATED!
+//IRepository<MarketHoliday> mhRepo = new MarketHolidayRepository();
+//MarketHoliday? MarketHoliday = PolygonAPI.GetMarketHoliday().First();
+//mhRepo.Save(MarketHoliday);
+//Console.WriteLine($"Entry Submitted as {MarketHoliday}");
+
+#endregion

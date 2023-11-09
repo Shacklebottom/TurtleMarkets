@@ -17,8 +17,8 @@ namespace TurtleSQL
                 new SqlParameter("Name", entity.Name.DBValue()),
                 new SqlParameter("Description", entity.Description.DBValue()),
                 new SqlParameter("Address", entity.Address?.DBValue()),
-                new SqlParameter("City", entity.Address?.DBValue()),
-                new SqlParameter("State", entity.Address?.DBValue()),
+                new SqlParameter("City", entity.City?.DBValue()),
+                new SqlParameter("State", entity.State?.DBValue()),
                 new SqlParameter("TotalEmployees", entity.TotalEmployees.DBValue()),
                 new SqlParameter("ListDate", entity.ListDate.DBValue())
             };

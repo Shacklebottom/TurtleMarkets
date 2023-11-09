@@ -34,7 +34,7 @@ namespace TurtleSQL
                     Exchange = rdr["Exchange"].ToString(),
                     Type = rdr["Type"].ToString(),
                     IPOdate = rdr.Parse<DateOnly>("IPOdate"),
-                    DelistingDate = rdr.Parse<DateOnly>("DelistingDate"),
+                    DelistingDate = rdr["DelistingDate"].ToString(),
                     Status = rdr["Status"].ToString(),
                     Id = rdr.Parse<int>("Id") ?? 0
                 };

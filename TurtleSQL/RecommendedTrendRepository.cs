@@ -32,7 +32,7 @@ namespace TurtleSQL
                     Ticker = rdr["Ticker"].ToString(),
                     Buy = rdr.Parse<int>("Buy"),
                     Hold = rdr.Parse<int>("Hold"),
-                    Period = rdr.Parse < DateOnly>("Period"),
+                    Period = rdr.Parse <DateOnly>("Period"),
                     Sell = rdr.Parse<int>("Sell"),
                     StrongBuy = rdr.Parse<int>("StrongBuy"),
                     StrongSell = rdr.Parse<int>("StrongSell")
