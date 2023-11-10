@@ -86,7 +86,7 @@ namespace TurtleAPI.PolygonIO
         }
         public static IEnumerable<DividendDetails>? GetDividendDetails(string ticker)
         {
-            //has a repository! : 
+            //has a repository! : PayPerShare isn't being recorded as a decimal for some reason!
             var uri = new Uri($"https://api.polygon.io/v3/reference/dividends?ticker={ticker}&apiKey={AuthData.API_KEY_POLYGON}");
             var client = new HttpClient
             {

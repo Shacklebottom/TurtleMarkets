@@ -100,23 +100,27 @@ using TurtleSQL;
 //}
 ITickerRepository<ListedStatus> lsRepo = new ListedStatusRepository();
 ITickerRepository<DividendDetails> ddRepo = new DividendDetailRepository();
-
-var loadedRepo = lsRepo.GetAll();
-var count = 0;
+var loadedRepo = ddRepo.GetAll();
 foreach (var item in loadedRepo)
 {
-    if (count != 4)
-    {
-        count++;
-        IEnumerable<DividendDetails> dividendDetails = PolygonAPI.GetDividendDetails($"{item.Ticker}");
-        foreach (var detail in dividendDetails)
-        {
-            ddRepo.Save(detail);
-            Console.WriteLine($"Entry Recorded as {detail}");
-            Console.WriteLine($"+====THE COUNT IS: {count}====+");
-        }
-    }
-    else return;
-
+    Console.WriteLine($"Entry PayoutPerShare: {item.PayoutPerShare}");
 }
+//var loadedRepo = lsRepo.GetAll();
+//var count = 0;
+//foreach (var item in loadedRepo)
+//{
+//    if (count != 4)
+//    {
+//        count++;
+//        IEnumerable<DividendDetails> dividendDetails = PolygonAPI.GetDividendDetails($"{item.Ticker}");
+//        foreach (var detail in dividendDetails)
+//        {
+//            ddRepo.Save(detail);
+//            Console.WriteLine($"Entry Recorded as {detail}");
+//            Console.WriteLine($"+====THE COUNT IS: {count}====+");
+//        }
+//    }
+//    else return;
+
+//}
 #endregion
