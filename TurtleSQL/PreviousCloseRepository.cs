@@ -4,7 +4,7 @@ using TurtleSQL.Extensions;
 
 namespace TurtleSQL
 {
-    public class PreviousCloseRepository : Repository<PreviousClose>, IRepository<PreviousClose>
+    public class PreviousCloseRepository : TickerRepository<PreviousClose>, ITickerRepository<PreviousClose>
     {
         protected override string TableName => "PreviousClose";
         protected override IEnumerable<SqlParameter> SqlParameters(PreviousClose entity)
@@ -30,14 +30,14 @@ namespace TurtleSQL
             {
                 yield return new PreviousClose
                 {
-                    Close = rdr.Parse<decimal>("Close"),
-                    Date = rdr.Parse<DateTime>("Date"),
-                    High = rdr.Parse<decimal>("High"),
-                    Low = rdr.Parse<decimal>("Low"),
-                    Open = rdr.Parse<decimal>("Open"),
-                    Ticker = rdr["Ticker"].ToString(),
-                    Volume = rdr.Parse<long>("Volume"),
-                    Id = rdr.Parse<int>("Id") ?? 0
+                    Close = rdr.ParseNullable<decimal>("Close"),
+                    Date = rdr.ParseNullable<DateTime>("Date"),
+                    High = rdr.ParseNullable<decimal>("High"),
+                    Low = rdr.ParseNullable<decimal>("Low"),
+                    Open = rdr.ParseNullable<decimal>("Open"),
+                    Ticker = rdr["Ticker"].ToString() ?? string.Empty,
+                    Volume = rdr.ParseNullable<long>("Volume"),
+                    Id = rdr.ParseNullable<int>("Id") ?? 0
                 };
             }
         }

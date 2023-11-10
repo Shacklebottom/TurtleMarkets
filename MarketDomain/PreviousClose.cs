@@ -2,14 +2,14 @@
 
 namespace MarketDomain
 {
-    public class PreviousClose : IEntity
+    public class PreviousClose : ITicker
     {
         //has a repository
         public override string ToString()
         {
             return $"Ticker: {Ticker}\tDate: {Date}\tOpen: {Open}\tClose: {Close}";
         }
-        public string? Ticker { get; set; }
+        public string Ticker { get; set; } = string.Empty;
         public DateTime? Date { get; set; }
 
         public decimal? Open { get; set; }

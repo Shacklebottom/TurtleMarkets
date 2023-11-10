@@ -5,7 +5,7 @@ using TurtleSQL.Extensions;
 namespace TurtleSQL
 {
     //This should work, but needs to be validated!
-    public class RecommendedTrendRepository : Repository<RecommendedTrend>, IRepository<RecommendedTrend>
+    public class RecommendedTrendRepository : TickerRepository<RecommendedTrend>, ITickerRepository<RecommendedTrend>
     {
         protected override string TableName => "RecommendedTrend";
         protected override List<string> FieldList => new() { "Ticker", "Buy", "Hold", "Period", "Sell", "StrongBuy", "StrongSell"};
@@ -29,13 +29,13 @@ namespace TurtleSQL
             {
                 yield return new RecommendedTrend
                 {
-                    Ticker = rdr["Ticker"].ToString(),
-                    Buy = rdr.Parse<int>("Buy"),
-                    Hold = rdr.Parse<int>("Hold"),
-                    Period = rdr.Parse <DateOnly>("Period"),
-                    Sell = rdr.Parse<int>("Sell"),
-                    StrongBuy = rdr.Parse<int>("StrongBuy"),
-                    StrongSell = rdr.Parse<int>("StrongSell")
+                    Ticker = rdr["Ticker"].ToString() ?? string.Empty,
+                    Buy = rdr.ParseNullable<int>("Buy"),
+                    Hold = rdr.ParseNullable<int>("Hold"),
+                    Period = rdr.ParseNullable <DateOnly>("Period"),
+                    Sell = rdr.ParseNullable<int>("Sell"),
+                    StrongBuy = rdr.ParseNullable<int>("StrongBuy"),
+                    StrongSell = rdr.ParseNullable<int>("StrongSell")
                 };
             }
         }

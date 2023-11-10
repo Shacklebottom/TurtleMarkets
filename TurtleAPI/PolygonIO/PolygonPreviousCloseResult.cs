@@ -6,7 +6,7 @@ namespace TurtleAPI.PolygonIO
     [SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "<Pending>")]
     internal class PolygonPreviousCloseResult
     {
-        public string? T { get; set; } //Ticker
+        public string T { get; set; } = string.Empty; //Ticker
         public decimal o { get; set; } //open
         public decimal c { get; set; } //close
         public decimal h { get; set; } //high

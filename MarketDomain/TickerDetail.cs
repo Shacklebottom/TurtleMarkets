@@ -2,14 +2,14 @@
 
 namespace MarketDomain
 {
-    public class TickerDetail : IEntity
+    public class TickerDetail : ITicker
     {
         //has a repository
         public override string ToString()
         {
             return $"Ticker: {Ticker}\tListDate: {ListDate}\tName: {Name}\tDescription: {Description}";
         }
-        public string? Ticker { get; set; }
+        public string Ticker { get; set; } = string.Empty;
         public string? Name { get; set; }
         public string? Description { get; set; }
         public string? Address { get; set; }

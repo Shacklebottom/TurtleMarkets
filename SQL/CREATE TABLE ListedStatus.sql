@@ -5,7 +5,7 @@ CREATE TABLE ListedStatus (
 	Exchange VARCHAR(50) null,
 	[Type] VARCHAR(50) null,
 	IPOdate date null,
-	DelistingDate VARCHAR(50) null,
+	DelistingDate date null,
 	[Status] VARCHAR(50) null,
 )
 declare @MarketData int

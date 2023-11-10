@@ -9,7 +9,13 @@ using TurtleSQL;
 
 #region SHACKLE WORKSPACE
 
+//PreviousCloseRepository pcRepo = new PreviousCloseRepository();
+//var data = pcRepo.GetByTicker("AAPL");
+//foreach (var item in data)
+//{
+//    Console.WriteLine(item);
 
+//}
 
 #endregion
 
@@ -57,14 +63,14 @@ using TurtleSQL;
 //Console.WriteLine($"Entry Submitted as {recommendedTrend}");
 
 //VALIDATED!
-//IRepository<ListedStatus> lsRepo = new ListedStatusRepository();
+//ITickerRepository<ListedStatus> lsRepo = new ListedStatusRepository();
+//var listedStatus = lsRepo.GetByTicker("MSFT");
 //IEnumerable<ListedStatus>? ListedStatus = AlphaVantageAPI.GetListedStatus(Activity.Active);
 //IEnumerable<ListedStatus>? ListedStatus = AlphaVantageAPI.GetListedStatus(Activity.Delisted);
 
-//foreach (var item in ListedStatus)
+//foreach (var item in listedStatus)
 //{
-//    lsRepo.Save(item);
-//    Console.WriteLine($"Entry Submitted as {item}");
+//    Console.WriteLine($"{item}");
 //}
 //Console.WriteLine("<======END OF CALL======>");
 
@@ -79,6 +85,8 @@ using TurtleSQL;
 
 //VALIDATED!
 //IRepository<ListedStatus> lsRepo = new ListedStatusRepository();
+//IRepository<PreviousClose> pcRepo = new PreviousCloseRepository();
+//IRepository<RecommendedTrend> rtRepo = new RecommendedTrendRepository();
 //IRepository<WorkTicker> wtRepo = new WorkTickerRepository();
 //var loadedRepo = lsRepo.GetAll();
 //var strippedTicker = loadedRepo.Where(s => s.Status == Activity.Active).Select(t => new WorkTicker
@@ -90,5 +98,25 @@ using TurtleSQL;
 //    wtRepo.Save(item);
 //    Console.WriteLine($"Active Ticker Recorded: {item.Ticker}");
 //}
+ITickerRepository<ListedStatus> lsRepo = new ListedStatusRepository();
+ITickerRepository<DividendDetails> ddRepo = new DividendDetailRepository();
 
+var loadedRepo = lsRepo.GetAll();
+var count = 0;
+foreach (var item in loadedRepo)
+{
+    if (count != 4)
+    {
+        count++;
+        IEnumerable<DividendDetails> dividendDetails = PolygonAPI.GetDividendDetails($"{item.Ticker}");
+        foreach (var detail in dividendDetails)
+        {
+            ddRepo.Save(detail);
+            Console.WriteLine($"Entry Recorded as {detail}");
+            Console.WriteLine($"+====THE COUNT IS: {count}====+");
+        }
+    }
+    else return;
+
+}
 #endregion

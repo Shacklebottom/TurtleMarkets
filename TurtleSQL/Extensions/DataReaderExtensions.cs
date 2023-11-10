@@ -4,7 +4,7 @@ namespace TurtleSQL.Extensions
 {
     public static class DataReaderExtensions
     {
-        public static T? Parse<T>(this SqlDataReader reader, string fieldName) where T : struct
+        public static T? ParseNullable<T>(this SqlDataReader reader, string fieldName) where T : struct
         {
             var colIndex = reader.GetOrdinal(fieldName);
             

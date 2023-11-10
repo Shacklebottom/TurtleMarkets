@@ -5,7 +5,7 @@ using TurtleSQL.Extensions;
 namespace TurtleSQL
 {
     //This should work, but needs to be validated! FURTHER, I think I did the 'AllFromReader' TickerDetail properly.
-    public class TickerDetailRepository : Repository<TickerDetail>, IRepository<TickerDetail>
+    public class TickerDetailRepository : TickerRepository<TickerDetail>, ITickerRepository<TickerDetail>
     {
         protected override string TableName => "TickerDetail";
         protected override List<string> FieldList => new() { "Ticker", "Name", "Description", "Address", "City", "State", "TotalEmployees", "ListDate" };
@@ -30,15 +30,15 @@ namespace TurtleSQL
             {
                 yield return new TickerDetail
                 {
-                    Ticker = rdr["Ticker"].ToString(),
+                    Ticker = rdr["Ticker"].ToString() ?? string.Empty,
                     Name = rdr["Name"].ToString(),
                     Description = rdr["Description"].ToString(),
                     Address = rdr["Address"].ToString(),
                     City = rdr["City"].ToString(),
                     State = rdr["State"].ToString(),
-                    TotalEmployees = rdr.Parse<Int64>("TotalEmployees"),
-                    ListDate = rdr.Parse<DateTime>("ListDate"),
-                    Id = rdr.Parse<int>("Id") ?? 0
+                    TotalEmployees = rdr.ParseNullable<Int64>("TotalEmployees"),
+                    ListDate = rdr.ParseNullable<DateTime>("ListDate"),
+                    Id = rdr.ParseNullable<int>("Id") ?? 0
                 };
             };
         }

@@ -106,7 +106,7 @@ namespace TurtleAPI.AlphaVantage
             var records = csv.GetRecords<AlphaVListingResponse>();
             var statusDetail = records.Select(r => new ListedStatus
             {
-                Ticker = r?.symbol,
+                Ticker = r.symbol,
                 Name = r?.name,
                 Exchange = r?.exchange,
                 Type = r?.assetType,

@@ -5,7 +5,7 @@ using TurtleSQL.Extensions;
 namespace TurtleSQL
 {
     //This should work, but needs to be validated!
-    public class ListedStatusRepository : Repository<ListedStatus>, IRepository<ListedStatus>
+    public class ListedStatusRepository : TickerRepository<ListedStatus>, ITickerRepository<ListedStatus>
     {
         protected override string TableName => "ListedStatus";
         protected override IEnumerable<SqlParameter> SqlParameters(ListedStatus entity)
@@ -29,14 +29,14 @@ namespace TurtleSQL
             {
                 yield return new ListedStatus
                 {
-                    Ticker = rdr["Ticker"].ToString(),
+                    Ticker = rdr["Ticker"].ToString() ?? string.Empty,
                     Name = rdr["Name"].ToString(),
                     Exchange = rdr["Exchange"].ToString(),
                     Type = rdr["Type"].ToString(),
-                    IPOdate = rdr.Parse<DateTime>("IPOdate"),
-                    DelistingDate = rdr["DelistingDate"].ToString(),
+                    IPOdate = rdr.ParseNullable<DateTime>("IPOdate"),
+                    DelistingDate = rdr.ParseNullable<DateTime>("DelistingDate"),
                     Status = rdr["Status"].ToString(),
-                    Id = rdr.Parse<int>("Id") ?? 0
+                    Id = rdr.ParseNullable<int>("Id") ?? 0
                 };
             }
         }

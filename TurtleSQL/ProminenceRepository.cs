@@ -4,7 +4,7 @@ using TurtleSQL.Extensions;
 
 namespace TurtleSQL
 {
-    public class ProminenceRepository : Repository<Prominence>, IRepository<Prominence>
+    public class ProminenceRepository : TickerRepository<Prominence>, ITickerRepository<Prominence>
     {
         //This should work, but needs to be validated!
         protected override string TableName => "Prominence";
@@ -27,12 +27,12 @@ namespace TurtleSQL
             {
                 yield return new Prominence
                 {
-                    Ticker = rdr["Ticker"].ToString(),
-                    Price = rdr.Parse<decimal>("Price"),
-                    ChangeAmount = rdr.Parse<decimal>("ChangeAmount"),
+                    Ticker = rdr["Ticker"].ToString() ?? string.Empty,
+                    Price = rdr.ParseNullable<decimal>("Price"),
+                    ChangeAmount = rdr.ParseNullable<decimal>("ChangeAmount"),
                     ChangePercentage = rdr["ChangePercentage"].ToString(),
-                    Volume = rdr.Parse<Int64>("Volume"),
-                    Id = rdr.Parse<int>("Id") ?? 0
+                    Volume = rdr.ParseNullable<Int64>("Volume"),
+                    Id = rdr.ParseNullable<int>("Id") ?? 0
                 };
             }
         }

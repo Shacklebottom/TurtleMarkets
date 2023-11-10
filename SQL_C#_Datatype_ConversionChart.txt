@@ -1,0 +1,20 @@
+Certainly! Here's the chart organized by C# data types:
+
+| C# Data Type           | SQL Data Types                                     | Additional Information                        |
+|------------------------|----------------------------------------------------|------------------------------------------------|
+| int                    | INT, SMALLINT, TINYINT, BIGINT                     |                                                |
+| long                   | BIGINT                                             |                                                |
+| short                  | SMALLINT                                           |                                                |
+| byte                   | TINYINT                                            |                                                |
+| decimal                | DECIMAL, NUMERIC, MONEY, SMALLMONEY                |                                                |
+| double                 | FLOAT, REAL                                        |                                                |
+| float                  | REAL                                               |                                                |
+| string                 | CHAR, VARCHAR, TEXT, NCHAR, NVARCHAR, NTEXT, XML   | VARCHAR and NVARCHAR have specified storage sizes; TEXT and NTEXT are variable-length suitable for large text. |
+| bool                   | BIT                                                |                                                |
+| Guid                   | UNIQUEIDENTIFIER                                   |                                                |
+| DateTime               | DATETIME, DATE, DATETIME2                          | DATETIME2 has higher fractional seconds precision. |
+| TimeSpan               | TIME                                               |                                                |
+| DateTimeOffset         | DATETIMEOFFSET                                     |                                                |
+| byte[]                 | BLOB, VARBINARY, IMAGE                            | IMAGE is deprecated; use VARBINARY(MAX) instead. |
+
+This organization groups SQL data types based on their corresponding C# data types. If you have any further questions or if there's anything else you'd like to modify, feel free to let me know!

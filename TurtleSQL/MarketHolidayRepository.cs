@@ -29,11 +29,11 @@ namespace TurtleSQL
                 yield return new MarketHoliday()
                 {
                     Exchange = rdr["Exchange"].ToString(),
-                    Date = rdr.Parse<DateTime>("Date"),
+                    Date = rdr.ParseNullable<DateTime>("Date"),
                     Holiday = rdr["Holiday"].ToString(),
                     Status = rdr["Status"].ToString(),
-                    Open = rdr.Parse<DateTime>("Open"),
-                    Close = rdr.Parse<DateTime>("Close")
+                    Open = rdr.ParseNullable<DateTime>("Open"),
+                    Close = rdr.ParseNullable<DateTime>("Close")
                 };
             }
         }

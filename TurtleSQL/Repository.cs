@@ -44,6 +44,7 @@ namespace TurtleSQL
             _sqlConnection.Open();
             var rdr = cmd.ExecuteReader();
             IEnumerable<T>? result = this.AllFromReader(rdr).ToList();
+            _sqlConnection.Close();
 
             return result;
         }

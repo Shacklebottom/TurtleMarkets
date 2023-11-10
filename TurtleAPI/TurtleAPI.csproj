@@ -14,4 +14,8 @@
     <ProjectReference Include="..\MarketDomain\MarketDomain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Extensions\" />
+  </ItemGroup>
+
 </Project>
