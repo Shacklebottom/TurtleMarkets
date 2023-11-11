@@ -34,8 +34,7 @@ namespace TurtleAPI.FinnhubIO
         private static DateTime ParseUnixTimestamp(decimal t)
         {
             var epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
-            var x = t * 1000;
-            var dateTime = epoch.AddMilliseconds((double)x);
+            var dateTime = epoch.AddSeconds((double)t);
             return dateTime;
         }
         public static RecommendedTrend? GetRecommendedTrend(string ticker)

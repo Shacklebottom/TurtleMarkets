@@ -9,7 +9,7 @@ namespace MarketDomain
         //has a repository
         public override string ToString()
         {
-            return $"Ticker: {Ticker}\tListDate: {ListDate}\tName: {Name}\tDescription: {Description}";
+            return $"Id: {Id}\tTicker: {Ticker}\tListDate: {ListDate}\tName: {Name}\tDescription: {Description}";
         }
         public string Ticker { get; set; } = string.Empty;
         public string? Name { get; set; }
