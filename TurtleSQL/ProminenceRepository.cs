@@ -28,8 +28,8 @@ namespace TurtleSQL
                 yield return new Prominence
                 {
                     Ticker = rdr["Ticker"].ToString() ?? string.Empty,
-                    Price = rdr.ParseNullable<decimal>("Price"),
-                    ChangeAmount = rdr.ParseNullable<decimal>("ChangeAmount"),
+                    Price = rdr.ParseNullable<double>("Price"),
+                    ChangeAmount = rdr.ParseNullable<double>("ChangeAmount"),
                     ChangePercentage = rdr["ChangePercentage"].ToString(),
                     Volume = rdr.ParseNullable<Int64>("Volume"),
                     Id = rdr.ParseNullable<int>("Id") ?? 0

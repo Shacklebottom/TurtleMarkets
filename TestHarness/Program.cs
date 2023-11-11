@@ -61,10 +61,26 @@ using TurtleSQL;
 
 
 //VALIDATED!
-//IRepository<Prominence> proRepo = new ProminenceRepository();
-//IEnumerable<Prominence>? Prominence = AlphaVantageAPI.GetPolarizedMarkets()[PrestigeType.TopGainer];
-//IEnumerable<Prominence>? Prominence = AlphaVantageAPI.GetPolarizedMarkets()[PrestigeType.TopLoser];
-//IEnumerable<Prominence>? Prominence = AlphaVantageAPI.GetPolarizedMarkets()[PrestigeType.MostTraded];
+IRepository<Prominence> proRepo = new ProminenceRepository();
+IEnumerable<Prominence>? Prominence1 = AlphaVantageAPI.GetPolarizedMarkets()[PrestigeType.TopGainer];
+IEnumerable<Prominence>? Prominence2 = AlphaVantageAPI.GetPolarizedMarkets()[PrestigeType.TopLoser];
+IEnumerable<Prominence>? Prominence3 = AlphaVantageAPI.GetPolarizedMarkets()[PrestigeType.MostTraded];
+var Prominences = new List<Prominence>();
+Prominences.AddRange(Prominence1);
+Prominences.AddRange(Prominence2);
+Prominences.AddRange(Prominence3);
+foreach (var item in Prominences)
+{
+    proRepo.Save(item);
+    Console.WriteLine($"Entry Submitted as {item}");
+}
+Console.WriteLine(">====END OF ADDITION====<");
+var loadedRepo = proRepo.GetAll();
+foreach (var item in loadedRepo)
+{
+    Console.WriteLine(item);    
+}
+Console.WriteLine(">====You've Reached IT====<");
 //foreach (var item in Prominence)
 //{
 //    proRepo.Save(item);
