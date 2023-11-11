@@ -1,7 +1,10 @@
 ﻿using CsvHelper;
 using MarketDomain;
+using MarketDomain.Enums;
 using Newtonsoft.Json;
 using System.Globalization;
+using System.Net;
+using TurtleAPI.Exceptions;
 
 namespace TurtleAPI.AlphaVantage
 {
@@ -92,30 +95,69 @@ namespace TurtleAPI.AlphaVantage
         /// </summary>
         /// <param name="statusRequest">Activity.Active or Activity.Delisted</param>
         /// <returns>IEnumberable of all active or delisted tickers</returns>
-        public static IEnumerable<ListedStatus>? GetListedStatus(string statusRequest)
+        public static IEnumerable<ListedStatus> GetListedStatus(ListedStatusTypes listingType = ListedStatusTypes.Listed)
         {
             //has a repository : Validated!
-            var uri = new Uri($"https://www.alphavantage.co/query?function=LISTING_STATUS&state={statusRequest}&apikey={AuthData.API_KEY_ALPHAVANTAGE}");
+            var uri = new Uri($"https://www.alphavantage.co/query?function=LISTING_STATUS&state={listingType.ToString().ToLower()}&apikey={AuthData.API_KEY_ALPHAVANTAGE}");
             var client = new HttpClient
             {
                 BaseAddress = uri
             };
-            var response = client.GetStreamAsync(uri).Result;
-            var reader = new StreamReader(response);
-            var csv = new CsvReader(reader, CultureInfo.InvariantCulture);
-            var records = csv.GetRecords<AlphaVListingResponse>() ??
-                throw new Exception("could not parse Alpha Vantage response");
-            var statusDetail = records.Select(r => new ListedStatus
+
+            var response = client.GetAsync(uri).Result;
+            if(response.StatusCode != HttpStatusCode.OK) // 200 == OK
             {
-                Ticker = r.symbol,
-                Name = r?.name,
-                Exchange = r?.exchange,
-                Type = r?.assetType,
-                IPOdate = r?.ipoDate,
-                DelistingDate = r?.delistingDate,
-                Status = r?.status,
-            });
-            return statusDetail;
+                throw new ApiException(response);
+            }
+            
+            var responseString = response.Content.ReadAsStringAsync().Result; // this "should" be a string of CSV data
+            var result = ParseListedStatus(responseString);
+
+            return result;
+            //var response = client.GetStreamAsync(uri).Result;
+            //var reader = new StreamReader(response);
+            //var csv = new CsvReader(reader, CultureInfo.InvariantCulture);
+            //var records = csv.GetRecords<AlphaVListingResponse>() ??
+            //    throw new Exception("could not parse Alpha Vantage response");
+            //var statusDetail = records.Select(r => new ListedStatus
+            //{
+            //    Ticker = r.symbol,
+            //    Name = r?.name,
+            //    Exchange = r?.exchange,
+            //    Type = r?.assetType,
+            //    IPOdate = r?.ipoDate,
+            //    DelistingDate = r?.delistingDate,
+            //    Status = r?.status,
+            //});
+            //return statusDetail;
+        }
+
+        private static IEnumerable<ListedStatus> ParseListedStatus(string csvData)
+        {
+            var result = new List<ListedStatus>();
+
+            var lines = csvData.Split("\r\n");
+            //var header = lines[0];
+            var data = lines.Skip(1);
+
+            foreach (var line in data)
+            {
+                var elements = line.Split(',');
+
+                var ls = new ListedStatus
+                {
+                    Ticker = elements[0],
+                    Name = elements[1],
+                    Exchange = elements[2],
+                    Type = elements[3],
+                    IPOdate = elements[4] == "null" ? null : DateTime.Parse(elements[4]),
+                    DelistingDate = elements[5] == "null" ? null : DateTime.Parse(elements[5]),
+                    Status = elements[6]
+                };
+
+                result.Add(ls);
+            }
+            return result;
         }
     }
 }

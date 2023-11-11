@@ -1,5 +1,7 @@
 ﻿
 
+using MarketDomain.Interfaces;
+
 namespace MarketDomain
 {
     public class ListedStatus : ITicker
@@ -7,7 +9,7 @@ namespace MarketDomain
         //has a repository
         public override string ToString()
         {
-            return $"Ticker: {Ticker}\tName {Name}\tExchange {Exchange}\tStatus {Status}\tDelistingDate {DelistingDate}";
+            return $"Ticker: {Ticker}\tName {Name}\tExchange {Exchange}\tStatus {Status}\tDelistingDate {DelistingDate?.ToString() ?? "(null)"}";
         }
         public string Ticker { get; set; } = string.Empty;
         public string? Name { get; set; }

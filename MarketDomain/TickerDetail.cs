@@ -1,5 +1,7 @@
 ﻿
 
+using MarketDomain.Interfaces;
+
 namespace MarketDomain
 {
     public class TickerDetail : ITicker
