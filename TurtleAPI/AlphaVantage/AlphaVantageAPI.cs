@@ -95,7 +95,7 @@ namespace TurtleAPI.AlphaVantage
         /// </summary>
         /// <param name="statusRequest">Activity.Active or Activity.Delisted</param>
         /// <returns>IEnumberable of all active or delisted tickers</returns>
-        public static IEnumerable<ListedStatus> GetListedStatus(ListedStatusTypes listingType = ListedStatusTypes.Listed)
+        public static IEnumerable<ListedStatus> GetListedStatus(ListedStatusTypes listingType = ListedStatusTypes.Active)
         {
             //has a repository : Validated!
             var uri = new Uri($"https://www.alphavantage.co/query?function=LISTING_STATUS&state={listingType.ToString().ToLower()}&apikey={AuthData.API_KEY_ALPHAVANTAGE}");
