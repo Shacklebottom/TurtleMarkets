@@ -142,6 +142,8 @@ namespace TurtleAPI.AlphaVantage
 
             foreach (var line in data)
             {
+                if (string.IsNullOrEmpty(line)) continue;
+
                 var elements = line.Split(',');
 
                 var ls = new ListedStatus
