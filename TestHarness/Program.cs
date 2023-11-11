@@ -32,6 +32,27 @@ using System.Net;
 #endregion
 
 #region VALIDATION
+//NOT VALIDATED!!!
+//It was giving Null problems again with DelistedStatus. FURTHER: I think I overloaded the API key :O
+//ITickerRepository<ListedStatus> lsRepo = new ListedStatusRepository();
+//IEnumerable<ListedStatus>? ListedStatus1 = AlphaVantageAPI.GetListedStatus(Activity.Active);
+//IEnumerable<ListedStatus>? ListedStatus2 = AlphaVantageAPI.GetListedStatus(Activity.Delisted);
+//var listedStatuses = new List<ListedStatus>();
+//listedStatuses.AddRange(ListedStatus1);
+//listedStatuses.AddRange(ListedStatus2);
+//foreach (var item in listedStatuses)
+//{
+//    lsRepo.Save(item);
+//    Console.WriteLine($"Entry Submitted as {item}");
+//}
+//Console.WriteLine("<======END OF CALL======>");
+//var loadedRepo = lsRepo.GetAll(); 
+//foreach (var item in loadedRepo)
+//{
+//    Console.WriteLine(item);
+//}
+//Console.WriteLine(">====END OF LINE====<");
+
 
 //VALIDATED!
 //IRepository<PreviousClose> pcRepo = new PreviousCloseRepository();
@@ -58,7 +79,6 @@ using System.Net;
 //    Console.WriteLine(item);
 //}
 
-
 //VALIDATED!
 //IRepository<Prominence> proRepo = new ProminenceRepository();
 //IEnumerable<Prominence>? Prominence1 = AlphaVantageAPI.GetPolarizedMarkets()[PrestigeType.TopGainer];
@@ -81,7 +101,6 @@ using System.Net;
 //}
 //Console.WriteLine(">====You've Reached IT====<");
 
-
 //VALIDATED!
 //IRepository<RecommendedTrend> rtRepo = new RecommendedTrendRepository();
 //RecommendedTrend? recommendedTrend = FinnhubAPI.GetRecommendedTrend("MSFT");
@@ -92,31 +111,6 @@ using System.Net;
 //{
 //    Console.WriteLine(item); 
 //}
-
-
-
-//It was giving Null problems again with DelistedStatus. FURTHER: I think I overloaded the API key :O
-//ITickerRepository<ListedStatus> lsRepo = new ListedStatusRepository();
-//IEnumerable<ListedStatus>? ListedStatus1 = AlphaVantageAPI.GetListedStatus(Activity.Active);
-//IEnumerable<ListedStatus>? ListedStatus2 = AlphaVantageAPI.GetListedStatus(Activity.Delisted);
-//var listedStatuses = new List<ListedStatus>();
-//listedStatuses.AddRange(ListedStatus1);
-//listedStatuses.AddRange(ListedStatus2);
-//foreach (var item in listedStatuses)
-//{
-//    lsRepo.Save(item);
-//    Console.WriteLine($"Entry Submitted as {item}");
-//}
-//Console.WriteLine("<======END OF CALL======>");
-//var loadedRepo = lsRepo.GetAll(); 
-//foreach (var item in loadedRepo)
-//{
-//    Console.WriteLine(item);
-//}
-//Console.WriteLine(">====END OF LINE====<");
-
-
-
 
 //VALIDATED!
 //IRepository<MarketHoliday> mhRepo = new MarketHolidayRepository();
@@ -170,6 +164,5 @@ using System.Net;
 //        }
 //    }
 //    else return;
-
 //}
 #endregion
