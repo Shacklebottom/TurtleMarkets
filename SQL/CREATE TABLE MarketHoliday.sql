@@ -4,7 +4,7 @@ CREATE TABLE MarketHoliday (
 	[Date] datetime null,
 	Holiday VARCHAR(50) null,
 	[Status] VARCHAR(50) null,
-	[Open] VARCHAR(50) null,
-	[Close] VARCHAR(50) null
+	[Open] datetime null,
+	[Close] datetime null
 	)
 	DECLARE @MarketHoliday int

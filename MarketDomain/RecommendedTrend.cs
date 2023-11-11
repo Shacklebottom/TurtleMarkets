@@ -12,7 +12,7 @@ namespace MarketDomain
         public string Ticker { get; set; } = string.Empty;
         public int? Buy { get; set; }
         public int? Hold { get; set; }
-        public DateOnly? Period { get; set; }
+        public DateTime? Period { get; set; }
         public int? Sell { get; set; }
         public int? StrongBuy { get; set; }
         public int? StrongSell { get; set; }

@@ -12,12 +12,12 @@ namespace MarketDomain
         public string Ticker { get; set; } = string.Empty;
         public DateTime? Date { get; set; }
 
-        public decimal? Open { get; set; }
+        public double? Open { get; set; }
 
-        public decimal? Close { get; set; }
-        public decimal? High { get; set; }
+        public double? Close { get; set; }
+        public double? High { get; set; }
 
-        public decimal? Low { get; set; }
+        public double? Low { get; set; }
 
         public long? Volume { get; set; }
         

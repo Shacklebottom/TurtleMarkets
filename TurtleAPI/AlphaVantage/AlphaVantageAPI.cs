@@ -103,7 +103,8 @@ namespace TurtleAPI.AlphaVantage
             var response = client.GetStreamAsync(uri).Result;
             var reader = new StreamReader(response);
             var csv = new CsvReader(reader, CultureInfo.InvariantCulture);
-            var records = csv.GetRecords<AlphaVListingResponse>();
+            var records = csv.GetRecords<AlphaVListingResponse>() ??
+                throw new Exception("could not parse Alpha Vantage response");
             var statusDetail = records.Select(r => new ListedStatus
             {
                 Ticker = r.symbol,

@@ -32,7 +32,7 @@ namespace TurtleSQL
                     Ticker = rdr["Ticker"].ToString() ?? string.Empty,
                     Buy = rdr.ParseNullable<int>("Buy"),
                     Hold = rdr.ParseNullable<int>("Hold"),
-                    Period = rdr.ParseNullable <DateOnly>("Period"),
+                    Period = rdr.ParseNullable <DateTime>("Period"),
                     Sell = rdr.ParseNullable<int>("Sell"),
                     StrongBuy = rdr.ParseNullable<int>("StrongBuy"),
                     StrongSell = rdr.ParseNullable<int>("StrongSell")

@@ -7,13 +7,13 @@ namespace TurtleAPI.AlphaVantage
     public class AlphaVPreviousCloseResult
     {
         [JsonProperty("02. open")]
-        public decimal open { get; set; }
+        public double open { get; set; }
         [JsonProperty("03. high")]
-        public decimal high { get; set; }
+        public double high { get; set; }
         [JsonProperty("04. low")]
-        public decimal low { get; set; }
+        public double low { get; set; }
         [JsonProperty("05. price")] //this is today's previous close
-        public decimal price { get; set; }
+        public double price { get; set; }
         [JsonProperty("06. volume")]
         public long volume { get; set; }
         [JsonProperty("07. latest trading day")]

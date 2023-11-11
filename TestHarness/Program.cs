@@ -4,6 +4,9 @@ using TurtleAPI.PolygonIO;
 using TurtleAPI.AlphaVantage;
 using TurtleAPI.FinnhubIO;
 using TurtleSQL;
+using CsvHelper;
+using System.Globalization;
+using System.Net;
 
 
 
@@ -44,10 +47,6 @@ using TurtleSQL;
 //    Console.WriteLine(item);
 //}
 
-
-
-
-
 //VALIDATED!
 //TickerDetail? tickerDetail = PolygonAPI.GetTickerDetails("MSFT");
 //IRepository<TickerDetail> tdRepo = new TickerDetailRepository();
@@ -61,49 +60,63 @@ using TurtleSQL;
 
 
 //VALIDATED!
-IRepository<Prominence> proRepo = new ProminenceRepository();
-IEnumerable<Prominence>? Prominence1 = AlphaVantageAPI.GetPolarizedMarkets()[PrestigeType.TopGainer];
-IEnumerable<Prominence>? Prominence2 = AlphaVantageAPI.GetPolarizedMarkets()[PrestigeType.TopLoser];
-IEnumerable<Prominence>? Prominence3 = AlphaVantageAPI.GetPolarizedMarkets()[PrestigeType.MostTraded];
-var Prominences = new List<Prominence>();
-Prominences.AddRange(Prominence1);
-Prominences.AddRange(Prominence2);
-Prominences.AddRange(Prominence3);
-foreach (var item in Prominences)
-{
-    proRepo.Save(item);
-    Console.WriteLine($"Entry Submitted as {item}");
-}
-Console.WriteLine(">====END OF ADDITION====<");
-var loadedRepo = proRepo.GetAll();
-foreach (var item in loadedRepo)
-{
-    Console.WriteLine(item);    
-}
-Console.WriteLine(">====You've Reached IT====<");
-//foreach (var item in Prominence)
+//IRepository<Prominence> proRepo = new ProminenceRepository();
+//IEnumerable<Prominence>? Prominence1 = AlphaVantageAPI.GetPolarizedMarkets()[PrestigeType.TopGainer];
+//IEnumerable<Prominence>? Prominence2 = AlphaVantageAPI.GetPolarizedMarkets()[PrestigeType.TopLoser];
+//IEnumerable<Prominence>? Prominence3 = AlphaVantageAPI.GetPolarizedMarkets()[PrestigeType.MostTraded];
+//var Prominences = new List<Prominence>();
+//Prominences.AddRange(Prominence1);
+//Prominences.AddRange(Prominence2);
+//Prominences.AddRange(Prominence3);
+//foreach (var item in Prominences)
 //{
 //    proRepo.Save(item);
 //    Console.WriteLine($"Entry Submitted as {item}");
 //}
+//Console.WriteLine(">====END OF ADDITION====<");
+//var loadedRepo = proRepo.GetAll();
+//foreach (var item in loadedRepo)
+//{
+//    Console.WriteLine(item);    
+//}
+//Console.WriteLine(">====You've Reached IT====<");
+
 
 //VALIDATED!
 //IRepository<RecommendedTrend> rtRepo = new RecommendedTrendRepository();
 //RecommendedTrend? recommendedTrend = FinnhubAPI.GetRecommendedTrend("MSFT");
 //rtRepo.Save(recommendedTrend);
 //Console.WriteLine($"Entry Submitted as {recommendedTrend}");
-
-//VALIDATED!
-//ITickerRepository<ListedStatus> lsRepo = new ListedStatusRepository();
-//var listedStatus = lsRepo.GetByTicker("MSFT");
-//IEnumerable<ListedStatus>? ListedStatus = AlphaVantageAPI.GetListedStatus(Activity.Active);
-//IEnumerable<ListedStatus>? ListedStatus = AlphaVantageAPI.GetListedStatus(Activity.Delisted);
-
-//foreach (var item in listedStatus)
+//var loadedRepo = rtRepo.GetAll();
+//foreach (var item in loadedRepo)
 //{
-//    Console.WriteLine($"{item}");
+//    Console.WriteLine(item); 
+//}
+
+
+
+//It was giving Null problems again with DelistedStatus. FURTHER: I think I overloaded the API key :O
+//ITickerRepository<ListedStatus> lsRepo = new ListedStatusRepository();
+//IEnumerable<ListedStatus>? ListedStatus1 = AlphaVantageAPI.GetListedStatus(Activity.Active);
+//IEnumerable<ListedStatus>? ListedStatus2 = AlphaVantageAPI.GetListedStatus(Activity.Delisted);
+//var listedStatuses = new List<ListedStatus>();
+//listedStatuses.AddRange(ListedStatus1);
+//listedStatuses.AddRange(ListedStatus2);
+//foreach (var item in listedStatuses)
+//{
+//    lsRepo.Save(item);
+//    Console.WriteLine($"Entry Submitted as {item}");
 //}
 //Console.WriteLine("<======END OF CALL======>");
+//var loadedRepo = lsRepo.GetAll(); 
+//foreach (var item in loadedRepo)
+//{
+//    Console.WriteLine(item);
+//}
+//Console.WriteLine(">====END OF LINE====<");
+
+
+
 
 //VALIDATED!
 //IRepository<MarketHoliday> mhRepo = new MarketHolidayRepository();
@@ -112,6 +125,11 @@ Console.WriteLine(">====You've Reached IT====<");
 //{
 //    mhRepo.Save(item);
 //    Console.WriteLine($"Entry Submitted as {item}");
+//}
+//var loadedRepo = mhRepo.GetAll();
+//foreach (var item in loadedRepo)
+//{
+//    Console.WriteLine(item);
 //}
 
 //VALIDATED!

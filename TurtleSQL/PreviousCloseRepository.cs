@@ -30,11 +30,11 @@ namespace TurtleSQL
             {
                 yield return new PreviousClose
                 {
-                    Close = rdr.ParseNullable<decimal>("Close"),
+                    Close = rdr.ParseNullable<double>("Close"),
                     Date = rdr.ParseNullable<DateTime>("Date"),
-                    High = rdr.ParseNullable<decimal>("High"),
-                    Low = rdr.ParseNullable<decimal>("Low"),
-                    Open = rdr.ParseNullable<decimal>("Open"),
+                    High = rdr.ParseNullable<double>("High"),
+                    Low = rdr.ParseNullable<double>("Low"),
+                    Open = rdr.ParseNullable<double>("Open"),
                     Ticker = rdr["Ticker"].ToString() ?? string.Empty,
                     Volume = rdr.ParseNullable<long>("Volume"),
                     Id = rdr.ParseNullable<int>("Id") ?? 0
