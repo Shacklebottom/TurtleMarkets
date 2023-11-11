@@ -34,24 +34,24 @@ using System.Net;
 #region VALIDATION
 //NOT VALIDATED!!!
 //It was giving Null problems again with DelistedStatus. FURTHER: I think I overloaded the API key :O
-//ITickerRepository<ListedStatus> lsRepo = new ListedStatusRepository();
-//IEnumerable<ListedStatus>? ListedStatus1 = AlphaVantageAPI.GetListedStatus(Activity.Active);
-//IEnumerable<ListedStatus>? ListedStatus2 = AlphaVantageAPI.GetListedStatus(Activity.Delisted);
-//var listedStatuses = new List<ListedStatus>();
-//listedStatuses.AddRange(ListedStatus1);
-//listedStatuses.AddRange(ListedStatus2);
-//foreach (var item in listedStatuses)
-//{
-//    lsRepo.Save(item);
-//    Console.WriteLine($"Entry Submitted as {item}");
-//}
-//Console.WriteLine("<======END OF CALL======>");
-//var loadedRepo = lsRepo.GetAll(); 
-//foreach (var item in loadedRepo)
-//{
-//    Console.WriteLine(item);
-//}
-//Console.WriteLine(">====END OF LINE====<");
+ITickerRepository<ListedStatus> lsRepo = new ListedStatusRepository();
+IEnumerable<ListedStatus>? ListedStatus1 = AlphaVantageAPI.GetListedStatus(Activity.Active);
+IEnumerable<ListedStatus>? ListedStatus2 = AlphaVantageAPI.GetListedStatus(Activity.Delisted);
+var listedStatuses = new List<ListedStatus>();
+listedStatuses.AddRange(ListedStatus1);
+listedStatuses.AddRange(ListedStatus2);
+foreach (var item in listedStatuses)
+{
+    lsRepo.Save(item);
+    Console.WriteLine($"Entry Submitted as {item}");
+}
+Console.WriteLine("<======END OF CALL======>");
+var loadedRepo = lsRepo.GetAll();
+foreach (var item in loadedRepo)
+{
+    Console.WriteLine(item);
+}
+Console.WriteLine(">====END OF LINE====<");
 
 
 //VALIDATED!

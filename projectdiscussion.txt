@@ -3,3 +3,5 @@ Possible API additions by interest:
 -Polygon:  Ticker News.
 -Alpha Vantage: News & Sentiments, Company Overview,
 -Finnhub: possibly crypto?
+
+
