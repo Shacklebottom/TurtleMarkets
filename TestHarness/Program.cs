@@ -31,7 +31,6 @@ using TurtleSQL;
 #region VALIDATION
 
 //VALIDATED!
-
 //IRepository<PreviousClose> pcRepo = new PreviousCloseRepository();
 //PreviousClose? marketDetail0 = AlphaVantageAPI.GetPreviousClose("MSFT");
 //PreviousClose? marketDetail1 = PolygonAPI.GetPreviousClose("MSFT");
@@ -45,12 +44,21 @@ using TurtleSQL;
 //    Console.WriteLine(item);
 //}
 
+
+
+
+
 //VALIDATED!
 //TickerDetail? tickerDetail = PolygonAPI.GetTickerDetails("MSFT");
-//Console.WriteLine(tickerDetail);
 //IRepository<TickerDetail> tdRepo = new TickerDetailRepository();
 //tdRepo.Save(tickerDetail);
-//Console.WriteLine("Entry Submitted");
+//Console.WriteLine($"Entry Submitted as {tickerDetail}");
+//var loadedRepo = tdRepo.GetAll();
+//foreach (var item in loadedRepo)
+//{
+//    Console.WriteLine(item);
+//}
+
 
 //VALIDATED!
 //IRepository<Prominence> proRepo = new ProminenceRepository();
