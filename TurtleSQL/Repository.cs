@@ -1,4 +1,4 @@
-﻿using MarketDomain;
+﻿using MarketDomain.Interfaces;
 using Microsoft.Data.SqlClient;
 using TurtleSQL.Extensions;
 

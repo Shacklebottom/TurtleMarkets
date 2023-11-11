@@ -7,8 +7,15 @@ using TurtleSQL;
 using CsvHelper;
 using System.Globalization;
 using System.Net;
+using TestHarness;
+using MarketDomain.Enums;
 
+#region ATARI WORKSPACE
 
+var data = AlphaVantageAPI.GetListedStatus(ListedStatusTypes.Listed).ToList();
+data.ForEach(Console.WriteLine);
+
+#endregion
 
 #region SHACKLE WORKSPACE
 

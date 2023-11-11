@@ -5,6 +5,7 @@ namespace TurtleAPI.AlphaVantage
     [SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "<Pending>")]
     public class AlphaVListingResponse
     {
+        // CSV header looks like this: symbol,name,exchange,assetType,ipoDate,delistingDate,status
         public string symbol { get; set; } = string.Empty;
         public string? name { get; set; }
         public string? exchange { get; set; }
