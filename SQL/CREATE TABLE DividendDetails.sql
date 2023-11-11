@@ -9,4 +9,4 @@ CREATE TABLE DividendDetails (
 	PayoutDate date null,
 	OwnBeforeDate date null
 	)
-	@DividendDetails int
+	declare @DividendDetails int

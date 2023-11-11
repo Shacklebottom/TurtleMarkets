@@ -31,12 +31,19 @@ using TurtleSQL;
 #region VALIDATION
 
 //VALIDATED!
+
 //IRepository<PreviousClose> pcRepo = new PreviousCloseRepository();
-//PreviousClose? marketDetail = AlphaVantageAPI.GetPreviousClose("MSFT");
-//PreviousClose? marketDetail = PolygonAPI.GetPreviousClose("MSFT");
-//PreviousClose? marketDetail = FinnhubAPI.GetPreviousClose("MSFT");
-//pcRepo.Save(marketDetail);
-//Console.WriteLine($"Entry Submitted as {marketDetail}");
+//PreviousClose? marketDetail0 = AlphaVantageAPI.GetPreviousClose("MSFT");
+//PreviousClose? marketDetail1 = PolygonAPI.GetPreviousClose("MSFT");
+//PreviousClose? marketDetail2 = FinnhubAPI.GetPreviousClose("MSFT");
+//pcRepo.Save(marketDetail0);
+//pcRepo.Save(marketDetail1);
+//pcRepo.Save(marketDetail2);
+//var loadedRepo = pcRepo.GetAll();
+//foreach (var item in loadedRepo)
+//{
+//    Console.WriteLine(item);
+//}
 
 //VALIDATED!
 //TickerDetail? tickerDetail = PolygonAPI.GetTickerDetails("MSFT");
@@ -98,13 +105,13 @@ using TurtleSQL;
 //    wtRepo.Save(item);
 //    Console.WriteLine($"Active Ticker Recorded: {item.Ticker}");
 //}
-ITickerRepository<ListedStatus> lsRepo = new ListedStatusRepository();
-ITickerRepository<DividendDetails> ddRepo = new DividendDetailRepository();
-var loadedRepo = ddRepo.GetAll();
-foreach (var item in loadedRepo)
-{
-    Console.WriteLine($"Entry PayoutPerShare: {item.PayoutPerShare}");
-}
+//ITickerRepository<ListedStatus> lsRepo = new ListedStatusRepository();
+//ITickerRepository<DividendDetails> ddRepo = new DividendDetailRepository();
+//var loadedRepo = ddRepo.GetAll();
+//foreach (var item in loadedRepo)
+//{
+//    Console.WriteLine($"Entry PayoutPerShare: {item.PayoutPerShare}");
+//}
 //var loadedRepo = lsRepo.GetAll();
 //var count = 0;
 //foreach (var item in loadedRepo)

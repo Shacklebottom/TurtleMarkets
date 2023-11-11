@@ -8,4 +8,4 @@ CREATE TABLE PreviousClose(
 	[Low] money,
 	[Volume] bigint
 	)
-	Declare @MarketData int
+declare @MarketData int
