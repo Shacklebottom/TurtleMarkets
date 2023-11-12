@@ -41,7 +41,7 @@ namespace TurtleSQL
                 yield return new DividendDetails
                 {
                     Ticker = rdr["Ticker"].ToString() ?? string.Empty,
-                    PayoutPerShare = rdr.ParseNullable<decimal>("PayoutPerShare"),
+                    PayoutPerShare = rdr.ParseNullable<double>("PayoutPerShare"),
                     DividendType = rdr["DividendType"].ToString(),
                     PayoutFrequency = rdr.ParseNullable<int>("PayoutFrequency"),
                     DividendDeclaration = rdr.ParseNullable<DateTime>("DividendDeclaration"),

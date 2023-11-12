@@ -43,12 +43,9 @@ using TurtleAPI.Exceptions;
 
 #region VALIDATION
 //VALIDATED!
-//It was giving Null problems again with DelistedStatus. FURTHER: I think I overloaded the API key :O
 //ITickerRepository<ListedStatus> lsRepo = new ListedStatusRepository();
-//IEnumerable<ListedStatus>? ListedStatus1 = AlphaVantageAPI.GetListedStatus(Activity.Active);
-//IEnumerable<ListedStatus>? ListedStatus2 = AlphaVantageAPI.GetListedStatus(Activity.Delisted);
+//IEnumerable<ListedStatus>? ListedStatus2 = AlphaVantageAPI.GetListedStatus(ListedStatusTypes.Active);
 //var listedStatuses = new List<ListedStatus>();
-//listedStatuses.AddRange(ListedStatus1);
 //listedStatuses.AddRange(ListedStatus2);
 //foreach (var item in listedStatuses)
 //{

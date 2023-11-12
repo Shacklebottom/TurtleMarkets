@@ -24,7 +24,7 @@ namespace MarketDomain
             return $"Ticker: {Ticker}\tPayoutPerShare: {PayoutPerShare}\tDividendType: {DividendType}\tPayoutFrequency: {PayoutFrequency}\t OwnBeforeDate: {OwnBeforeDate}";
         }
         public string Ticker { get; set; } = string.Empty;
-        public decimal? PayoutPerShare { get; set; }
+        public double? PayoutPerShare { get; set; }
         public string? DividendType { get; set; }
         public int? PayoutFrequency { get; set; }
         //Company announce date of intent to payout a dividend.

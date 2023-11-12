@@ -1,11 +1,13 @@
 ﻿using MarketDomain;
 using Newtonsoft.Json;
-
+using System.Net;
+using TurtleAPI.Exceptions;
 
 namespace TurtleAPI.PolygonIO
 {
     public class PolygonAPI
     {
+        //IMPORTANT! POLYGON API HAS 5 CALLS / MINUTE
         public static PreviousClose? GetPreviousClose(string ticker)
         {
             //has a repository : Validated!
@@ -38,10 +40,18 @@ namespace TurtleAPI.PolygonIO
             {
                 BaseAddress = uri
             };
+
             var response = client.GetAsync(uri).Result;
+            if (response.StatusCode != HttpStatusCode.OK) // 200 == OK
+            {
+                throw new ApiException(response);
+            }
+
             var responseString = response.Content.ReadAsStringAsync().Result;
+
             var baseData = JsonConvert.DeserializeObject<PolygonTickerDetailResponse>(responseString) ??
                 throw new Exception("could not parse Polygon response");
+
             var tickerDetail = new TickerDetail
             {
                 Ticker = ticker,
@@ -55,12 +65,14 @@ namespace TurtleAPI.PolygonIO
             };
                return tickerDetail;
         }
+
         private static DateTime ParseUnixTimestamp(decimal t)
         {
             var epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
             var dateTime = epoch.AddMilliseconds((double)t);
             return dateTime;
         }
+
         public static IEnumerable<MarketHoliday>? GetMarketHoliday()
         {
             //has a repository : Validated!
@@ -69,10 +81,18 @@ namespace TurtleAPI.PolygonIO
             {
                 BaseAddress = uri
             };
+
             var response = client.GetAsync(uri).Result;
+            if (response.StatusCode != HttpStatusCode.OK) // 200 == OK
+            {
+                throw new ApiException(response);
+            }
+
             var responseString = response.Content.ReadAsStringAsync().Result;
+
             var baseData = JsonConvert.DeserializeObject<List<PolygonMarketHolidayResponse>>(responseString) ??
                 throw new Exception("could not parse Polygon response");
+
             var holidayDetail = baseData?.Select(r => new MarketHoliday
             {
                 Exchange = r?.exchange,
@@ -92,10 +112,18 @@ namespace TurtleAPI.PolygonIO
             {
                 BaseAddress = uri
             };
+
             var response = client.GetAsync(uri).Result;
+            if (response.StatusCode != HttpStatusCode.OK) // 200 == OK
+            {
+                throw new ApiException(response);
+            }
+
             var responseString = response.Content.ReadAsStringAsync().Result;
+
             var baseData = JsonConvert.DeserializeObject<PolygonDividendResponse>(responseString) ??
                 throw new Exception("could not parse Polygon response");
+
             var dividendDetail = baseData?.results?.Select(r =>
                 new DividendDetails
                 {

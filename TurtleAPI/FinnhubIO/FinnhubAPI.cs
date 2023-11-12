@@ -1,10 +1,13 @@
 ﻿using MarketDomain;
 using Newtonsoft.Json;
+using System.Net;
+using TurtleAPI.Exceptions;
 
 namespace TurtleAPI.FinnhubIO
 {
     public class FinnhubAPI
     {
+        //IMPORTANT! FINNHUB API HAS 60 CALLS / MINUTE
         public static PreviousClose? GetPreviousClose(string ticker)
         {
             //has a repository : Validated!
@@ -15,10 +18,18 @@ namespace TurtleAPI.FinnhubIO
             };
             client.DefaultRequestHeaders.Add("X-Finnhub-Token", AuthData.API_KEY_FINNHUB);
             client.DefaultRequestHeaders.Add("X-Finnhub-Secret", AuthData.SECRET_FINNHUB);
+
             var response = client.GetAsync(uri).Result;
+            if (response.StatusCode != HttpStatusCode.OK) // 200 == OK
+            {
+                throw new ApiException(response);
+            }
+
             var responseString = response.Content.ReadAsStringAsync().Result;
+
             var baseData = JsonConvert.DeserializeObject<FinnhubPrevCloseResponse>(responseString) ??
                 throw new Exception("could not parse Finnhub response");
+
             var marketDetail = new PreviousClose
             {
                 Ticker = ticker,
@@ -31,12 +42,14 @@ namespace TurtleAPI.FinnhubIO
             };
             return marketDetail;
         }
+
         private static DateTime ParseUnixTimestamp(decimal t)
         {
             var epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
             var dateTime = epoch.AddSeconds((double)t);
             return dateTime;
         }
+
         public static RecommendedTrend? GetRecommendedTrend(string ticker)
         {
             //has a repository : Validated!
@@ -47,10 +60,18 @@ namespace TurtleAPI.FinnhubIO
             };
             client.DefaultRequestHeaders.Add("X-Finnhub-Token", AuthData.API_KEY_FINNHUB);
             client.DefaultRequestHeaders.Add("X-Finnhub-Secret", AuthData.SECRET_FINNHUB);
+
             var response = client.GetAsync(uri).Result;
+            if (response.StatusCode != HttpStatusCode.OK) // 200 == OK
+            {
+                throw new ApiException(response);
+            }
+
             var responseString = response.Content.ReadAsStringAsync().Result;
+
             var baseData = JsonConvert.DeserializeObject<List<FinnhubTrendResponse>>(responseString) ??
                 throw new Exception("could not parse Finnhub response");
+
             var recommendedTrend = baseData?.Select(r => new RecommendedTrend
             {
                 Ticker = ticker,

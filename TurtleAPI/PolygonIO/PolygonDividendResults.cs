@@ -1,15 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace TurtleAPI.PolygonIO
 {
+    [SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "<Pending>")]
     public class PolygonDividendResults
     {
         public string? ticker { get; set; }
-        public decimal? cash_amount { get; set; }
+        public double? cash_amount { get; set; }
         public DateTime? declaration_date { get; set; }
         public string? dividend_type { get; set; }
         public DateTime? ex_dividend_date { get; set; }
