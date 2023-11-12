@@ -3,7 +3,6 @@ using TurtleAPI;
 using TurtleAPI.PolygonIO;
 using TurtleAPI.AlphaVantage;
 using TurtleAPI.FinnhubIO;
-using TurtleSQL;
 using CsvHelper;
 using System.Globalization;
 using System.Net;
@@ -12,6 +11,8 @@ using MarketDomain.Enums;
 using MarketDomain.Interfaces;
 using System.Linq.Expressions;
 using TurtleAPI.Exceptions;
+using System.Diagnostics;
+using TurtleSQL.TickerRepositories;
 
 #region ATARI WORKSPACE
 
@@ -21,14 +22,8 @@ using TurtleAPI.Exceptions;
 #endregion
 
 #region SHACKLE WORKSPACE
-
-//PreviousCloseRepository pcRepo = new PreviousCloseRepository();
-//var data = pcRepo.GetByTicker("AAPL");
-//foreach (var item in data)
-//{
-//    Console.WriteLine(item);
-
-//}
+//Shackle.RecordPreviousClose();
+Shackle.RecordDividendDetails();
 
 #endregion
 

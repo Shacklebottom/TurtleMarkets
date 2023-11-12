@@ -20,16 +20,15 @@ namespace TurtleAPI.FinnhubIO
             client.DefaultRequestHeaders.Add("X-Finnhub-Secret", AuthData.SECRET_FINNHUB);
 
             var response = client.GetAsync(uri).Result;
+            Console.WriteLine($"{response.StatusCode}");
             if (response.StatusCode != HttpStatusCode.OK) // 200 == OK
             {
                 throw new ApiException(response);
             }
 
             var responseString = response.Content.ReadAsStringAsync().Result;
-
             var baseData = JsonConvert.DeserializeObject<FinnhubPrevCloseResponse>(responseString) ??
-                throw new Exception("could not parse Finnhub response");
-
+                    throw new Exception("could not parse Finnhub response");
             var marketDetail = new PreviousClose
             {
                 Ticker = ticker,
@@ -43,11 +42,15 @@ namespace TurtleAPI.FinnhubIO
             return marketDetail;
         }
 
-        private static DateTime ParseUnixTimestamp(decimal t)
+        private static DateTime? ParseUnixTimestamp(decimal? t)
         {
-            var epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
-            var dateTime = epoch.AddSeconds((double)t);
-            return dateTime;
+            if (t != null)
+            {
+                var epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+                var dateTime = epoch.AddSeconds((double)t);
+                return dateTime;
+            }
+            return null;
         }
 
         public static RecommendedTrend? GetRecommendedTrend(string ticker)

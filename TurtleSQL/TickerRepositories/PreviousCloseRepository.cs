@@ -1,8 +1,9 @@
 ﻿using MarketDomain;
 using Microsoft.Data.SqlClient;
 using TurtleSQL.Extensions;
+using TurtleSQL.Interfaces;
 
-namespace TurtleSQL
+namespace TurtleSQL.TickerRepositories
 {
     public class PreviousCloseRepository : TickerRepository<PreviousClose>, ITickerRepository<PreviousClose>
     {

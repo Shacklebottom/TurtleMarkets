@@ -1,6 +1,7 @@
 ﻿using MarketDomain.Interfaces;
+using TurtleSQL.Interfaces;
 
-namespace TurtleSQL
+namespace TurtleSQL.TickerRepositories
 {
     public class TickerRepository<T> : Repository<T>, ITickerRepository<T> where T : ITicker
     {
@@ -11,7 +12,7 @@ namespace TurtleSQL
 
             _sqlConnection.Open();
             var rdr = cmd.ExecuteReader();
-            IEnumerable<T> result = this.AllFromReader(rdr).ToList();
+            IEnumerable<T> result = AllFromReader(rdr).ToList();
             _sqlConnection.Close();
 
             return result;

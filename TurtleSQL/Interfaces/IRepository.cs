@@ -1,6 +1,6 @@
 ﻿using MarketDomain.Interfaces;
 
-namespace TurtleSQL
+namespace TurtleSQL.Interfaces
 {
     public interface IRepository<T> where T : IEntity
     {

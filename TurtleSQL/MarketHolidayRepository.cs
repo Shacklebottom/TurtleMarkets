@@ -1,6 +1,7 @@
 ﻿using MarketDomain;
 using Microsoft.Data.SqlClient;
 using TurtleSQL.Extensions;
+using TurtleSQL.Interfaces;
 
 namespace TurtleSQL
 {

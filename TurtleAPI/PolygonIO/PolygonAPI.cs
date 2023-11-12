@@ -16,7 +16,13 @@ namespace TurtleAPI.PolygonIO
             {
                 BaseAddress = uri
             };
+
             var response = client.GetAsync(uri).Result;
+            if (response.StatusCode != HttpStatusCode.OK) // 200 == OK
+            {
+                throw new ApiException(response);
+            }
+
             var responseString = response.Content.ReadAsStringAsync().Result;
             var baseData = JsonConvert.DeserializeObject<PolygonPrevCloseResponse>(responseString) ??
                 throw new Exception("could not parse Polygon response");
@@ -63,14 +69,18 @@ namespace TurtleAPI.PolygonIO
                 TotalEmployees = baseData?.results?.total_employees,
                 ListDate = baseData?.results?.list_date
             };
-               return tickerDetail;
+            return tickerDetail;
         }
 
-        private static DateTime ParseUnixTimestamp(decimal t)
+        private static DateTime? ParseUnixTimestamp(decimal? t)
         {
-            var epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
-            var dateTime = epoch.AddMilliseconds((double)t);
-            return dateTime;
+            if (t != null)
+            {
+                var epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+                var dateTime = epoch.AddMilliseconds((double)t);
+                return dateTime;
+            }
+            return null;
         }
 
         public static IEnumerable<MarketHoliday>? GetMarketHoliday()
@@ -114,6 +124,7 @@ namespace TurtleAPI.PolygonIO
             };
 
             var response = client.GetAsync(uri).Result;
+            Console.WriteLine($"{response.StatusCode}");
             if (response.StatusCode != HttpStatusCode.OK) // 200 == OK
             {
                 throw new ApiException(response);

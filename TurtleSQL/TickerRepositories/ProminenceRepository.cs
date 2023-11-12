@@ -1,14 +1,15 @@
 ﻿using MarketDomain;
 using Microsoft.Data.SqlClient;
 using TurtleSQL.Extensions;
+using TurtleSQL.Interfaces;
 
-namespace TurtleSQL
+namespace TurtleSQL.TickerRepositories
 {
     public class ProminenceRepository : TickerRepository<Prominence>, ITickerRepository<Prominence>
     {
         //This should work, but needs to be validated!
         protected override string TableName => "Prominence";
-        protected override List<string> FieldList => new() { "Ticker", "Price", "ChangeAmount", "ChangePercentage", "Volume"};
+        protected override List<string> FieldList => new() { "Ticker", "Price", "ChangeAmount", "ChangePercentage", "Volume" };
         protected override IEnumerable<SqlParameter> SqlParameters(Prominence entity)
         {
             var parms = new List<SqlParameter>
@@ -31,7 +32,7 @@ namespace TurtleSQL
                     Price = rdr.ParseNullable<double>("Price"),
                     ChangeAmount = rdr.ParseNullable<double>("ChangeAmount"),
                     ChangePercentage = rdr["ChangePercentage"].ToString(),
-                    Volume = rdr.ParseNullable<Int64>("Volume"),
+                    Volume = rdr.ParseNullable<long>("Volume"),
                     Id = rdr.ParseNullable<int>("Id") ?? 0
                 };
             }

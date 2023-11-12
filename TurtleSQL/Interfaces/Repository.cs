@@ -2,7 +2,7 @@
 using Microsoft.Data.SqlClient;
 using TurtleSQL.Extensions;
 
-namespace TurtleSQL
+namespace TurtleSQL.Interfaces
 {
     public class Repository<T> : IRepository<T> where T : IEntity
     {
@@ -23,7 +23,7 @@ namespace TurtleSQL
 
             _sqlConnection.Open();
             var rdr = cmd.ExecuteReader();
-            T? result = this.AllFromReader(rdr).FirstOrDefault();
+            T? result = AllFromReader(rdr).FirstOrDefault();
             _sqlConnection.Close();
 
             return result;
@@ -43,7 +43,7 @@ namespace TurtleSQL
 
             _sqlConnection.Open();
             var rdr = cmd.ExecuteReader();
-            IEnumerable<T>? result = this.AllFromReader(rdr).ToList();
+            IEnumerable<T>? result = AllFromReader(rdr).ToList();
             _sqlConnection.Close();
 
             return result;
@@ -61,7 +61,7 @@ namespace TurtleSQL
             else
             {
                 Update(entity, cmd);
-                return (entity.Id);
+                return entity.Id;
             }
         }
 
@@ -73,7 +73,7 @@ namespace TurtleSQL
             var parameterNames = string.Join(',', FieldList.Select(fn => $"@{fn}"));
 
             cmd.CommandText = $"INSERT INTO {TableName}({fieldNames}) VALUES({parameterNames})";
-            cmd.Parameters.AddRange(this.SqlParameters(entity).ToArray());
+            cmd.Parameters.AddRange(SqlParameters(entity).ToArray());
 
             _sqlConnection.Open();
             cmd.ExecuteNonQuery();
@@ -100,7 +100,7 @@ namespace TurtleSQL
             var whereClause = "WHERE Id = @Id";
             cmd.CommandText = $"{updateClause} {values} {whereClause}";
 
-            var parms = this.SqlParameters(entity).Where(p => p.ParameterName != "@Id").ToArray();
+            var parms = SqlParameters(entity).Where(p => p.ParameterName != "@Id").ToArray();
             cmd.Parameters.AddRange(parms);
             cmd.Parameters.AddWithValue("@Id", entity.Id.DBValue());
 

@@ -1,14 +1,15 @@
 ﻿using MarketDomain;
 using Microsoft.Data.SqlClient;
 using TurtleSQL.Extensions;
+using TurtleSQL.Interfaces;
 
-namespace TurtleSQL
+namespace TurtleSQL.TickerRepositories
 {
 
     public class DividendDetailRepository : TickerRepository<DividendDetails>, ITickerRepository<DividendDetails>
     {
         protected override string TableName => "DividendDetails";
-        protected override List<string> FieldList => new() 
+        protected override List<string> FieldList => new()
         {
             "Ticker",
             "PayoutPerShare",

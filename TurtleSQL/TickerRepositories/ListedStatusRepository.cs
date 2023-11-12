@@ -1,8 +1,9 @@
 ﻿using MarketDomain;
 using Microsoft.Data.SqlClient;
 using TurtleSQL.Extensions;
+using TurtleSQL.Interfaces;
 
-namespace TurtleSQL
+namespace TurtleSQL.TickerRepositories
 {
     //This should work, but needs to be validated!
     public class ListedStatusRepository : TickerRepository<ListedStatus>, ITickerRepository<ListedStatus>

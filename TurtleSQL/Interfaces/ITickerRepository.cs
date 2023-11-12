@@ -1,6 +1,6 @@
 ﻿using MarketDomain.Interfaces;
 
-namespace TurtleSQL
+namespace TurtleSQL.Interfaces
 {
     public interface ITickerRepository<T> : IRepository<T> where T : ITicker
     {

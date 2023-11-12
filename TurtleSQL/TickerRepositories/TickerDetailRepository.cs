@@ -1,8 +1,9 @@
 ﻿using MarketDomain;
 using Microsoft.Data.SqlClient;
 using TurtleSQL.Extensions;
+using TurtleSQL.Interfaces;
 
-namespace TurtleSQL
+namespace TurtleSQL.TickerRepositories
 {
     //This should work, but needs to be validated! FURTHER, I think I did the 'AllFromReader' TickerDetail properly.
     public class TickerDetailRepository : TickerRepository<TickerDetail>, ITickerRepository<TickerDetail>
@@ -36,7 +37,7 @@ namespace TurtleSQL
                     Address = rdr["Address"].ToString(),
                     City = rdr["City"].ToString(),
                     State = rdr["State"].ToString(),
-                    TotalEmployees = rdr.ParseNullable<Int32>("TotalEmployees"),
+                    TotalEmployees = rdr.ParseNullable<int>("TotalEmployees"),
                     ListDate = rdr.ParseNullable<DateTime>("ListDate"),
                     Id = rdr.ParseNullable<int>("Id") ?? 0
                 };
