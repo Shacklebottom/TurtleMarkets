@@ -4,8 +4,9 @@ using Microsoft.Data.SqlClient;
 using TurtleSQL.Extensions;
 using TurtleSQL.TickerRepositories;
 using TurtleSQL.MarketStatusForecast;
+using TurtleSQL.Interfaces;
 
-namespace TurtleSQL.Interfaces
+namespace TurtleSQL.BaseClasses
 {
     public class Repository<T> : IRepository<T> where T : IEntity
     {
@@ -39,14 +40,14 @@ namespace TurtleSQL.Interfaces
         protected virtual IEnumerable<T> AllFromReader(SqlDataReader rdr) => new List<T>();
         #endregion
 
-        public IEnumerable<T>? GetAll()
+        public IEnumerable<T> GetAll()
         {
             var cmd = _sqlConnection.CreateCommand();
             cmd.CommandText = $"SELECT * FROM {TableName}";
 
             _sqlConnection.Open();
             var rdr = cmd.ExecuteReader();
-            IEnumerable<T>? result = AllFromReader(rdr).ToList();
+            IEnumerable<T> result = AllFromReader(rdr).ToList();
             _sqlConnection.Close();
 
             return result;

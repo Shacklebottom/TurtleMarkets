@@ -10,6 +10,6 @@ namespace TurtleAPI.PolygonIO
     [SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "<Pending>")]
     public class PolygonDividendResponse
     {
-        public PolygonDividendResults[]? results { get; set; }
+        public PolygonDividendResults[] results { get; set; } = Array.Empty<PolygonDividendResults>();
     }
 }

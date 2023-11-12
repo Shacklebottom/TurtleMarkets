@@ -13,16 +13,19 @@ using System.Linq.Expressions;
 using TurtleAPI.Exceptions;
 using System.Diagnostics;
 using TurtleSQL.TickerRepositories;
+using BusinessLogic;
+using BusinessLogic.Logging;
 
 #region ATARI WORKSPACE
 
-//var data = AlphaVantageAPI.GetListedStatus(ListedStatusTypes.Listed).ToList();
-//data.ForEach(Console.WriteLine);
+//var dbLogger = new DatabaseLogger();
+//var markets = new MarketService(logger: dbLogger);
+//markets.RecordDividendDetails();
 
 #endregion
 
 #region SHACKLE WORKSPACE
-Shackle.RecordPreviousClose();
+//Shackle.RecordPreviousClose();
 //Shackle.RecordDividendDetails();
 
 #endregion

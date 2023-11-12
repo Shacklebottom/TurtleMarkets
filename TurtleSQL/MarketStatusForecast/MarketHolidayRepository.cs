@@ -1,5 +1,6 @@
 ﻿using MarketDomain;
 using Microsoft.Data.SqlClient;
+using TurtleSQL.BaseClasses;
 using TurtleSQL.Extensions;
 using TurtleSQL.Interfaces;
 

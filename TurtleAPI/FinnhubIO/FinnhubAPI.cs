@@ -8,7 +8,7 @@ namespace TurtleAPI.FinnhubIO
     public class FinnhubAPI
     {
         //IMPORTANT! FINNHUB API HAS 60 CALLS / MINUTE
-        public static PreviousClose? GetPreviousClose(string ticker)
+        public static PreviousClose GetPreviousClose(string ticker)
         {
             //has a repository : Validated!
             var uri = new Uri($"https://finnhub.io/api/v1/quote?symbol={ticker}");
