@@ -132,6 +132,7 @@ namespace TurtleAPI.PolygonIO
 
             var responseString = response.Content.ReadAsStringAsync().Result;
 
+
             var baseData = JsonConvert.DeserializeObject<PolygonDividendResponse>(responseString) ??
                 throw new Exception("could not parse Polygon response");
 
@@ -147,6 +148,23 @@ namespace TurtleAPI.PolygonIO
                     PayoutDate = r.pay_date,
                     OwnBeforeDate = r.record_date
                 });
+            if (dividendDetail.Count() < 1)
+            {
+                var emptyDetail = new List<DividendDetails>();
+                var x = new DividendDetails
+                {
+                    Ticker = ticker,
+                    PayoutPerShare = 0,
+                    DividendType = "",
+                    PayoutFrequency = 0,
+                    DividendDeclaration = DateTime.Today,
+                    OpenBeforeDividend = DateTime.Today,
+                    PayoutDate = DateTime.Today,
+                    OwnBeforeDate = DateTime.Today
+                };
+                emptyDetail.Add(x);
+                return emptyDetail;
+            }
             return dividendDetail;
         }
     }

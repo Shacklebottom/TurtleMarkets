@@ -51,7 +51,10 @@ namespace TestHarness
                 {
                     Console.WriteLine($"Querying {item.Ticker}");
                     IEnumerable<DividendDetails> ddInfo = PolygonAPI.GetDividendDetails(item.Ticker);
-                    ddInfo.Select(x => ddRepo.Save(x));
+                    foreach (var r in ddInfo)
+                    {
+                        ddRepo.Save(r);
+                    }
                     entryCount++;
                     APIcallCount++;
                     Console.WriteLine($"Transmission {entryCount} Received");
