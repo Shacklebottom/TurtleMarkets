@@ -22,8 +22,8 @@ using TurtleSQL.TickerRepositories;
 #endregion
 
 #region SHACKLE WORKSPACE
-//Shackle.RecordPreviousClose();
-Shackle.RecordDividendDetails();
+Shackle.RecordPreviousClose();
+//Shackle.RecordDividendDetails();
 
 #endregion
 

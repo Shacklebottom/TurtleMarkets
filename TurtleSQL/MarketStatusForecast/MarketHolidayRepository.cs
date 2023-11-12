@@ -3,7 +3,7 @@ using Microsoft.Data.SqlClient;
 using TurtleSQL.Extensions;
 using TurtleSQL.Interfaces;
 
-namespace TurtleSQL
+namespace TurtleSQL.MarketStatusForecast
 {
     //This should work, but needs to be validated!
     public class MarketHolidayRepository : Repository<MarketHoliday>, IRepository<MarketHoliday>

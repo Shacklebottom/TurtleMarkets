@@ -116,7 +116,7 @@ namespace TurtleAPI.PolygonIO
         }
         public static IEnumerable<DividendDetails>? GetDividendDetails(string ticker)
         {
-            //has a repository! : PayPerShare isn't being recorded as a decimal for some reason!
+            //has a repository! : Validated
             var uri = new Uri($"https://api.polygon.io/v3/reference/dividends?ticker={ticker}&apiKey={AuthData.API_KEY_POLYGON}");
             var client = new HttpClient
             {
@@ -124,6 +124,7 @@ namespace TurtleAPI.PolygonIO
             };
 
             var response = client.GetAsync(uri).Result;
+            Thread.Sleep(12000);
             Console.WriteLine($"{response.StatusCode}");
             if (response.StatusCode != HttpStatusCode.OK) // 200 == OK
             {
@@ -148,7 +149,7 @@ namespace TurtleAPI.PolygonIO
                     PayoutDate = r.pay_date,
                     OwnBeforeDate = r.record_date
                 });
-            if (dividendDetail.Count() < 1)
+            if (dividendDetail.Any())
             {
                 var emptyDetail = new List<DividendDetails>();
                 var x = new DividendDetails

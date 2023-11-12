@@ -52,5 +52,6 @@ namespace TurtleSQL.TickerRepositories
                 };
             }
         }
+
     }
 }

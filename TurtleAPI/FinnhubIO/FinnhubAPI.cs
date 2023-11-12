@@ -20,6 +20,7 @@ namespace TurtleAPI.FinnhubIO
             client.DefaultRequestHeaders.Add("X-Finnhub-Secret", AuthData.SECRET_FINNHUB);
 
             var response = client.GetAsync(uri).Result;
+            Thread.Sleep(1000);
             Console.WriteLine($"{response.StatusCode}");
             if (response.StatusCode != HttpStatusCode.OK) // 200 == OK
             {
@@ -40,6 +41,7 @@ namespace TurtleAPI.FinnhubIO
                 Volume = null,
             };
             return marketDetail;
+
         }
 
         private static DateTime? ParseUnixTimestamp(decimal? t)
@@ -65,6 +67,7 @@ namespace TurtleAPI.FinnhubIO
             client.DefaultRequestHeaders.Add("X-Finnhub-Secret", AuthData.SECRET_FINNHUB);
 
             var response = client.GetAsync(uri).Result;
+            Thread.Sleep(12000);
             if (response.StatusCode != HttpStatusCode.OK) // 200 == OK
             {
                 throw new ApiException(response);

@@ -1,12 +1,16 @@
 ﻿using MarketDomain;
+using MarketDomain.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Markup;
 using TurtleAPI.FinnhubIO;
 using TurtleAPI.PolygonIO;
+using TurtleSQL.Interfaces;
+using TurtleSQL.MarketStatusForecast;
 using TurtleSQL.TickerRepositories;
 
 namespace TestHarness
@@ -16,52 +20,36 @@ namespace TestHarness
         public static void RecordPreviousClose()
         {
             VaporTransmission();
-            ListedStatusRepository lsRepo = new();
-            IEnumerable<ListedStatus> lsData = lsRepo.GetAll();
+            var lsRepo = new ListedStatusRepository().GetAll();
             PreviousCloseRepository pcRepo = new();
             int count = 0;
-            Stopwatch sw = new();
-            foreach (var item in lsData)
+            foreach (var item in lsRepo)
             {
-                if (sw.Elapsed < TimeSpan.FromMinutes(1))
-                {
-                    Console.WriteLine($"Querying {item.Ticker}");
-                    PreviousClose pcInfo = FinnhubAPI.GetPreviousClose(item.Ticker);
-                    pcRepo.Save(pcInfo);
-                    count++;
-                    Console.WriteLine($"Transmission {count} Received");
-                    Thread.Sleep(850);
-                }
-                sw.Restart();
+                Console.WriteLine($"Querying {item.Ticker}");
+                PreviousClose pcInfo = FinnhubAPI.GetPreviousClose(item.Ticker);
+                pcRepo.Save(pcInfo);
+                count++;
+                Console.WriteLine($"Transmission {count} Received");
             }
             Console.WriteLine("Vapor Released");
         }
+
         public static void RecordDividendDetails()
         {
             VaporTransmission();
-            ListedStatusRepository lsRepo = new();
-            IEnumerable<ListedStatus> lsData = lsRepo.GetAll();
+            var lsRepo = new ListedStatusRepository().GetAll();
             DividendDetailRepository ddRepo = new();
-            int entryCount = 0;
-            int APIcallCount = 0;
-            Stopwatch sw = new();
-            foreach (var item in lsData)
+            int count = 0;
+            foreach (var item in lsRepo)
             {
-                if(sw.Elapsed < TimeSpan.FromMinutes(1) && APIcallCount < 5)
+                Console.WriteLine($"Querying {item.Ticker}");
+                IEnumerable<DividendDetails> ddInfo = PolygonAPI.GetDividendDetails(item.Ticker);
+                foreach (var r in ddInfo)
                 {
-                    Console.WriteLine($"Querying {item.Ticker}");
-                    IEnumerable<DividendDetails> ddInfo = PolygonAPI.GetDividendDetails(item.Ticker);
-                    foreach (var r in ddInfo)
-                    {
-                        ddRepo.Save(r);
-                    }
-                    entryCount++;
-                    APIcallCount++;
-                    Console.WriteLine($"Transmission {entryCount} Received");
-                    Thread.Sleep(12000);
+                    ddRepo.Save(r);
                 }
-                APIcallCount = 0;
-                sw.Restart();
+                count++;
+                Console.WriteLine($"Transmission {count} Received");
             }
             Console.WriteLine("Vapor Released");
         }
@@ -76,5 +64,10 @@ namespace TestHarness
             Console.WriteLine("[...]");
             Console.WriteLine("Engaging Vapor");
         }
+
+    }
+    public class Dumbell
+    {
+
     }
 }

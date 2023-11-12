@@ -1,6 +1,9 @@
-﻿using MarketDomain.Interfaces;
+﻿using MarketDomain;
+using MarketDomain.Interfaces;
 using Microsoft.Data.SqlClient;
 using TurtleSQL.Extensions;
+using TurtleSQL.TickerRepositories;
+using TurtleSQL.MarketStatusForecast;
 
 namespace TurtleSQL.Interfaces
 {

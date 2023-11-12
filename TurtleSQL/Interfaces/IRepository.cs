@@ -7,6 +7,5 @@ namespace TurtleSQL.Interfaces
         T? GetById(int id);
         IEnumerable<T>? GetAll();
         int Save(T entity);
-
     }
 }
