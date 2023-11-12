@@ -18,7 +18,7 @@ using BusinessLogic.Logging;
 
 #region ATARI WORKSPACE
 
-//var dbLogger = new DatabaseLogger();
+var dbLogger = new DatabaseLogger();
 //var markets = new MarketService(logger: dbLogger);
 //markets.RecordDividendDetails();
 

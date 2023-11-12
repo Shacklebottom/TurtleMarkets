@@ -1,0 +1,67 @@
+using BusinessLogic;
+using BusinessLogic.Logging;
+using MarketDomain;
+using Moq;
+using TurtleSQL.Interfaces;
+
+namespace TurtleTests
+{
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+    [TestClass]
+    public class MarketServiceTests
+    {
+        Mock<IRepository<PreviousClose>> _mockPreviousCloseRepo;
+        Mock<IRepository<DividendDetails>> _mockDividendDetailsRepo;
+        Mock<IRepository<ListedStatus>> _mockListedStatusRepo;
+        Mock<ILogger> _mockLogger;
+        MarketService _service; // UNIT UNDER TEST
+
+        [TestInitialize]
+        public void RunBeforeEachTest()
+        {
+            _mockPreviousCloseRepo = new();
+            _mockDividendDetailsRepo = new();
+            _mockListedStatusRepo = new();
+            _mockLogger = new();
+
+            _service = new MarketService(
+                _mockPreviousCloseRepo.Object,
+                _mockDividendDetailsRepo.Object,
+                _mockListedStatusRepo.Object,
+                _mockLogger.Object);
+        }
+
+        [TestMethod]
+        public void RecordPreviousClose_Logs_Start()
+        {
+            // Arrange
+            // nothing to setup
+
+            // Act
+            _service.RecordPreviousClose();
+
+            // Assert
+            _mockLogger.Verify(
+                l => l.Log(It.Is<string>(s => s.StartsWith("Starting"))), 
+                Times.Once, 
+                "Logging did not indicate start exactly once");
+        }
+
+        [TestMethod]
+        public void RecordPreviousClose_Logs_Stop()
+        {
+            // Arrange
+            // nothing to setup
+
+            // Act
+            _service.RecordPreviousClose();
+
+            // Assert
+            _mockLogger.Verify(
+                l => l.Log(It.Is<string>(s => s.EndsWith("complete."))), 
+                Times.Once, 
+                "Logging did not indicate complete exactly once");
+        }
+    }
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+}
