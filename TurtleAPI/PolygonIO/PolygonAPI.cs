@@ -5,7 +5,7 @@ using TurtleAPI.Exceptions;
 
 namespace TurtleAPI.PolygonIO
 {
-    public class PolygonAPI
+    public class PolygonAPI : IPolygonAPI
     {
         //IMPORTANT! POLYGON API HAS 5 CALLS / MINUTE
         public static PreviousClose? GetPreviousClose(string ticker)
@@ -114,7 +114,7 @@ namespace TurtleAPI.PolygonIO
             });
             return holidayDetail;
         }
-        public static IEnumerable<DividendDetails> GetDividendDetails(string ticker)
+        public IEnumerable<DividendDetails> GetDividendDetails(string ticker)
         {
             //has a repository! : Validated
             var uri = new Uri($"https://api.polygon.io/v3/reference/dividends?ticker={ticker}&apiKey={AuthData.API_KEY_POLYGON}");

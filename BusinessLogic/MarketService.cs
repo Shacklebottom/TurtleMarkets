@@ -1,5 +1,6 @@
 ﻿using BusinessLogic.Logging;
 using MarketDomain;
+using System.Xml.Linq;
 using TurtleAPI.FinnhubIO;
 using TurtleAPI.PolygonIO;
 using TurtleSQL.Interfaces;
@@ -13,6 +14,7 @@ namespace BusinessLogic
         private readonly IRepository<DividendDetails> _dividedDetailsRepo;
         private readonly IRepository<ListedStatus> _listedStatusRepo;
         private readonly IFinnhubAPI _finnhubAPI;
+        private readonly IPolygonAPI _polygonAPI;
         private readonly ILogger _logger;
 
         public MarketService(
@@ -20,12 +22,14 @@ namespace BusinessLogic
             IRepository<DividendDetails>? ddRepo = null,
             IRepository<ListedStatus>? lsRepo = null,
             IFinnhubAPI? finnhubAPI = null,
+            IPolygonAPI? polygonAPI = null,
             ILogger? logger = null)
         {
             _previousCloseRepo = pcRepo ?? new PreviousCloseRepository();
             _dividedDetailsRepo = ddRepo ?? new DividendDetailRepository();
             _listedStatusRepo = lsRepo ?? new ListedStatusRepository();
             _finnhubAPI = finnhubAPI ?? new FinnhubAPI();
+            _polygonAPI = polygonAPI ?? new PolygonAPI();
             _logger = logger ?? new ConsoleLogger();
         }
 
@@ -35,13 +39,15 @@ namespace BusinessLogic
             {
                 log("Starting RecordPreviousClose()");
 
-                var lsData = _listedStatusRepo.GetAll().ToList();
-                log($"...working on {lsData.Count} records.");
-                lsData.ForEach(x =>
+                var lsRepo = _listedStatusRepo.GetAll().ToList();
+                log($"...working on {lsRepo.Count} records.");
+
+                lsRepo.ForEach(x =>
                 {
                     log($"...Querying {x.Ticker}");
                     _previousCloseRepo.Save(_finnhubAPI.GetPreviousClose(x.Ticker));
                 });
+
                 log("RecordPreviousClose() complete.");
             }
             catch( Exception ex )
@@ -53,9 +59,28 @@ namespace BusinessLogic
         public void RecordDividendDetails()
         {
 
+            try
+            {
+                log("Starting RecordDividendDetails");
 
-            log("Starting RecordDividendDetails");
+                var lsRepo = _listedStatusRepo.GetAll().ToList();
+                log($"...working on {lsRepo.Count} records.");
 
+                lsRepo.ForEach(x =>
+                {
+                    log($"...Querying {x.Ticker}");
+                    foreach (var item in _polygonAPI.GetDividendDetails(x.Ticker))
+                    {
+                        _dividedDetailsRepo.Save(item);
+                    }
+                });
+
+                log("RecordDividendDetails() complete.");
+            } 
+            catch( Exception ex ) 
+            {
+                log($"EXCEPTION:\n{ex.Message}\n\n{ex.StackTrace}");
+            }
             //var lsRepo = new ListedStatusRepository().GetAll();
             //DividendDetailRepository ddRepo = new();
             //int count = 0;

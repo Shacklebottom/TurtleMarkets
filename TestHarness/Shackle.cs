@@ -40,11 +40,12 @@ namespace TestHarness
             VaporTransmission();
             var lsRepo = new ListedStatusRepository().GetAll();
             DividendDetailRepository ddRepo = new();
+            var pgAPI = new PolygonAPI();
             int count = 0;
             foreach (var item in lsRepo)
             {
                 Console.WriteLine($"Querying {item.Ticker}");
-                IEnumerable<DividendDetails> ddInfo = PolygonAPI.GetDividendDetails(item.Ticker);
+                IEnumerable<DividendDetails> ddInfo = pgAPI.GetDividendDetails(item.Ticker);
                 foreach (var r in ddInfo)
                 {
                     ddRepo.Save(r);
