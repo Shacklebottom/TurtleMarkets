@@ -51,7 +51,7 @@ namespace TurtleTests
         public void RecordPreviousClose_Logs_Start()
         {
             // Arrange
-            // nothing to setup
+
 
             // Act
             _service.RecordPreviousClose();
@@ -149,7 +149,6 @@ namespace TurtleTests
         public void RecordPreviousClose_Logs_Stop()
         {
             // Arrange
-            // nothing to setup
 
             // Act
             _service.RecordPreviousClose();
@@ -264,7 +263,6 @@ namespace TurtleTests
         public void RecordDividendDetails_Logs_Stop()
         {
             // Arrange
-            // nothing to setup
 
             // Act
             _service.RecordDividendDetails();

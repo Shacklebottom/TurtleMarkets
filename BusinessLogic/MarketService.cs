@@ -10,6 +10,8 @@ namespace BusinessLogic
 {
     public class MarketService
     {
+        private void log(string message) { _logger.Log(message); }
+
         private readonly IRepository<PreviousClose> _previousCloseRepo;
         private readonly IRepository<DividendDetails> _dividedDetailsRepo;
         private readonly IRepository<ListedStatus> _listedStatusRepo;
@@ -81,24 +83,8 @@ namespace BusinessLogic
             {
                 log($"EXCEPTION:\n{ex.Message}\n\n{ex.StackTrace}");
             }
-            //var lsRepo = new ListedStatusRepository().GetAll();
-            //DividendDetailRepository ddRepo = new();
-            //int count = 0;
-            //foreach (var item in lsRepo)
-            //{
-            //    Console.WriteLine($"Querying {item.Ticker}");
-            //    IEnumerable<DividendDetails> ddInfo = PolygonAPI.GetDividendDetails(item.Ticker);
-            //    foreach (var r in ddInfo)
-            //    {
-            //        ddRepo.Save(r);
-            //    }
-            //    count++;
-            //    Console.WriteLine($"Transmission {count} Received");
-            //}
-
-            //log("RecordDividendDetails complete");
         }
 
-        private void log(string message) { _logger.Log(message); }
+
     }
 }
