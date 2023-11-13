@@ -8,4 +8,3 @@ Create table PreviousClose(
 	[Low] float null,
 	[Volume] bigint null
 	)
-declare @MarketData int

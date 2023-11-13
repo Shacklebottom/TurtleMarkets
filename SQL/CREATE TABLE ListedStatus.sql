@@ -8,4 +8,3 @@ CREATE TABLE ListedStatus (
 	DelistingDate datetime null,
 	[Status] VARCHAR(50) null,
 )
-declare @MarketData int

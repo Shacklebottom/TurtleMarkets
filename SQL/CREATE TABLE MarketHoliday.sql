@@ -7,4 +7,3 @@ CREATE TABLE MarketHoliday (
 	[Open] datetime null,
 	[Close] datetime null
 	)
-	DECLARE @MarketHoliday int

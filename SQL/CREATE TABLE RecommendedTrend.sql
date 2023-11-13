@@ -8,4 +8,3 @@ CREATE TABLE RecommendedTrend (
 	StrongBuy int null,
 	StrongSell int null
 )
-declare @MarketData int

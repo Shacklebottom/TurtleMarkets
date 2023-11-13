@@ -8,7 +8,4 @@ create table TickerDetail(
 	[State] varchar(50) null,
 	TotalEmployees int null,
 	ListDate date null
-
 )
-
-declare @MarketData int

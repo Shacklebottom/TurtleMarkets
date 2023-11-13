@@ -6,4 +6,3 @@ CREATE TABLE Prominence (
 	ChangePercentage VARCHAR(50) null,
 	Volume bigint null
 )
-declare @MarketData int

@@ -8,5 +8,4 @@ CREATE TABLE WorkTicker (
 	Buy int null,
 	Sell int null,
 	Hold int null
-	)
-	DECLARE @MarketData int
+)
