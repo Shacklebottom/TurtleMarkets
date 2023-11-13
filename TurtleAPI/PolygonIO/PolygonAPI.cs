@@ -114,7 +114,7 @@ namespace TurtleAPI.PolygonIO
             });
             return holidayDetail;
         }
-        public static IEnumerable<DividendDetails>? GetDividendDetails(string ticker)
+        public static IEnumerable<DividendDetails> GetDividendDetails(string ticker)
         {
             //has a repository! : Validated
             var uri = new Uri($"https://api.polygon.io/v3/reference/dividends?ticker={ticker}&apiKey={AuthData.API_KEY_POLYGON}");
@@ -137,7 +137,7 @@ namespace TurtleAPI.PolygonIO
             var baseData = JsonConvert.DeserializeObject<PolygonDividendResponse>(responseString) ??
                 throw new Exception("could not parse Polygon response");
 
-            var dividendDetail = baseData?.results?.Select(r =>
+            var dividendDetail = baseData.results.Select(r =>
                 new DividendDetails
                 {
                     Ticker = ticker,

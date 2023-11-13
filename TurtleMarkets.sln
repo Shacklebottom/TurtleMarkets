@@ -9,9 +9,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MarketAnalyzer", "MarketAna
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MarketDomain", "MarketDomain\MarketDomain.csproj", "{6D13364B-E898-45E5-BC4C-F8DC8899F7AB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TurtleAPI", "TurtleAPI\TurtleAPI.csproj", "{E67768AE-8F67-460E-9FED-B60AB4F0D60E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TurtleAPI", "TurtleAPI\TurtleAPI.csproj", "{E67768AE-8F67-460E-9FED-B60AB4F0D60E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TurtleSQL", "TurtleSQL\TurtleSQL.csproj", "{D0A19EE2-4191-47DC-80B8-D586D7BEB2C1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TurtleSQL", "TurtleSQL\TurtleSQL.csproj", "{D0A19EE2-4191-47DC-80B8-D586D7BEB2C1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BusinessLogic", "BusinessLogic\BusinessLogic.csproj", "{D1E9CB07-3DE8-4B89-9A7A-B5C4D3EBBB8E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{D0A19EE2-4191-47DC-80B8-D586D7BEB2C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D0A19EE2-4191-47DC-80B8-D586D7BEB2C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D0A19EE2-4191-47DC-80B8-D586D7BEB2C1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D1E9CB07-3DE8-4B89-9A7A-B5C4D3EBBB8E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D1E9CB07-3DE8-4B89-9A7A-B5C4D3EBBB8E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D1E9CB07-3DE8-4B89-9A7A-B5C4D3EBBB8E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D1E9CB07-3DE8-4B89-9A7A-B5C4D3EBBB8E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

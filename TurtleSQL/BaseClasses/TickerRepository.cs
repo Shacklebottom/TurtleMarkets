@@ -1,6 +1,7 @@
 ﻿using MarketDomain.Interfaces;
+using TurtleSQL.Interfaces;
 
-namespace TurtleSQL.Interfaces
+namespace TurtleSQL.BaseClasses
 {
     public class TickerRepository<T> : Repository<T>, ITickerRepository<T> where T : ITicker
     {
