@@ -1,6 +1,7 @@
 using BusinessLogic;
 using BusinessLogic.Logging;
 using MarketDomain;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using TurtleAPI.Exceptions;
 using TurtleAPI.FinnhubIO;
@@ -28,14 +29,19 @@ namespace TurtleTests
             _mockFinnhubAPI = new();
             _mockLogger = new();
 
+            _mockListedStatusRepo.Setup(
+                m => m.GetAll())
+                .Returns(new List<ListedStatus> { new() { Ticker = "MSFT" }, new() { Ticker = "WYNN" } });
+
             _service = new MarketService(
                 _mockPreviousCloseRepo.Object,
                 _mockDividendDetailsRepo.Object,
                 _mockListedStatusRepo.Object,
                 _mockFinnhubAPI.Object,
                 _mockLogger.Object);
-        }
 
+        }
+        #region RecordPreviousClose
         [TestMethod]
         public void RecordPreviousClose_Logs_Start()
         {
@@ -72,16 +78,14 @@ namespace TurtleTests
         public void RecordPreviousClose_Logs_RecordCount()
         {
             // Arrange
-            _mockListedStatusRepo.Setup(
-                m => m.GetAll())
-                .Returns(new List<ListedStatus> { new(), new(), new(), new(), new() });
+
 
             // Act
             _service.RecordPreviousClose();
 
             // Assert
             _mockLogger.Verify(
-                l => l.Log(It.Is<string>(s => s == "...working on 5 records.")),
+                l => l.Log(It.Is<string>(s => s == "...working on 2 records.")),
                 Times.Once,
                 "Logging did not track records received");
         }
@@ -90,9 +94,7 @@ namespace TurtleTests
         public void RecordPreviousClose_GetPreviousClose_ForEachTicker()
         {
             // Arrange
-            _mockListedStatusRepo.Setup(
-                m => m.GetAll())
-                .Returns(new List<ListedStatus> { new() { Ticker = "MSFT" }, new() { Ticker = "WYNN" } });
+
             // Act
             _service.RecordPreviousClose();
 
@@ -111,9 +113,7 @@ namespace TurtleTests
         public void RecordPreviousClose_Logs_QueryTicker()
         {
             // Arrange
-            _mockListedStatusRepo.Setup(
-                m => m.GetAll())
-                .Returns(new List<ListedStatus> { new() { Ticker = "MSFT" } });
+
 
             // Act
             _service.RecordPreviousClose();
@@ -121,17 +121,14 @@ namespace TurtleTests
             // Assert
             _mockLogger.Verify(
                 l => l.Log(It.Is<string>(s => s.StartsWith("...Querying"))),
-                Times.Once,
-                "Logging did not indicate querying exactly once");
+                Times.Exactly(2),
+                "Logging did not indicate querying exactly twice");
         }
 
         [TestMethod]
         public void RecordPreviousClose_SavePreviousClose_ForEachTicker()
         {
             // Arrange
-            _mockListedStatusRepo.Setup(
-                m => m.GetAll())
-                .Returns(new List<ListedStatus> { new() { Ticker = "MSFT" }, new() { Ticker = "WYNN" } });
 
             // Act
             _service.RecordPreviousClose();
@@ -158,6 +155,26 @@ namespace TurtleTests
                 Times.Once,
                 "Logging did not indicate complete exactly once");
         }
+        #endregion
+
+        #region RecordDividendDetails
+        [TestMethod]
+        public void RecordDividendDetails_Logs_Start()
+        {
+            // Arrange
+
+            // Act
+            _service.RecordDividendDetails();
+
+            // Assert
+            _mockLogger.Verify(
+                l => l.Log(It.Is<string>(s => s.StartsWith("Starting"))),
+                Times.Once,
+                "Logging did not indicate start exactly once");
+        }
+
+
+        #endregion
     }
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 }

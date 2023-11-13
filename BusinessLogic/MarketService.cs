@@ -1,6 +1,7 @@
 ﻿using BusinessLogic.Logging;
 using MarketDomain;
 using TurtleAPI.FinnhubIO;
+using TurtleAPI.PolygonIO;
 using TurtleSQL.Interfaces;
 using TurtleSQL.TickerRepositories;
 
@@ -32,20 +33,20 @@ namespace BusinessLogic
         {
             try
             {
-                _logger.Log("Starting RecordPreviousClose()");
+                log("Starting RecordPreviousClose()");
 
                 var lsData = _listedStatusRepo.GetAll().ToList();
-                _logger.Log($"...working on {lsData.Count} records.");
+                log($"...working on {lsData.Count} records.");
                 lsData.ForEach(x =>
                 {
-                    _logger.Log($"...Querying {x.Ticker}");
+                    log($"...Querying {x.Ticker}");
                     _previousCloseRepo.Save(_finnhubAPI.GetPreviousClose(x.Ticker));
                 });
-                _logger.Log("RecordPreviousClose() complete.");
+                log("RecordPreviousClose() complete.");
             }
             catch( Exception ex )
             {
-                _logger.Log($"EXCEPTION:\n{ex.Message}\n\n{ex.StackTrace}");
+                log($"EXCEPTION:\n{ex.Message}\n\n{ex.StackTrace}");
             }
         }
 
@@ -53,11 +54,24 @@ namespace BusinessLogic
         {
 
 
-            log("RecordDividendDetails started");
-            Thread.Sleep(1000);
-            log("...pretending to do work...");
-            Thread.Sleep(2500);
-            log("RecordDividendDetails complete");
+            log("Starting RecordDividendDetails");
+
+            //var lsRepo = new ListedStatusRepository().GetAll();
+            //DividendDetailRepository ddRepo = new();
+            //int count = 0;
+            //foreach (var item in lsRepo)
+            //{
+            //    Console.WriteLine($"Querying {item.Ticker}");
+            //    IEnumerable<DividendDetails> ddInfo = PolygonAPI.GetDividendDetails(item.Ticker);
+            //    foreach (var r in ddInfo)
+            //    {
+            //        ddRepo.Save(r);
+            //    }
+            //    count++;
+            //    Console.WriteLine($"Transmission {count} Received");
+            //}
+
+            //log("RecordDividendDetails complete");
         }
 
         private void log(string message) { _logger.Log(message); }
