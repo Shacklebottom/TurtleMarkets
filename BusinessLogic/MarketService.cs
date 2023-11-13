@@ -84,7 +84,5 @@ namespace BusinessLogic
                 log($"EXCEPTION:\n{ex.Message}\n\n{ex.StackTrace}");
             }
         }
-
-
     }
 }

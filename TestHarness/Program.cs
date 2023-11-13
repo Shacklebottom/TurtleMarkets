@@ -16,6 +16,7 @@ using TurtleSQL.TickerRepositories;
 using BusinessLogic;
 using BusinessLogic.Logging;
 
+int x = 0;
 #region ATARI WORKSPACE
 
 //var dbLogger = new DatabaseLogger();
