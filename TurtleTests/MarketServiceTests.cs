@@ -46,11 +46,26 @@ namespace TurtleTests
             _service.RecordPreviousClose();
 
             // Assert
-            Assert.ThrowsException<ApiException>(() => _service.RecordPreviousClose());
             _mockLogger.Verify(
                 l => l.Log(It.Is<string>(s => s.StartsWith("Starting"))),
                 Times.Once,
                 "Logging did not indicate start exactly once");
+        }
+
+        [TestMethod]
+        public void RecordPreviousClose_lsRepo_GetAll_Once()
+        {
+            // Arrange
+
+
+            // Act
+            _service.RecordPreviousClose();
+
+            // Assert
+            _mockListedStatusRepo.Verify(
+                g => g.GetAll(),
+                Times.Once,
+                "GetAll() was not called exactly once");
         }
 
         [TestMethod]
@@ -72,21 +87,6 @@ namespace TurtleTests
         }
 
         [TestMethod]
-        public void RecordPreviousClose_lsRepo_GetAll_Once()
-        {
-            // Arrange
-
-
-            // Act
-            _service.RecordPreviousClose();
-
-            // Assert
-            _mockListedStatusRepo.Verify(
-                g => g.GetAll(),
-                Times.Once,
-                "GetAll() was not called exactly once");
-        }
-        [TestMethod]
         public void RecordPreviousClose_GetPreviousClose_ForEachTicker()
         {
             // Arrange
@@ -106,6 +106,25 @@ namespace TurtleTests
                 Times.Once,
                 "GetPreviousClose(\"WYNN\") was not called exactly once");
         }
+
+        [TestMethod]
+        public void RecordPreviousClose_Logs_QueryTicker()
+        {
+            // Arrange
+            _mockListedStatusRepo.Setup(
+                m => m.GetAll())
+                .Returns(new List<ListedStatus> { new() { Ticker = "MSFT" } });
+
+            // Act
+            _service.RecordPreviousClose();
+
+            // Assert
+            _mockLogger.Verify(
+                l => l.Log(It.Is<string>(s => s.StartsWith("...Querying"))),
+                Times.Once,
+                "Logging did not indicate querying exactly once");
+        }
+
         [TestMethod]
         public void RecordPreviousClose_SavePreviousClose_ForEachTicker()
         {

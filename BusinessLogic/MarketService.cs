@@ -34,23 +34,13 @@ namespace BusinessLogic
             {
                 _logger.Log("Starting RecordPreviousClose()");
 
-                int count = 0;
                 var lsData = _listedStatusRepo.GetAll().ToList();
-                _logger.Log($"...working on {lsData.Count()} records.");
-                lsData.ForEach(x => 
+                _logger.Log($"...working on {lsData.Count} records.");
+                lsData.ForEach(x =>
                 {
+                    _logger.Log($"...Querying {x.Ticker}");
                     _previousCloseRepo.Save(_finnhubAPI.GetPreviousClose(x.Ticker));
                 });
-
-
-                //foreach (var item in lsData)
-                //{
-                //    _logger.Log($"...Querying {item.Ticker}");
-                //    PreviousClose pcInfo = _finnhubAPI.GetPreviousClose(item.Ticker);
-                //    _previousCloseRepo.Save(pcInfo);
-                //    count++;
-                //    _logger.Log($"...Transmission {count} Received");
-                //}
                 _logger.Log("RecordPreviousClose() complete.");
             }
             catch( Exception ex )
@@ -61,6 +51,8 @@ namespace BusinessLogic
 
         public void RecordDividendDetails()
         {
+
+
             log("RecordDividendDetails started");
             Thread.Sleep(1000);
             log("...pretending to do work...");
