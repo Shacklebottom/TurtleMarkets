@@ -22,11 +22,12 @@ namespace TestHarness
             VaporTransmission();
             var lsRepo = new ListedStatusRepository().GetAll();
             PreviousCloseRepository pcRepo = new();
+            var fhAPI = new FinnhubAPI();
             int count = 0;
             foreach (var item in lsRepo)
             {
                 Console.WriteLine($"Querying {item.Ticker}");
-                PreviousClose pcInfo = FinnhubAPI.GetPreviousClose(item.Ticker);
+                PreviousClose pcInfo = fhAPI.GetPreviousClose(item.Ticker);
                 pcRepo.Save(pcInfo);
                 count++;
                 Console.WriteLine($"Transmission {count} Received");

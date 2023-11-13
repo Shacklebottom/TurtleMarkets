@@ -11,17 +11,20 @@ namespace BusinessLogic
         private readonly IRepository<PreviousClose> _previousCloseRepo;
         private readonly IRepository<DividendDetails> _dividedDetailsRepo;
         private readonly IRepository<ListedStatus> _listedStatusRepo;
+        private readonly IFinnhubAPI _finnhubAPI;
         private readonly ILogger _logger;
 
         public MarketService(
             IRepository<PreviousClose>? pcRepo = null,
             IRepository<DividendDetails>? ddRepo = null,
             IRepository<ListedStatus>? lsRepo = null,
+            IFinnhubAPI? finnhubAPI = null,
             ILogger? logger = null)
         {
             _previousCloseRepo = pcRepo ?? new PreviousCloseRepository();
             _dividedDetailsRepo = ddRepo ?? new DividendDetailRepository();
             _listedStatusRepo = lsRepo ?? new ListedStatusRepository();
+            _finnhubAPI = finnhubAPI ?? new FinnhubAPI();
             _logger = logger ?? new ConsoleLogger();
         }
 
@@ -31,18 +34,13 @@ namespace BusinessLogic
             {
                 _logger.Log("Starting RecordPreviousClose()");
 
-                int count = 0;
                 var lsData = _listedStatusRepo.GetAll().ToList();
-                _logger.Log($"...working on {lsData.Count()} records.");
-
-                foreach (var item in _listedStatusRepo.GetAll())
+                _logger.Log($"...working on {lsData.Count} records.");
+                lsData.ForEach(x =>
                 {
-                    _logger.Log($"...Querying {item.Ticker}");
-                    PreviousClose pcInfo = FinnhubAPI.GetPreviousClose(item.Ticker);
-                    _previousCloseRepo.Save(pcInfo);
-                    count++;
-                    _logger.Log($"...Transmission {count} Received");
-                }
+                    _logger.Log($"...Querying {x.Ticker}");
+                    _previousCloseRepo.Save(_finnhubAPI.GetPreviousClose(x.Ticker));
+                });
                 _logger.Log("RecordPreviousClose() complete.");
             }
             catch( Exception ex )
@@ -53,6 +51,8 @@ namespace BusinessLogic
 
         public void RecordDividendDetails()
         {
+
+
             log("RecordDividendDetails started");
             Thread.Sleep(1000);
             log("...pretending to do work...");
