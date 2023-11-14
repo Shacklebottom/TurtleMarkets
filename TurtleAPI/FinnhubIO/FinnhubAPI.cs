@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using System.Net;
 using TurtleAPI.BaseClasses;
 using TurtleAPI.Exceptions;
+using TurtleAPI.FinnhubIO.Responses;
 
 namespace TurtleAPI.FinnhubIO
 {
@@ -19,7 +20,7 @@ namespace TurtleAPI.FinnhubIO
                 new("X-Finnhub-Token", AuthData.API_KEY_FINNHUB),
                 new("X-Finnhub-Secret", AuthData.SECRET_FINNHUB)
             };
-            var baseData = CallAPI<FinnhubPrevCloseResponse>(uri, requestHeaders);
+            var baseData = CallAPI<FinnhubPrevCloseResponse>(uri, requestHeaders).First();
 
             var marketDetail = new PreviousClose
             {

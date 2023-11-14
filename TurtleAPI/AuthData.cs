@@ -1,6 +1,4 @@
-﻿
-
-namespace TurtleAPI
+﻿namespace TurtleAPI
 {
     internal static class AuthData
     {

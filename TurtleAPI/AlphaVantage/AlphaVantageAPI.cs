@@ -7,6 +7,8 @@ using System.Net;
 using TurtleAPI.BaseClasses;
 using TurtleAPI.Exceptions;
 using TurtleAPI.FinnhubIO;
+using TurtleAPI.AlphaVantage.Responses;
+using System.Windows.Markup;
 
 namespace TurtleAPI.AlphaVantage
 {
@@ -15,11 +17,11 @@ namespace TurtleAPI.AlphaVantage
         //IMPORTANT! ALPHA VANTAGE API HAS 25 CALLS ===>PER DAY<===
         public AlphaVantageAPI(int msToSleep = 2400) : base(msToSleep) { }
 
-        public PreviousClose? GetPreviousClose(string ticker)
+        public PreviousClose GetPreviousClose(string ticker)
         {
             //has a repository : Validated!
             var uri = new Uri($"https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol={ticker}&apikey={AuthData.API_KEY_ALPHAVANTAGE}");
-            var results = CallAPI<AlphaVPrevCloseResponse>(uri).results;
+            var results = CallAPI<AlphaVPrevCloseResponse>(uri).First().results;
 
             var marketDetails = new PreviousClose
             {
@@ -34,27 +36,13 @@ namespace TurtleAPI.AlphaVantage
 
             return marketDetails;
         }
-        public static IEnumerable<MarketStatus>? GetMarketStatus()
+        public IEnumerable<MarketStatus>? GetMarketStatus()
         {
             //has a repository! : Validated!
             var uri = new Uri($"https://www.alphavantage.co/query?function=MARKET_STATUS&apikey={AuthData.API_KEY_ALPHAVANTAGE}");
-            var client = new HttpClient
-            {
-                BaseAddress = uri
-            };
+            var baseData = CallAPI<AlphaVMarketStatusResponse>(uri).First().results;
 
-            var response = client.GetAsync(uri).Result;
-            if (response.StatusCode != HttpStatusCode.OK) // 200 == OK
-            {
-                throw new ApiException(response);
-            }
-
-            var responseString = response.Content.ReadAsStringAsync().Result;
-
-            var baseData = JsonConvert.DeserializeObject<AlphaVMarketStatusResponse>(responseString) ??
-                throw new Exception("could not parse Alpha Vantage response");
-
-            var results = baseData?.results?.Select(r => new MarketStatus
+            var results = baseData?.Select(r => new MarketStatus
             {
                 MarketType = r.market_type,
                 Region = r.region,
@@ -67,28 +55,14 @@ namespace TurtleAPI.AlphaVantage
 
             return results;
         }
-        public static Dictionary<PrestigeType, IEnumerable<Prominence>?> GetPolarizedMarkets()
+        public Dictionary<PrestigeType, IEnumerable<Prominence>?> GetPolarizedMarkets()
         {
             //has a repository : Validated!
             //returns the top and bottom 20 tickers, and the 20 most traded.
             Dictionary<PrestigeType, IEnumerable<Prominence>?>? prominenceDetail = new();
 
             var uri = new Uri($"https://www.alphavantage.co/query?function=TOP_GAINERS_LOSERS&apikey={AuthData.API_KEY_ALPHAVANTAGE}");
-            var client = new HttpClient
-            {
-                BaseAddress = uri
-            };
-
-            var response = client.GetAsync(uri).Result;
-            if (response.StatusCode != HttpStatusCode.OK) // 200 == OK
-            {
-                throw new ApiException(response);
-            }
-
-            var responseString = response.Content.ReadAsStringAsync().Result;
-            var baseData = JsonConvert.DeserializeObject<AlphaVProminenceResponse>(responseString) ??
-                throw new Exception("could not parse Alpha Vantage response");
-
+            var baseData = CallAPI<AlphaVProminenceResponse>(uri).First();
             prominenceDetail.Add(PrestigeType.TopGainer, baseData.top_gainers?.Select(tg => BuildProminence(tg)));
             prominenceDetail.Add(PrestigeType.TopLoser, baseData.top_losers?.Select(tl => BuildProminence(tl)));
             prominenceDetail.Add(PrestigeType.MostTraded, baseData.most_actively_traded?.Select(m => BuildProminence(m)));
@@ -111,25 +85,12 @@ namespace TurtleAPI.AlphaVantage
         /// </summary>
         /// <param name="statusRequest">ListedStatusType.Active or ListedStatusType.Delisted</param>
         /// <returns>IEnumberable of all active or delisted tickers</returns>
-        public static IEnumerable<ListedStatus> GetListedStatus(ListedStatusTypes listingType = ListedStatusTypes.Active)
+        public IEnumerable<ListedStatus> GetListedStatus(ListedStatusTypes listingType = ListedStatusTypes.Active)
         {
             //has a repository : Validated!
             var uri = new Uri($"https://www.alphavantage.co/query?function=LISTING_STATUS&state={listingType.ToString().ToLower()}&apikey={AuthData.API_KEY_ALPHAVANTAGE}");
-            var client = new HttpClient
-            {
-                BaseAddress = uri
-            };
-
-            var response = client.GetAsync(uri).Result;
-            if (response.StatusCode != HttpStatusCode.OK) // 200 == OK
-            {
-                throw new ApiException(response);
-            }
-
-            var responseString = response.Content.ReadAsStringAsync().Result; // this "should" be a string of CSV data
-            var result = ParseListedStatus(responseString);
-
-            return result;
+            var baseData = CallAPI(uri, parser: ParseListedStatus);
+            return baseData;
         }
 
         private static IEnumerable<ListedStatus> ParseListedStatus(string csvData)

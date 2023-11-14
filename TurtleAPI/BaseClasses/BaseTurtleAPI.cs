@@ -15,7 +15,7 @@ namespace TurtleAPI.BaseClasses
     {
         protected readonly ILogger _logger;
         protected int _msToSleep;
- 
+
         private BaseTurtleAPI()
         {
             _logger = new ConsoleLogger();
@@ -29,7 +29,7 @@ namespace TurtleAPI.BaseClasses
             _msToSleep = msToSleep;
         }
 
-        protected T CallAPI<T>(Uri uri, List<KeyValuePair<string, string>>? customHeaders = null)
+        protected IEnumerable<T> CallAPI<T>(Uri uri, List<KeyValuePair<string, string>>? customHeaders = null, Func<string, IEnumerable<T>>? parser = null)
         {
             var client = new HttpClient
             {
@@ -48,10 +48,15 @@ namespace TurtleAPI.BaseClasses
             }
 
             var responseString = response.Content.ReadAsStringAsync().Result;
-
-            var baseData = JsonConvert.DeserializeObject<T>(responseString) ??
-                throw new ParseException($"could not parse response as {typeof(T)}");
-
+            IEnumerable<T> baseData;
+            if (parser == null)
+            {
+                baseData = new List<T> { JsonConvert.DeserializeObject<T>(responseString)  ??
+                    throw new ParseException($"could not parse response as {typeof(T)}") };
+            } else
+            {
+                baseData = parser.Invoke(responseString);
+            }
             Thread.Sleep(_msToSleep);
 
             return baseData;

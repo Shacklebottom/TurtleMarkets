@@ -12,24 +12,24 @@ namespace TurtleAPI.PolygonIO
         public PolygonAPI(int msToSleep = 12000) : base(msToSleep) { }
 
         //IMPORTANT! POLYGON API HAS 5 CALLS / MINUTE
-        public PreviousClose? GetPreviousClose(string ticker)
+        public PreviousClose GetPreviousClose(string ticker)
         {
             //has a repository : Validated!
             var uri = new Uri($"https://api.polygon.io/v2/aggs/ticker/{ticker}/prev?adjusted=true&apiKey={AuthData.API_KEY_POLYGON}");
-            var baseData = CallAPI<PolygonPrevCloseResponse>(uri)?.results;
+            var baseData = CallAPI<PolygonPrevCloseResponse>(uri);
             
             var marketDetails = baseData?.Select(r => new PreviousClose
             {
                 Ticker = ticker,
-                Close = r.c,
-                Date = ParseUnixTimestamp(r.t),
-                High = r.h,
-                Low = r.l,
-                Open = r.o,
-                Volume = r.v,
+                Close = r.results?[0].c,
+                Date = ParseUnixTimestamp(r.results?[0].t),
+                High = r.results?[0].h,
+                Low = r.results?[0].l,
+                Open = r.results?[0].o,
+                Volume = r.results?[0].v,
             });
             
-            return marketDetails?.First();
+            return marketDetails.First();
         }
 
         public static TickerDetail? GetTickerDetails(string ticker)
