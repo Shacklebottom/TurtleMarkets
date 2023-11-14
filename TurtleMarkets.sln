@@ -5,17 +5,15 @@ VisualStudioVersion = 17.6.33829.357
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestHarness", "TestHarness\TestHarness.csproj", "{DFE0D7E7-0B92-48AD-9EE0-A61EB63F4AF1}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MarketAnalyzer", "MarketAnalyzer\MarketAnalyzer.csproj", "{916D0676-1CD7-4F34-AF32-097542D1B4C7}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MarketDomain", "MarketDomain\MarketDomain.csproj", "{6D13364B-E898-45E5-BC4C-F8DC8899F7AB}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TurtleAPI", "TurtleAPI\TurtleAPI.csproj", "{E67768AE-8F67-460E-9FED-B60AB4F0D60E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TurtleSQL", "TurtleSQL\TurtleSQL.csproj", "{D0A19EE2-4191-47DC-80B8-D586D7BEB2C1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BusinessLogic", "BusinessLogic\BusinessLogic.csproj", "{D1E9CB07-3DE8-4B89-9A7A-B5C4D3EBBB8E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BusinessLogic", "BusinessLogic\BusinessLogic.csproj", "{D1E9CB07-3DE8-4B89-9A7A-B5C4D3EBBB8E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TurtleTests", "TurtleTests\TurtleTests.csproj", "{8AA8394F-B47D-473A-867A-B2148EE4875A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TurtleTests", "TurtleTests\TurtleTests.csproj", "{8AA8394F-B47D-473A-867A-B2148EE4875A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,10 +25,6 @@ Global
 		{DFE0D7E7-0B92-48AD-9EE0-A61EB63F4AF1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DFE0D7E7-0B92-48AD-9EE0-A61EB63F4AF1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DFE0D7E7-0B92-48AD-9EE0-A61EB63F4AF1}.Release|Any CPU.Build.0 = Release|Any CPU
-		{916D0676-1CD7-4F34-AF32-097542D1B4C7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{916D0676-1CD7-4F34-AF32-097542D1B4C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{916D0676-1CD7-4F34-AF32-097542D1B4C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{916D0676-1CD7-4F34-AF32-097542D1B4C7}.Release|Any CPU.Build.0 = Release|Any CPU
 		{6D13364B-E898-45E5-BC4C-F8DC8899F7AB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{6D13364B-E898-45E5-BC4C-F8DC8899F7AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6D13364B-E898-45E5-BC4C-F8DC8899F7AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
