@@ -1,9 +1,9 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 
-namespace TurtleAPI.FinnhubIO
+namespace TurtleAPI.FinnhubIO.Responses
 {
     [SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "<Pending>")]
-    public class FinnhubPrevCloseResponse
+    internal class FinnhubPrevCloseResponse
     {
         //Response isn't nested like Polygon and AlphaVantage are, so we only need the Response
         public double? c { get; set; } //close

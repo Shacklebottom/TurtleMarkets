@@ -1,9 +1,9 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 
-namespace TurtleAPI.FinnhubIO
+namespace TurtleAPI.FinnhubIO.Responses
 {
     [SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "<Pending>")]
-    public class FinnhubTrendResponse
+    internal class FinnhubTrendResponse
     {
         public int? buy { get; set; }
         public int? hold { get; set; }

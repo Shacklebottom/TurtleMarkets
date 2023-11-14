@@ -4,34 +4,23 @@ using MarketDomain.Enums;
 using Newtonsoft.Json;
 using System.Globalization;
 using System.Net;
+using TurtleAPI.BaseClasses;
 using TurtleAPI.Exceptions;
+using TurtleAPI.FinnhubIO;
 
 namespace TurtleAPI.AlphaVantage
 {
-    public class AlphaVantageAPI
+    public class AlphaVantageAPI : BaseTurtleAPI
     {
         //IMPORTANT! ALPHA VANTAGE API HAS 25 CALLS ===>PER DAY<===
-        public static PreviousClose? GetPreviousClose(string ticker)
+        public AlphaVantageAPI(int msToSleep = 2400) : base(msToSleep) { }
+
+        public PreviousClose? GetPreviousClose(string ticker)
         {
             //has a repository : Validated!
             var uri = new Uri($"https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol={ticker}&apikey={AuthData.API_KEY_ALPHAVANTAGE}");
-            var client = new HttpClient
-            {
-                BaseAddress = uri
-            };
+            var results = CallAPI<AlphaVPrevCloseResponse>(uri).results;
 
-            var response = client.GetAsync(uri).Result;
-            if (response.StatusCode != HttpStatusCode.OK) // 200 == OK
-            {
-                throw new ApiException(response);
-            }
-
-            var responseString = response.Content.ReadAsStringAsync().Result;
-
-            var baseData = JsonConvert.DeserializeObject<AlphaVPrevCloseResponse>(responseString) ??
-                throw new Exception("could not parse Alpha Vantage response");
-
-            var results = baseData?.results;
             var marketDetails = new PreviousClose
             {
                 Ticker = ticker,
@@ -42,6 +31,7 @@ namespace TurtleAPI.AlphaVantage
                 Low = results?.low,
                 Volume = results?.volume
             };
+
             return marketDetails;
         }
         public static IEnumerable<MarketStatus>? GetMarketStatus()
@@ -131,11 +121,11 @@ namespace TurtleAPI.AlphaVantage
             };
 
             var response = client.GetAsync(uri).Result;
-            if(response.StatusCode != HttpStatusCode.OK) // 200 == OK
+            if (response.StatusCode != HttpStatusCode.OK) // 200 == OK
             {
                 throw new ApiException(response);
             }
-            
+
             var responseString = response.Content.ReadAsStringAsync().Result; // this "should" be a string of CSV data
             var result = ParseListedStatus(responseString);
 

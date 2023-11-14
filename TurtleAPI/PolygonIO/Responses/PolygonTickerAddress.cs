@@ -1,10 +1,9 @@
 ﻿using Newtonsoft.Json;
 
-namespace TurtleAPI.PolygonIO
+namespace TurtleAPI.PolygonIO.Responses
 {
-    public class PolygonTickerAddress
+    internal class PolygonTickerAddress
     {
-        //not sure if this belongs here tbh.
         [JsonProperty("address1")]
         public string? Address1 { get; set; }
         [JsonProperty("city")]

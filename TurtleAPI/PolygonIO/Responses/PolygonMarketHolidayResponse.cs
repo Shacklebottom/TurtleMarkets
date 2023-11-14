@@ -1,9 +1,9 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 
-namespace TurtleAPI.PolygonIO
+namespace TurtleAPI.PolygonIO.Responses
 {
     [SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "<Pending>")]
-    public class PolygonMarketHolidayResponse
+    internal class PolygonMarketHolidayResponse
     {
         public string? exchange { get; set; }
         public DateTime? date { get; set; }

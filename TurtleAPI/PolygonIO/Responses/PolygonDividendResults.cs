@@ -5,10 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TurtleAPI.PolygonIO
+namespace TurtleAPI.PolygonIO.Responses
 {
     [SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "<Pending>")]
-    public class PolygonDividendResults
+    internal class PolygonDividendResults
     {
         public string? ticker { get; set; }
         public double? cash_amount { get; set; }

@@ -1,8 +1,8 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 
-namespace TurtleAPI.PolygonIO
+namespace TurtleAPI.PolygonIO.Responses
 {
-    public class PolygonTickerDetailResponse
+    internal class PolygonTickerDetailResponse
     {
         [SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "<Pending>")]
         public PolygonTickerDetailResults? results { get; set; }

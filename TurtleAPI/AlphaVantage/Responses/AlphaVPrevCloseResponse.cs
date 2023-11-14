@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System.Diagnostics.CodeAnalysis;
 
-namespace TurtleAPI.AlphaVantage
+namespace TurtleAPI.AlphaVantage.Responses
 {
     [SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "<Pending>")]
     public class AlphaVPrevCloseResponse

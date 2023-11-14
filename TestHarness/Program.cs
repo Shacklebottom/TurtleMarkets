@@ -15,13 +15,14 @@ using System.Diagnostics;
 using TurtleSQL.TickerRepositories;
 using BusinessLogic;
 using BusinessLogic.Logging;
+using TurtleAPI.BaseClasses;
 
-int x = 0;
+Console.WriteLine($"-=≡> TURTLE START <≡=-\n\n");
+
 #region ATARI WORKSPACE
 
-//var dbLogger = new DatabaseLogger();
-//var markets = new MarketService(logger: dbLogger);
-//markets.RecordDividendDetails();
+Console.WriteLine(new PolygonAPI(6).GetPreviousClose("MSFT"));
+
 
 #endregion
 

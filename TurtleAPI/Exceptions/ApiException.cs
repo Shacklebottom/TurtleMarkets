@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace TurtleAPI.Exceptions
 {
-	[Serializable]
+    [Serializable]
 	public class ApiException : Exception
 	{
 		public HttpResponseMessage? Response { get; private set; } = null;

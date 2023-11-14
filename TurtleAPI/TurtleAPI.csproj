@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MarketDomain\MarketDomain.csproj" />
+    <ProjectReference Include="..\Turtilities\Turtilities.csproj" />
   </ItemGroup>
 
   <ItemGroup>

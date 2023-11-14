@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System.Diagnostics.CodeAnalysis;
 
-namespace TurtleAPI.AlphaVantage
+namespace TurtleAPI.AlphaVantage.Responses
 {
     [SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "<Pending>")]
     public class AlphaVPreviousCloseResult
@@ -19,7 +19,7 @@ namespace TurtleAPI.AlphaVantage
         [JsonProperty("07. latest trading day")]
         public DateTime latest { get; set; }
         [JsonProperty("08. previous close")] //this is yesterday's previous close
-        public decimal previous { get; set; } 
-        
+        public decimal previous { get; set; }
+
     }
 }

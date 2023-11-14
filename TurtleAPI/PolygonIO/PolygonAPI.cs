@@ -1,32 +1,24 @@
 ﻿using MarketDomain;
 using Newtonsoft.Json;
 using System.Net;
+using TurtleAPI.BaseClasses;
 using TurtleAPI.Exceptions;
+using TurtleAPI.PolygonIO.Responses;
 
 namespace TurtleAPI.PolygonIO
 {
-    public class PolygonAPI : IPolygonAPI
+    public class PolygonAPI : BaseTurtleAPI, IPolygonAPI
     {
+        public PolygonAPI(int msToSleep = 12000) : base(msToSleep) { }
+
         //IMPORTANT! POLYGON API HAS 5 CALLS / MINUTE
-        public static PreviousClose? GetPreviousClose(string ticker)
+        public PreviousClose? GetPreviousClose(string ticker)
         {
             //has a repository : Validated!
             var uri = new Uri($"https://api.polygon.io/v2/aggs/ticker/{ticker}/prev?adjusted=true&apiKey={AuthData.API_KEY_POLYGON}");
-            var client = new HttpClient
-            {
-                BaseAddress = uri
-            };
-
-            var response = client.GetAsync(uri).Result;
-            if (response.StatusCode != HttpStatusCode.OK) // 200 == OK
-            {
-                throw new ApiException(response);
-            }
-
-            var responseString = response.Content.ReadAsStringAsync().Result;
-            var baseData = JsonConvert.DeserializeObject<PolygonPrevCloseResponse>(responseString) ??
-                throw new Exception("could not parse Polygon response");
-            var marketDetails = baseData?.results?.Select(r => new PreviousClose
+            var baseData = CallAPI<PolygonPrevCloseResponse>(uri)?.results;
+            
+            var marketDetails = baseData?.Select(r => new PreviousClose
             {
                 Ticker = ticker,
                 Close = r.c,
@@ -36,8 +28,10 @@ namespace TurtleAPI.PolygonIO
                 Open = r.o,
                 Volume = r.v,
             });
+            
             return marketDetails?.First();
         }
+
         public static TickerDetail? GetTickerDetails(string ticker)
         {
             //has repository : Validated!

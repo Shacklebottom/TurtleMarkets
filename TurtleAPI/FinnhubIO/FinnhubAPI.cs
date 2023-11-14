@@ -1,35 +1,26 @@
 ﻿using MarketDomain;
 using Newtonsoft.Json;
 using System.Net;
+using TurtleAPI.BaseClasses;
 using TurtleAPI.Exceptions;
 
 namespace TurtleAPI.FinnhubIO
 {
-    public class FinnhubAPI : IFinnhubAPI
+    public class FinnhubAPI : BaseTurtleAPI, IFinnhubAPI
     {
+        public FinnhubAPI(int msSleepTime = 1000) : base(msSleepTime) { }
+
         //IMPORTANT! FINNHUB API HAS 60 CALLS / MINUTE
         public PreviousClose GetPreviousClose(string ticker)
         {
-            //has a repository : Validated!
             var uri = new Uri($"https://finnhub.io/api/v1/quote?symbol={ticker}");
-            var client = new HttpClient()
+            var requestHeaders = new List<KeyValuePair<string, string>>
             {
-                BaseAddress = uri,
+                new("X-Finnhub-Token", AuthData.API_KEY_FINNHUB),
+                new("X-Finnhub-Secret", AuthData.SECRET_FINNHUB)
             };
-            client.DefaultRequestHeaders.Add("X-Finnhub-Token", AuthData.API_KEY_FINNHUB);
-            client.DefaultRequestHeaders.Add("X-Finnhub-Secret", AuthData.SECRET_FINNHUB);
+            var baseData = CallAPI<FinnhubPrevCloseResponse>(uri, requestHeaders);
 
-            var response = client.GetAsync(uri).Result;
-            Thread.Sleep(1000);
-            Console.WriteLine($"{response.StatusCode}");
-            if (response.StatusCode != HttpStatusCode.OK) // 200 == OK
-            {
-                throw new ApiException(response);
-            }
-
-            var responseString = response.Content.ReadAsStringAsync().Result;
-            var baseData = JsonConvert.DeserializeObject<FinnhubPrevCloseResponse>(responseString) ??
-                    throw new Exception("could not parse Finnhub response");
             var marketDetail = new PreviousClose
             {
                 Ticker = ticker,
@@ -41,7 +32,6 @@ namespace TurtleAPI.FinnhubIO
                 Volume = null,
             };
             return marketDetail;
-
         }
 
         private static DateTime? ParseUnixTimestamp(decimal? t)

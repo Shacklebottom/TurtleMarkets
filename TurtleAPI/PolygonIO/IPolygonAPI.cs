@@ -1,8 +1,9 @@
 ﻿using MarketDomain;
+using TurtleAPI.BaseClasses;
 
 namespace TurtleAPI.PolygonIO
 {
-    public interface IPolygonAPI
+    public interface IPolygonAPI : ITurtleAPI
     {
         IEnumerable<DividendDetails> GetDividendDetails(string ticker);
     }
