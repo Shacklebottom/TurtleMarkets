@@ -3,7 +3,7 @@
 namespace TurtleAPI.AlphaVantage.Responses
 {
     [SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "<Pending>")]
-    public class AlphaVMarketStatusResult
+    internal class AlphaVMarketStatusResult
     {
         public string? market_type { get; set; }
         public string? region { get; set; }

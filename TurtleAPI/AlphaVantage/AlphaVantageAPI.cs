@@ -21,6 +21,7 @@ namespace TurtleAPI.AlphaVantage
         {
             //has a repository : Validated!
             var uri = new Uri($"https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol={ticker}&apikey={AuthData.API_KEY_ALPHAVANTAGE}");
+            
             var results = CallAPI<AlphaVPrevCloseResponse>(uri).First().results;
 
             var marketDetails = new PreviousClose
@@ -55,16 +56,20 @@ namespace TurtleAPI.AlphaVantage
 
             return results;
         }
-        public Dictionary<PrestigeType, IEnumerable<Prominence>?> GetPolarizedMarkets()
+        public Dictionary<PrestigeType, IEnumerable<Prominence?>?> GetPolarizedMarkets()
         {
             //has a repository : Validated!
             //returns the top and bottom 20 tickers, and the 20 most traded.
-            Dictionary<PrestigeType, IEnumerable<Prominence>?>? prominenceDetail = new();
+            Dictionary<PrestigeType, IEnumerable<Prominence?>?> prominenceDetail = new();
 
             var uri = new Uri($"https://www.alphavantage.co/query?function=TOP_GAINERS_LOSERS&apikey={AuthData.API_KEY_ALPHAVANTAGE}");
+            
             var baseData = CallAPI<AlphaVProminenceResponse>(uri).First();
+            
             prominenceDetail.Add(PrestigeType.TopGainer, baseData.top_gainers?.Select(tg => BuildProminence(tg)));
+            
             prominenceDetail.Add(PrestigeType.TopLoser, baseData.top_losers?.Select(tl => BuildProminence(tl)));
+            
             prominenceDetail.Add(PrestigeType.MostTraded, baseData.most_actively_traded?.Select(m => BuildProminence(m)));
 
             return prominenceDetail;
@@ -89,7 +94,9 @@ namespace TurtleAPI.AlphaVantage
         {
             //has a repository : Validated!
             var uri = new Uri($"https://www.alphavantage.co/query?function=LISTING_STATUS&state={listingType.ToString().ToLower()}&apikey={AuthData.API_KEY_ALPHAVANTAGE}");
+            
             var baseData = CallAPI(uri, parser: ParseListedStatus);
+            
             return baseData;
         }
 

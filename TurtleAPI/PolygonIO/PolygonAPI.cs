@@ -14,54 +14,40 @@ namespace TurtleAPI.PolygonIO
         //IMPORTANT! POLYGON API HAS 5 CALLS / MINUTE
         public PreviousClose GetPreviousClose(string ticker)
         {
-            //has a repository : Validated!
+            //has a repository : >Validated!<
             var uri = new Uri($"https://api.polygon.io/v2/aggs/ticker/{ticker}/prev?adjusted=true&apiKey={AuthData.API_KEY_POLYGON}");
-            var baseData = CallAPI<PolygonPrevCloseResponse>(uri);
-            
-            var marketDetails = baseData?.Select(r => new PreviousClose
+            var baseData = CallAPI<PolygonPrevCloseResponse>(uri).First().results?[0];
+
+            var marketDetails = new PreviousClose
             {
                 Ticker = ticker,
-                Close = r.results?[0].c,
-                Date = ParseUnixTimestamp(r.results?[0].t),
-                High = r.results?[0].h,
-                Low = r.results?[0].l,
-                Open = r.results?[0].o,
-                Volume = r.results?[0].v,
-            });
-            
-            return marketDetails.First();
+                Close = baseData?.c,
+                Date = ParseUnixTimestamp(baseData?.t),
+                High = baseData?.h,
+                Low = baseData?.l,
+                Open = baseData?.o,
+                Volume = baseData?.v,
+            };
+            return marketDetails;
         }
 
-        public static TickerDetail? GetTickerDetails(string ticker)
+        public TickerDetail GetTickerDetails(string ticker)
         {
-            //has repository : Validated!
+            //has repository : >Validated!<
             var uri = new Uri($"https://api.polygon.io/v3/reference/tickers/{ticker}?apiKey={AuthData.API_KEY_POLYGON}");
-            var client = new HttpClient
-            {
-                BaseAddress = uri
-            };
-
-            var response = client.GetAsync(uri).Result;
-            if (response.StatusCode != HttpStatusCode.OK) // 200 == OK
-            {
-                throw new ApiException(response);
-            }
-
-            var responseString = response.Content.ReadAsStringAsync().Result;
-
-            var baseData = JsonConvert.DeserializeObject<PolygonTickerDetailResponse>(responseString) ??
-                throw new Exception("could not parse Polygon response");
+            
+            var baseData = CallAPI<PolygonTickerDetailResponse>(uri).First().results;
 
             var tickerDetail = new TickerDetail
             {
                 Ticker = ticker,
-                Name = baseData?.results?.name,
-                Description = baseData?.results?.description,
-                Address = baseData?.results?.address?.Address1,
-                City = baseData?.results?.address?.City,
-                State = baseData?.results?.address?.State,
-                TotalEmployees = baseData?.results?.total_employees,
-                ListDate = baseData?.results?.list_date
+                Name = baseData?.name,
+                Description = baseData?.description,
+                Address = baseData?.address?.Address1,
+                City = baseData?.address?.City,
+                State = baseData?.address?.State,
+                TotalEmployees = baseData?.total_employees,
+                ListDate = baseData?.list_date
             };
             return tickerDetail;
         }
@@ -71,33 +57,22 @@ namespace TurtleAPI.PolygonIO
             if (t != null)
             {
                 var epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+
                 var dateTime = epoch.AddMilliseconds((double)t);
+
                 return dateTime;
             }
             return null;
         }
 
-        public static IEnumerable<MarketHoliday>? GetMarketHoliday()
+        public IEnumerable<MarketHoliday> GetMarketHoliday()
         {
-            //has a repository : Validated!
+            //has a repository : >Validated!<
             var uri = new Uri($"https://api.polygon.io/v1/marketstatus/upcoming?apiKey={AuthData.API_KEY_POLYGON}");
-            var client = new HttpClient
-            {
-                BaseAddress = uri
-            };
-
-            var response = client.GetAsync(uri).Result;
-            if (response.StatusCode != HttpStatusCode.OK) // 200 == OK
-            {
-                throw new ApiException(response);
-            }
-
-            var responseString = response.Content.ReadAsStringAsync().Result;
-
-            var baseData = JsonConvert.DeserializeObject<List<PolygonMarketHolidayResponse>>(responseString) ??
-                throw new Exception("could not parse Polygon response");
-
-            var holidayDetail = baseData?.Select(r => new MarketHoliday
+            
+            var baseData = CallAPI<List<PolygonMarketHolidayResponse>>(uri).First();
+            
+            var holidayDetail = baseData.Select(r => new MarketHoliday
             {
                 Exchange = r?.exchange,
                 Date = r?.date,
@@ -108,29 +83,14 @@ namespace TurtleAPI.PolygonIO
             });
             return holidayDetail;
         }
+
         public IEnumerable<DividendDetails> GetDividendDetails(string ticker)
         {
             //has a repository! : Validated
             var uri = new Uri($"https://api.polygon.io/v3/reference/dividends?ticker={ticker}&apiKey={AuthData.API_KEY_POLYGON}");
-            var client = new HttpClient
-            {
-                BaseAddress = uri
-            };
-
-            var response = client.GetAsync(uri).Result;
-            Thread.Sleep(12000);
-            Console.WriteLine($"{response.StatusCode}");
-            if (response.StatusCode != HttpStatusCode.OK) // 200 == OK
-            {
-                throw new ApiException(response);
-            }
-
-            var responseString = response.Content.ReadAsStringAsync().Result;
-
-
-            var baseData = JsonConvert.DeserializeObject<PolygonDividendResponse>(responseString) ??
-                throw new Exception("could not parse Polygon response");
-
+            
+            var baseData = CallAPI<PolygonDividendResponse>(uri).First();
+            
             var dividendDetail = baseData.results.Select(r =>
                 new DividendDetails
                 {
@@ -143,9 +103,11 @@ namespace TurtleAPI.PolygonIO
                     PayoutDate = r.pay_date,
                     OwnBeforeDate = r.record_date
                 });
-            if (dividendDetail.Any())
+            
+            if (!dividendDetail.Any())
             {
                 var emptyDetail = new List<DividendDetails>();
+                
                 var x = new DividendDetails
                 {
                     Ticker = ticker,
@@ -158,6 +120,7 @@ namespace TurtleAPI.PolygonIO
                     OwnBeforeDate = DateTime.Today
                 };
                 emptyDetail.Add(x);
+                
                 return emptyDetail;
             }
             return dividendDetail;

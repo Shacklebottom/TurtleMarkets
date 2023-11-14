@@ -21,13 +21,15 @@ Console.WriteLine($"-=≡> TURTLE START <≡=-\n\n");
 
 #region ATARI WORKSPACE
 
-Console.WriteLine(new PolygonAPI(6).GetPreviousClose("MSFT"));
+//Console.WriteLine(new PolygonAPI(6).GetPreviousClose("MSFT"));
 
 
 #endregion
 
 #region SHACKLE WORKSPACE
 
+var x = new FinnhubAPI(0).GetRecommendedTrend("MSFT");
+var y = x;
 #endregion
 
 #region FUNCTION CHECK

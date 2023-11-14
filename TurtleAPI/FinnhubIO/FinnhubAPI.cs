@@ -15,11 +15,13 @@ namespace TurtleAPI.FinnhubIO
         public PreviousClose GetPreviousClose(string ticker)
         {
             var uri = new Uri($"https://finnhub.io/api/v1/quote?symbol={ticker}");
+            
             var requestHeaders = new List<KeyValuePair<string, string>>
             {
                 new("X-Finnhub-Token", AuthData.API_KEY_FINNHUB),
                 new("X-Finnhub-Secret", AuthData.SECRET_FINNHUB)
             };
+
             var baseData = CallAPI<FinnhubPrevCloseResponse>(uri, requestHeaders).First();
 
             var marketDetail = new PreviousClose
@@ -32,6 +34,7 @@ namespace TurtleAPI.FinnhubIO
                 Low = baseData?.l,
                 Volume = null,
             };
+
             return marketDetail;
         }
 
@@ -40,34 +43,27 @@ namespace TurtleAPI.FinnhubIO
             if (t != null)
             {
                 var epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+                
                 var dateTime = epoch.AddSeconds((double)t);
+                
                 return dateTime;
             }
+
             return null;
         }
 
-        public static RecommendedTrend? GetRecommendedTrend(string ticker)
+        public IEnumerable<RecommendedTrend>? GetRecommendedTrend(string ticker)
         {
             //has a repository : Validated!
             var uri = new Uri($"https://finnhub.io/api/v1/stock/recommendation?symbol={ticker}&token={AuthData.API_KEY_FINNHUB}");
-            var client = new HttpClient()
+
+            var requestHeaders = new List<KeyValuePair<string, string>>
             {
-                BaseAddress = uri,
+                new("X-Finnhub-Token", AuthData.API_KEY_FINNHUB),
+                new("X-Finnhub-Secret", AuthData.SECRET_FINNHUB)
             };
-            client.DefaultRequestHeaders.Add("X-Finnhub-Token", AuthData.API_KEY_FINNHUB);
-            client.DefaultRequestHeaders.Add("X-Finnhub-Secret", AuthData.SECRET_FINNHUB);
 
-            var response = client.GetAsync(uri).Result;
-            Thread.Sleep(12000);
-            if (response.StatusCode != HttpStatusCode.OK) // 200 == OK
-            {
-                throw new ApiException(response);
-            }
-
-            var responseString = response.Content.ReadAsStringAsync().Result;
-
-            var baseData = JsonConvert.DeserializeObject<List<FinnhubTrendResponse>>(responseString) ??
-                throw new Exception("could not parse Finnhub response");
+            var baseData = CallAPI<List<FinnhubTrendResponse>>(uri, requestHeaders).First();
 
             var recommendedTrend = baseData?.Select(r => new RecommendedTrend
             {
@@ -79,7 +75,8 @@ namespace TurtleAPI.FinnhubIO
                 StrongBuy = r.strongBuy,
                 StrongSell = r.strongSell
             });
-            return recommendedTrend?.First();
+
+            return recommendedTrend;
         }
     }
 }

@@ -3,7 +3,7 @@
 namespace TurtleAPI.AlphaVantage.Responses
 {
     [SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "<Pending>")]
-    public class AlphaVProminenceResult
+    internal class AlphaVProminenceResult
     {
         public string ticker { get; set; } = string.Empty;
         public double? price { get; set; }
