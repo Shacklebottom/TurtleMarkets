@@ -26,6 +26,7 @@ namespace TurtleTests
         Mock<IRepository<RecommendedTrend>> _mockRecommendedTrendRepo;
         Mock<IRepository<TickerDetail>> _mockTickerDetailRepo;
         Mock<IRepository<MarketHoliday>> _mockMarketHolidayRepo;
+        Mock<IRepository<MarketStatus>> _mockMarketStatusRepo;
         Mock<IFinnhubAPI> _mockFinnhubAPI;
         Mock<IPolygonAPI> _mockPolygonAPI;
         Mock<IAlphaVantageAPI> _mockAlphaVantageAPI;
@@ -42,6 +43,7 @@ namespace TurtleTests
             _mockRecommendedTrendRepo = new();
             _mockTickerDetailRepo = new();
             _mockMarketHolidayRepo = new();
+            _mockMarketStatusRepo = new();
             _mockFinnhubAPI = new();
             _mockPolygonAPI = new();
             _mockAlphaVantageAPI = new();
@@ -79,6 +81,7 @@ namespace TurtleTests
                 _mockRecommendedTrendRepo.Object,
                 _mockTickerDetailRepo.Object,
                 _mockMarketHolidayRepo.Object,
+                _mockMarketStatusRepo.Object,
                 _mockFinnhubAPI.Object,
                 _mockPolygonAPI.Object,
                 _mockAlphaVantageAPI.Object,
@@ -423,14 +426,14 @@ namespace TurtleTests
         }
         #endregion
 
-        #region CheckMarketStatus
+        #region RecordMarketStatus
         [TestMethod]
-        public void CheckMarketStatus_Logs_Start()
+        public void RecordMarketStatus_Logs_Start()
         {
             // Assign
 
             // Act
-            _service.CheckMarketStatus("NYSE");
+            _service.RecordMarketStatus();
 
             // Assert
             _mockLogger.Verify(l => l.Log(It.Is<string>(s => s.StartsWith("Starting"))),
@@ -438,12 +441,12 @@ namespace TurtleTests
                 "Logging did not indicate start once");
         }
         [TestMethod]
-        public void CheckMarketStatus_Get_Once()
+        public void RecordMarketStatus_Get_Once()
         {
             // Assign
 
             // Act
-            _service.CheckMarketStatus("NYSE");
+            _service.RecordMarketStatus();
 
             // Assert
             _mockAlphaVantageAPI.Verify(av => av.GetMarketStatus(),
@@ -452,12 +455,27 @@ namespace TurtleTests
         }
 
         [TestMethod]
-        public void CheckMarketStatus_Logs_Stop()
+        public void RecordMarketStatus_Save_ForAllDetails()
+        {
+            // Assign
+            _mockAlphaVantageAPI.Setup(av => av.GetMarketStatus())
+                .Returns(new List<MarketStatus> { new() { Exchange = "NYSE" }, new() { Exchange = "NASDAQ" } });
+            // Act
+            _service.RecordMarketStatus();
+
+            // Assert
+            _mockMarketStatusRepo.Verify(ms => ms.Save(It.IsAny<MarketStatus>()),
+                Times.Exactly(2),
+                "Save was not called exactly twice :(");
+        }
+
+        [TestMethod]
+        public void RecordMarketStatus_Logs_Stop()
         {
             // Assign
 
             // Act
-            _service.CheckMarketStatus("NYSE");
+            _service.RecordMarketStatus();
 
             // Assert
             _mockLogger.Verify(l => l.Log(It.Is<string>(s => s.EndsWith("complete."))),
@@ -465,25 +483,15 @@ namespace TurtleTests
                 "Logging did not indicate complete once");
         }
 
-        [TestMethod]
-        public void CheckMarketStatus_Return_Value()
-        {
-            // Assign
 
-            // Act
-            var result = _service.CheckMarketStatus("NYSE");
-
-            // Assert
-            Assert.AreEqual("NYSE", result?.Exchange, "CheckMarketStatus did not return the expected value");
-        }
 
         [TestMethod]
-        public void CheckMarketStatus_Logs_Exception()
+        public void RecordMarketStatus_Logs_Exception()
         {
             // Assign
             _mockAlphaVantageAPI.Setup(av => av.GetMarketStatus()).Throws(new Exception());
             // Act
-            _service.CheckMarketStatus("NYSE");
+            _service.RecordMarketStatus();
 
             // Assert
             _mockLogger.Verify(l => l.Log(It.Is<string>(s => s.StartsWith("EXCEPTION:"))),
@@ -831,7 +839,7 @@ namespace TurtleTests
         public void RecordMarketHoliday_Save_ForEachDetail()
         {
             // Arrange
-            
+
             // Act
             _service.RecordMarketHoliday();
 
@@ -860,7 +868,7 @@ namespace TurtleTests
         {
             // Arrange
             _mockMarketHolidayRepo.Setup(mh => mh.Save(It.IsAny<MarketHoliday>())).Throws(new Exception());
-            
+
             // Act
             _service.RecordMarketHoliday();
 

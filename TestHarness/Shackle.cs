@@ -3,6 +3,7 @@ using MarketDomain.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,11 +16,11 @@ using TurtleSQL.TickerRepositories;
 
 namespace TestHarness
 {
-    public static class Shackle
+    public class Shackle
     {
 
     }
-    public class Dumbell
+    public static class Dumbell
     {
 
     }

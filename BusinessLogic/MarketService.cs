@@ -21,6 +21,7 @@ namespace BusinessLogic
         private readonly IRepository<Prominence> _prominenceRepo;
         private readonly IRepository<TickerDetail> _tickerDetailRepo;
         private readonly IRepository<MarketHoliday> _marketHolidayRepo;
+        private readonly IRepository<MarketStatus> _marketStatusRepo;
         private readonly IFinnhubAPI _finnhubAPI;
         private readonly IPolygonAPI _polygonAPI;
         private readonly IAlphaVantageAPI _alphavantageAPI;
@@ -34,6 +35,7 @@ namespace BusinessLogic
             IRepository<RecommendedTrend>? rtRepo = null,
             IRepository<TickerDetail>? tdRepo = null,
             IRepository<MarketHoliday>? mhRepo = null,
+            IRepository<MarketStatus>? msRepo = null,
             IFinnhubAPI? finnhubAPI = null,
             IPolygonAPI? polygonAPI = null,
             IAlphaVantageAPI? alphaVantageAPI = null,
@@ -46,12 +48,15 @@ namespace BusinessLogic
             _recommendedTrendRepo = rtRepo ?? new RecommendedTrendRepository();
             _tickerDetailRepo = tdRepo ?? new TickerDetailRepository();
             _marketHolidayRepo = mhRepo ?? new MarketHolidayRepository();
+            _marketStatusRepo = msRepo ?? new MarketStatusRepository();
             _finnhubAPI = finnhubAPI ?? new FinnhubAPI();
             _polygonAPI = polygonAPI ?? new PolygonAPI();
             _alphavantageAPI = alphaVantageAPI ?? new AlphaVantageAPI();
             _logger = logger ?? new ConsoleLogger();
         }
 
+
+        #region APIcalls
         public void RecordPreviousClose()
         {
             try
@@ -126,26 +131,26 @@ namespace BusinessLogic
             }
         }
 
-        public MarketStatus? CheckMarketStatus(string exchange)
+        public void RecordMarketStatus()
         {
             try
             {
                 log("Starting CheckMarketStatus()");
-                
-                var marketStatus = _alphavantageAPI?.GetMarketStatus()?.Where(e => e.Exchange == exchange).First();
+                foreach (var item in _alphavantageAPI.GetMarketStatus())
+                {
+                    _marketStatusRepo.Save(item);
+                }
                 
                 log("CheckMarketStatus() complete.");
                 
-                return marketStatus;
 
             }
             catch (Exception ex)
             {
                 log($"EXCEPTION:\n{ex.Message}\n\n{ex.StackTrace}");
-                
-                return null;
             }
         }
+
         public void RecordListedStatus()
         {
             try
@@ -164,6 +169,7 @@ namespace BusinessLogic
                 log($"EXCEPTION:\n{ex.Message}\n\n{ex.StackTrace}");
             }
         }
+
         public void RecordRecommendedTrend()
         {
             try
@@ -189,6 +195,7 @@ namespace BusinessLogic
                 log($"EXCEPTION:\n{ex.Message}\n\n{ex.StackTrace}");
             }
         }
+
         public void RecordTickerDetails()
         {
             try
@@ -229,5 +236,8 @@ namespace BusinessLogic
                 log($"EXCEPTION:\n{ex.Message}\n\n{ex.StackTrace}");
             }
         }
+        #endregion
+
+
     }
 }

@@ -27,7 +27,7 @@ Console.WriteLine($"-=≡> TURTLE START <≡=-\n\n");
 #endregion
 
 #region SHACKLE WORKSPACE
-new MarketService().RecordDailyProminence();
+
 #endregion
 
 #region FUNCTION CHECK
