@@ -7,5 +7,6 @@ namespace TurtleAPI.PolygonIO
     {
         IEnumerable<DividendDetails> GetDividendDetails(string ticker);
         TickerDetail GetTickerDetails(string ticker);
+        IEnumerable<MarketHoliday> GetMarketHoliday();
     }
 }

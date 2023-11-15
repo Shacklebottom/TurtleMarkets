@@ -14,6 +14,7 @@ namespace TurtleAPI.PolygonIO
         //IMPORTANT! POLYGON API HAS 5 CALLS / MINUTE
         public PreviousClose GetPreviousClose(string ticker)
         {
+            //maybe unnecessary??
             //has a repository : >Validated!<
             var uri = new Uri($"https://api.polygon.io/v2/aggs/ticker/{ticker}/prev?adjusted=true&apiKey={AuthData.API_KEY_POLYGON}");
             var baseData = CallAPI<PolygonPrevCloseResponse>(uri).First().results?[0];

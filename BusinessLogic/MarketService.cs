@@ -6,6 +6,7 @@ using TurtleAPI.PolygonIO;
 using TurtleAPI.AlphaVantage;
 using TurtleSQL.Interfaces;
 using TurtleSQL.TickerRepositories;
+using TurtleSQL.MarketStatusForecast;
 
 namespace BusinessLogic
 {
@@ -19,6 +20,7 @@ namespace BusinessLogic
         private readonly IRepository<RecommendedTrend> _recommendedTrendRepo;
         private readonly IRepository<Prominence> _prominenceRepo;
         private readonly IRepository<TickerDetail> _tickerDetailRepo;
+        private readonly IRepository<MarketHoliday> _marketHolidayRepo;
         private readonly IFinnhubAPI _finnhubAPI;
         private readonly IPolygonAPI _polygonAPI;
         private readonly IAlphaVantageAPI _alphavantageAPI;
@@ -31,6 +33,7 @@ namespace BusinessLogic
             IRepository<Prominence>? proRepo = null,
             IRepository<RecommendedTrend>? rtRepo = null,
             IRepository<TickerDetail>? tdRepo = null,
+            IRepository<MarketHoliday>? mhRepo = null,
             IFinnhubAPI? finnhubAPI = null,
             IPolygonAPI? polygonAPI = null,
             IAlphaVantageAPI? alphaVantageAPI = null,
@@ -42,6 +45,7 @@ namespace BusinessLogic
             _prominenceRepo = proRepo ?? new ProminenceRepository();
             _recommendedTrendRepo = rtRepo ?? new RecommendedTrendRepository();
             _tickerDetailRepo = tdRepo ?? new TickerDetailRepository();
+            _marketHolidayRepo = mhRepo ?? new MarketHolidayRepository();
             _finnhubAPI = finnhubAPI ?? new FinnhubAPI();
             _polygonAPI = polygonAPI ?? new PolygonAPI();
             _alphavantageAPI = alphaVantageAPI ?? new AlphaVantageAPI();
@@ -100,7 +104,7 @@ namespace BusinessLogic
         }
 
         public void RecordDailyProminence()
-        {
+        { //may refactor?
             try
             {
                 log("Starting RecordDailyProminence()");
@@ -212,11 +216,17 @@ namespace BusinessLogic
         {
             try
             {
+                log("Starting RecordMarketHoliday()");
+                foreach (var item in _polygonAPI.GetMarketHoliday())
+                {
+                    _marketHolidayRepo.Save(item);
+                }
+                log("RecordMarketHoliday() complete.");
 
             }
             catch (Exception ex)
             {
-
+                log($"EXCEPTION:\n{ex.Message}\n\n{ex.StackTrace}");
             }
         }
     }

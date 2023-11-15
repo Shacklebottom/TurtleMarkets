@@ -25,6 +25,7 @@ namespace TurtleTests
         Mock<IRepository<Prominence>> _mockProminenceRepo;
         Mock<IRepository<RecommendedTrend>> _mockRecommendedTrendRepo;
         Mock<IRepository<TickerDetail>> _mockTickerDetailRepo;
+        Mock<IRepository<MarketHoliday>> _mockMarketHolidayRepo;
         Mock<IFinnhubAPI> _mockFinnhubAPI;
         Mock<IPolygonAPI> _mockPolygonAPI;
         Mock<IAlphaVantageAPI> _mockAlphaVantageAPI;
@@ -40,6 +41,7 @@ namespace TurtleTests
             _mockProminenceRepo = new();
             _mockRecommendedTrendRepo = new();
             _mockTickerDetailRepo = new();
+            _mockMarketHolidayRepo = new();
             _mockFinnhubAPI = new();
             _mockPolygonAPI = new();
             _mockAlphaVantageAPI = new();
@@ -64,6 +66,8 @@ namespace TurtleTests
             _mockFinnhubAPI.Setup(fh => fh.GetRecommendedTrend("MSFT"))
                 .Returns(new List<RecommendedTrend> { new() { Ticker = "MSFT" }, new() { Ticker = "MSFT" } });
 
+            _mockPolygonAPI.Setup(pg => pg.GetMarketHoliday())
+                .Returns(new List<MarketHoliday> { new() { Exchange = "NYSE" }, new() { Exchange = "NASDAQ" } });
 
             #endregion
 
@@ -74,6 +78,7 @@ namespace TurtleTests
                 _mockProminenceRepo.Object,
                 _mockRecommendedTrendRepo.Object,
                 _mockTickerDetailRepo.Object,
+                _mockMarketHolidayRepo.Object,
                 _mockFinnhubAPI.Object,
                 _mockPolygonAPI.Object,
                 _mockAlphaVantageAPI.Object,
@@ -637,7 +642,7 @@ namespace TurtleTests
         public void RecordRecommendedTrend_Save_ForEachTicker()
         {
             // Assign
-            
+
             // Act
             _service.RecordRecommendedTrend();
 
@@ -780,7 +785,7 @@ namespace TurtleTests
         public void RecordTickerDetails_Logs_Exception()
         {
             // Assign
-            _mockTickerDetailRepo.Setup(rt => rt.Save(It.IsAny<TickerDetail>())).Throws(new Exception());
+            _mockTickerDetailRepo.Setup(td => td.Save(It.IsAny<TickerDetail>())).Throws(new Exception());
 
             // Act
             _service.RecordTickerDetails();
@@ -790,6 +795,81 @@ namespace TurtleTests
                 Times.Once,
                 "Logging did not indicate Exception once");
         }
+        #endregion
+
+        #region RecordMarketHoliday()
+
+        [TestMethod]
+        public void RecordMarketHoliday_Logs_Start()
+        {
+            // Arrange
+
+            // Act
+            _service.RecordMarketHoliday();
+
+            // Assert
+            _mockLogger.Verify(l => l.Log(It.Is<string>(s => s.StartsWith("Starting"))),
+                Times.Once,
+                "Logging did not indicate start exactly once");
+        }
+
+        [TestMethod]
+        public void RecordMarketHoliday_Get_Once()
+        {
+            // Arrange
+
+            // Act
+            _service.RecordMarketHoliday();
+
+            // Assert
+            _mockPolygonAPI.Verify(pg => pg.GetMarketHoliday(),
+                Times.Once,
+                "GetMarketHoliday() was not called exactly once");
+        }
+
+        [TestMethod]
+        public void RecordMarketHoliday_Save_ForEachDetail()
+        {
+            // Arrange
+            
+            // Act
+            _service.RecordMarketHoliday();
+
+            // Assert
+            _mockMarketHolidayRepo.Verify(mh => mh.Save(It.IsAny<MarketHoliday>()),
+                Times.Exactly(2),
+                "Save was not called exactly twice :(");
+        }
+
+        [TestMethod]
+        public void RecordMarketHoliday_Logs_Stop()
+        {
+            // Arrange
+
+            // Act
+            _service.RecordMarketHoliday();
+
+            // Assert
+            _mockLogger.Verify(l => l.Log(It.Is<string>(s => s.EndsWith("complete."))),
+                Times.Once,
+                "Logging did not indicate complete once");
+        }
+
+        [TestMethod]
+        public void RecordMarketHoliday_Logs_Exception()
+        {
+            // Arrange
+            _mockMarketHolidayRepo.Setup(mh => mh.Save(It.IsAny<MarketHoliday>())).Throws(new Exception());
+            
+            // Act
+            _service.RecordMarketHoliday();
+
+            // Assert
+            _mockLogger.Verify(l => l.Log(It.Is<string>(s => s.StartsWith("EXCEPTION:"))),
+                Times.Once,
+                "Logging did not indicate exception once");
+        }
+
         #endregion
     }
 
