@@ -19,7 +19,7 @@ namespace TurtleAPI.AlphaVantage
 
         public PreviousClose GetPreviousClose(string ticker)
         {
-            //has a repository : Validated!
+            //has a repository : Validated! (we'll probably never use this?)
             var uri = new Uri($"https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol={ticker}&apikey={AuthData.API_KEY_ALPHAVANTAGE}");
             
             var results = CallAPI<AlphaVPrevCloseResponse>(uri).First().results;

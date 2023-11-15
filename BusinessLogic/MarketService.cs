@@ -16,6 +16,7 @@ namespace BusinessLogic
         private readonly IRepository<PreviousClose> _previousCloseRepo;
         private readonly IRepository<DividendDetails> _dividedDetailsRepo;
         private readonly IRepository<ListedStatus> _listedStatusRepo;
+        private readonly IRepository<RecommendedTrend> _recommendedTrendRepo;
         private readonly IRepository<Prominence> _prominenceRepo;
         private readonly IFinnhubAPI _finnhubAPI;
         private readonly IPolygonAPI _polygonAPI;
@@ -27,6 +28,7 @@ namespace BusinessLogic
             IRepository<DividendDetails>? ddRepo = null,
             IRepository<ListedStatus>? lsRepo = null,
             IRepository<Prominence>? proRepo = null,
+            IRepository<RecommendedTrend>? rtRepo = null,
             IFinnhubAPI? finnhubAPI = null,
             IPolygonAPI? polygonAPI = null,
             IAlphaVantageAPI? alphaVantageAPI = null,
@@ -36,6 +38,7 @@ namespace BusinessLogic
             _dividedDetailsRepo = ddRepo ?? new DividendDetailRepository();
             _listedStatusRepo = lsRepo ?? new ListedStatusRepository();
             _prominenceRepo = proRepo ?? new ProminenceRepository();
+            _recommendedTrendRepo = rtRepo ?? new RecommendedTrendRepository();
             _finnhubAPI = finnhubAPI ?? new FinnhubAPI();
             _polygonAPI = polygonAPI ?? new PolygonAPI();
             _alphavantageAPI = alphaVantageAPI ?? new AlphaVantageAPI();
@@ -108,7 +111,6 @@ namespace BusinessLogic
                         _prominenceRepo.Save(item);
                     }
                 });
-
                 log("RecordDailyProminence() complete.");
             }
             catch (Exception ex )
@@ -153,7 +155,31 @@ namespace BusinessLogic
             catch (Exception ex)
             {
                 log($"EXCEPTION:\n{ex.Message}\n\n{ex.StackTrace}");
+            }
+        }
+        public void RecordRecommendedTrend()
+        {
+            try
+            {
+                log("Starting RecordRecommendedTrend()");
 
+                var lsRepo = _listedStatusRepo.GetAll().ToList();
+
+                log($"...working on {lsRepo.Count} records.");
+
+                lsRepo.ForEach(x => 
+                {
+                    log($"...Querying {x.Ticker}");
+                    foreach (var item in _finnhubAPI.GetRecommendedTrend($"{x.Ticker}"))
+                    {
+                        _recommendedTrendRepo.Save(item);
+                    }
+                });
+                log("RecordRecommendedTrend() complete.");
+            }
+            catch (Exception ex)
+            {
+                log($"EXCEPTION:\n{ex.Message}\n\n{ex.StackTrace}");
             }
         }
     }
