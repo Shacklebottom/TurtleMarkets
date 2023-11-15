@@ -4,6 +4,7 @@ using MarketDomain;
 using MarketDomain.Enums;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using System.ComponentModel;
 using System.Data.SqlClient;
 using System.Security.Authentication;
 using TurtleAPI.AlphaVantage;
@@ -23,6 +24,7 @@ namespace TurtleTests
         Mock<IRepository<ListedStatus>> _mockListedStatusRepo;
         Mock<IRepository<Prominence>> _mockProminenceRepo;
         Mock<IRepository<RecommendedTrend>> _mockRecommendedTrendRepo;
+        Mock<IRepository<TickerDetail>> _mockTickerDetailRepo;
         Mock<IFinnhubAPI> _mockFinnhubAPI;
         Mock<IPolygonAPI> _mockPolygonAPI;
         Mock<IAlphaVantageAPI> _mockAlphaVantageAPI;
@@ -37,6 +39,7 @@ namespace TurtleTests
             _mockListedStatusRepo = new();
             _mockProminenceRepo = new();
             _mockRecommendedTrendRepo = new();
+            _mockTickerDetailRepo = new();
             _mockFinnhubAPI = new();
             _mockPolygonAPI = new();
             _mockAlphaVantageAPI = new();
@@ -60,6 +63,8 @@ namespace TurtleTests
 
             _mockFinnhubAPI.Setup(fh => fh.GetRecommendedTrend("MSFT"))
                 .Returns(new List<RecommendedTrend> { new() { Ticker = "MSFT" }, new() { Ticker = "MSFT" } });
+
+
             #endregion
 
             _service = new MarketService(
@@ -68,6 +73,7 @@ namespace TurtleTests
                 _mockListedStatusRepo.Object,
                 _mockProminenceRepo.Object,
                 _mockRecommendedTrendRepo.Object,
+                _mockTickerDetailRepo.Object,
                 _mockFinnhubAPI.Object,
                 _mockPolygonAPI.Object,
                 _mockAlphaVantageAPI.Object,
@@ -631,7 +637,7 @@ namespace TurtleTests
         public void RecordRecommendedTrend_Save_ForEachTicker()
         {
             // Assign
-
+            
             // Act
             _service.RecordRecommendedTrend();
 
@@ -659,6 +665,7 @@ namespace TurtleTests
         {
             // Assign
             _mockRecommendedTrendRepo.Setup(rt => rt.Save(It.IsAny<RecommendedTrend>())).Throws(new Exception());
+
             // Act
             _service.RecordRecommendedTrend();
 
@@ -666,6 +673,122 @@ namespace TurtleTests
             _mockLogger.Verify(l => l.Log(It.Is<string>(s => s.StartsWith("EXCEPTION:"))),
                 Times.Once,
                 "Logging did not indicate Exception exactly once");
+        }
+        #endregion
+
+        #region RecordTickerDetails
+        [TestMethod]
+        public void RecordTickerDetails_Logs_Start()
+        {
+            // Assign
+
+            // Act
+            _service.RecordTickerDetails();
+
+            // Assert
+            _mockLogger.Verify(l => l.Log(It.Is<string>(s => s.StartsWith("Starting"))),
+                Times.Once,
+                "Logging did not indicate start exactly once");
+        }
+        [TestMethod]
+        public void RecordTickerDetails_Repo_GetAll_Once()
+        {
+            // Assign
+
+            // Act
+            _service.RecordTickerDetails();
+
+            // Assert
+            _mockListedStatusRepo.Verify(ls => ls.GetAll(),
+                Times.Once,
+                "GetAll() was not called exactly once");
+        }
+
+        [TestMethod]
+        public void RecordTickerDetails_Logs_RecordCount()
+        {
+            // Assign
+
+            // Act
+            _service.RecordTickerDetails();
+
+            // Assert
+            _mockLogger.Verify(l => l.Log(It.Is<string>(s => s.StartsWith("...working on 2 records"))),
+                Times.Once,
+                "Logging did not track records received");
+        }
+
+        [TestMethod]
+        public void RecordTickerDetails_Logs_QueryTicker()
+        {
+            // Assign
+
+            // Act
+            _service.RecordTickerDetails();
+
+            // Assert
+            _mockLogger.Verify(l => l.Log(It.Is<string>(s => s.StartsWith("...Querying"))),
+                Times.Exactly(2),
+                "Logging did not indicate querying exactly twice");
+
+        }
+
+        [TestMethod]
+        public void RecordTickerDetails_Get_ForEachTicker()
+        {
+            // Assign
+
+            // Act
+            _service.RecordTickerDetails();
+
+            // Assert
+            _mockPolygonAPI.Verify(pg => pg.GetTickerDetails("MSFT"),
+                Times.Once,
+                "GetTickerDetails(\"MSFT\") was not called exactly once");
+        }
+
+        [TestMethod]
+        public void RecordTickerDetails_Save_ForEachDetail()
+        {
+            // Assign
+
+            // Act
+            _service.RecordTickerDetails();
+
+            // Assert
+            _mockTickerDetailRepo.Verify(td => td.Save(It.IsAny<TickerDetail>()),
+                Times.Exactly(2),
+                "Save was not called exactly twice :(");
+        }
+
+
+        [TestMethod]
+        public void RecordTickerDetails_Logs_Stop()
+        {
+            // Assign
+
+            // Act
+            _service.RecordTickerDetails();
+
+            // Assert
+            _mockLogger.Verify(l => l.Log(It.Is<string>(s => s.EndsWith("complete."))),
+                Times.Once,
+                "Logger did not indicate complete exactly once");
+        }
+
+        [TestMethod]
+        public void RecordTickerDetails_Logs_Exception()
+        {
+            // Assign
+            _mockTickerDetailRepo.Setup(rt => rt.Save(It.IsAny<TickerDetail>())).Throws(new Exception());
+
+            // Act
+            _service.RecordTickerDetails();
+
+            // Assert
+            _mockLogger.Verify(l => l.Log(It.Is<string>(s => s.StartsWith("EXCEPTION:"))),
+                Times.Once,
+                "Logging did not indicate Exception once");
         }
         #endregion
     }

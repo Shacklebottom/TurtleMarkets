@@ -18,6 +18,7 @@ namespace BusinessLogic
         private readonly IRepository<ListedStatus> _listedStatusRepo;
         private readonly IRepository<RecommendedTrend> _recommendedTrendRepo;
         private readonly IRepository<Prominence> _prominenceRepo;
+        private readonly IRepository<TickerDetail> _tickerDetailRepo;
         private readonly IFinnhubAPI _finnhubAPI;
         private readonly IPolygonAPI _polygonAPI;
         private readonly IAlphaVantageAPI _alphavantageAPI;
@@ -29,6 +30,7 @@ namespace BusinessLogic
             IRepository<ListedStatus>? lsRepo = null,
             IRepository<Prominence>? proRepo = null,
             IRepository<RecommendedTrend>? rtRepo = null,
+            IRepository<TickerDetail>? tdRepo = null,
             IFinnhubAPI? finnhubAPI = null,
             IPolygonAPI? polygonAPI = null,
             IAlphaVantageAPI? alphaVantageAPI = null,
@@ -39,6 +41,7 @@ namespace BusinessLogic
             _listedStatusRepo = lsRepo ?? new ListedStatusRepository();
             _prominenceRepo = proRepo ?? new ProminenceRepository();
             _recommendedTrendRepo = rtRepo ?? new RecommendedTrendRepository();
+            _tickerDetailRepo = tdRepo ?? new TickerDetailRepository();
             _finnhubAPI = finnhubAPI ?? new FinnhubAPI();
             _polygonAPI = polygonAPI ?? new PolygonAPI();
             _alphavantageAPI = alphaVantageAPI ?? new AlphaVantageAPI();
@@ -180,6 +183,40 @@ namespace BusinessLogic
             catch (Exception ex)
             {
                 log($"EXCEPTION:\n{ex.Message}\n\n{ex.StackTrace}");
+            }
+        }
+        public void RecordTickerDetails()
+        {
+            try
+            {
+                log("Starting RecordTickerDetails()");
+
+                var lsRepo = _listedStatusRepo.GetAll().ToList();
+
+                log($"...working on {lsRepo.Count} records.");
+
+                lsRepo.ForEach(x =>
+                {
+                    log($"...Querying {x.Ticker}");
+                    _tickerDetailRepo.Save(_polygonAPI.GetTickerDetails(x.Ticker));
+                });
+                log("RecordTickerDetail() complete.");
+            }
+            catch (Exception ex)
+            {
+                log($"EXCEPTION:\n{ex.Message}\n\n{ex.StackTrace}");
+            }
+        }
+        
+        public void RecordMarketHoliday()
+        {
+            try
+            {
+
+            }
+            catch (Exception ex)
+            {
+
             }
         }
     }
