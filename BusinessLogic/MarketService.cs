@@ -124,14 +124,36 @@ namespace BusinessLogic
                 log("Starting CheckMarketStatus()");
                 
                 var marketStatus = _alphavantageAPI?.GetMarketStatus()?.Where(e => e.Exchange == exchange).First();
+                
                 log("CheckMarketStatus() complete.");
+                
                 return marketStatus;
 
             }
             catch (Exception ex)
             {
                 log($"EXCEPTION:\n{ex.Message}\n\n{ex.StackTrace}");
+                
                 return null;
+            }
+        }
+        public void RecordListedStatus()
+        {
+            try
+            {
+                log("Starting RecordListedStatus()");
+
+                foreach (var item in _alphavantageAPI.GetListedStatus())
+                {
+                    _listedStatusRepo.Save(item);
+                }
+
+                log("RecordListedStatus() complete.");
+            }
+            catch (Exception ex)
+            {
+                log($"EXCEPTION:\n{ex.Message}\n\n{ex.StackTrace}");
+
             }
         }
     }
