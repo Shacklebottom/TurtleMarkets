@@ -10,11 +10,13 @@ namespace TurtleSQL.TickerRepositories
     {
         //This should work, but needs to be validated!
         protected override string TableName => "Prominence";
-        protected override List<string> FieldList => new() { "Ticker", "Price", "ChangeAmount", "ChangePercentage", "Volume" };
+        protected override List<string> FieldList => new() { "PrestigeType", "Date", "Ticker", "Price", "ChangeAmount", "ChangePercentage", "Volume" };
         protected override IEnumerable<SqlParameter> SqlParameters(Prominence entity)
         {
             var parms = new List<SqlParameter>
             {
+                new SqlParameter("PrestigeType", entity.PrestigeType.DBValue()),
+                new SqlParameter("Date", entity.Date.DBValue()),
                 new SqlParameter("@Ticker", entity.Ticker.DBValue()),
                 new SqlParameter("@Price", entity.Price.DBValue()),
                 new SqlParameter("@ChangeAmount", entity.ChangeAmount.DBValue()),
@@ -29,6 +31,8 @@ namespace TurtleSQL.TickerRepositories
             {
                 yield return new Prominence
                 {
+                    PrestigeType = rdr["PrestigeType"].ToString(),
+                    Date = rdr.ParseNullable<DateTime>("Date"),
                     Ticker = rdr["Ticker"].ToString() ?? string.Empty,
                     Price = rdr.ParseNullable<double>("Price"),
                     ChangeAmount = rdr.ParseNullable<double>("ChangeAmount"),

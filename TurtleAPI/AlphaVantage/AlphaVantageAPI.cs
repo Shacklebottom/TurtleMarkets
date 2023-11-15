@@ -12,10 +12,10 @@ using System.Windows.Markup;
 
 namespace TurtleAPI.AlphaVantage
 {
-    public class AlphaVantageAPI : BaseTurtleAPI
+    public class AlphaVantageAPI : BaseTurtleAPI, IAlphaVantageAPI
     {
         //IMPORTANT! ALPHA VANTAGE API HAS 25 CALLS ===>PER DAY<===
-        public AlphaVantageAPI(int msToSleep = 2400) : base(msToSleep) { }
+        public AlphaVantageAPI(int msToSleep = 0) : base(msToSleep) { }
 
         public PreviousClose GetPreviousClose(string ticker)
         {
@@ -37,13 +37,14 @@ namespace TurtleAPI.AlphaVantage
 
             return marketDetails;
         }
+
         public IEnumerable<MarketStatus>? GetMarketStatus()
         {
             //has a repository! : Validated!
             var uri = new Uri($"https://www.alphavantage.co/query?function=MARKET_STATUS&apikey={AuthData.API_KEY_ALPHAVANTAGE}");
             var baseData = CallAPI<AlphaVMarketStatusResponse>(uri).First().results;
 
-            var results = baseData?.Select(r => new MarketStatus
+            var marketStatus = baseData?.Select(r => new MarketStatus
             {
                 MarketType = r.market_type,
                 Region = r.region,
@@ -54,8 +55,9 @@ namespace TurtleAPI.AlphaVantage
                 Notes = r.notes
             });
 
-            return results;
+            return marketStatus;
         }
+
         public Dictionary<PrestigeType, IEnumerable<Prominence?>?> GetPolarizedMarkets()
         {
             //has a repository : Validated!
@@ -66,18 +68,20 @@ namespace TurtleAPI.AlphaVantage
             
             var baseData = CallAPI<AlphaVProminenceResponse>(uri).First();
             
-            prominenceDetail.Add(PrestigeType.TopGainer, baseData.top_gainers?.Select(tg => BuildProminence(tg)));
+            prominenceDetail.Add(PrestigeType.TopGainer, baseData.top_gainers?.Select(tg => BuildProminence(tg, PrestigeType.TopGainer)));
             
-            prominenceDetail.Add(PrestigeType.TopLoser, baseData.top_losers?.Select(tl => BuildProminence(tl)));
+            prominenceDetail.Add(PrestigeType.TopLoser, baseData.top_losers?.Select(tl => BuildProminence(tl, PrestigeType.TopLoser)));
             
-            prominenceDetail.Add(PrestigeType.MostTraded, baseData.most_actively_traded?.Select(m => BuildProminence(m)));
+            prominenceDetail.Add(PrestigeType.MostTraded, baseData.most_actively_traded?.Select(m => BuildProminence(m, PrestigeType.MostTraded)));
 
             return prominenceDetail;
         }
-        private static Prominence BuildProminence(AlphaVProminenceResult r)
+        private static Prominence BuildProminence(AlphaVProminenceResult r, PrestigeType pt)
         {
             return new Prominence
             {
+                PrestigeType = pt.ToString(),
+                Date = DateTime.Now,
                 Ticker = r.ticker,
                 Price = r.price,
                 ChangeAmount = r.change_amount,

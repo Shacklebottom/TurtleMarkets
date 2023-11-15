@@ -27,9 +27,7 @@ Console.WriteLine($"-=≡> TURTLE START <≡=-\n\n");
 #endregion
 
 #region SHACKLE WORKSPACE
-
-var x = new FinnhubAPI(0).GetRecommendedTrend("MSFT");
-var y = x;
+new MarketService().RecordDailyProminence();
 #endregion
 
 #region FUNCTION CHECK

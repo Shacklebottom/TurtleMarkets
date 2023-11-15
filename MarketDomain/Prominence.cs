@@ -11,6 +11,8 @@ namespace MarketDomain
         {
             return $"Ticker: {Ticker}\tPrice {Price}\tChange Amount {ChangeAmount}";
         }
+        public string? PrestigeType { get; set; }
+        public DateTime? Date { get; set; }
         public string Ticker { get; set; } = string.Empty;
         public double? Price { get; set; }
         public double? ChangeAmount { get; set; }
