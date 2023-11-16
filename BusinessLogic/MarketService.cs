@@ -99,7 +99,28 @@ namespace BusinessLogic
                 log($"EXCEPTION:\n{ex.Message}\n\n{ex.StackTrace}");
             }
         }
+        public void RecordSnapshot()
+        {
+            try
+            {
+                log("Starting RecordSnapshot()");
 
+                var lsRepo = _listedStatusRepo.GetAll().ToList();
+                log($"...working on {lsRepo.Count} records.");
+
+                lsRepo.ForEach(x =>
+                {
+                    log($"...Querying {x.Ticker}");
+                    _snapShotRepo.Save(_finnhubAPI.GetPreviousClose(x.Ticker));
+                });
+
+                log("RecordSnapshot() complete.");
+            }
+            catch (Exception ex)
+            {
+                log($"EXCEPTION:\n{ex.Message}\n\n{ex.StackTrace}");
+            }
+        }
         public void RecordDividendDetails()
         {
             try
