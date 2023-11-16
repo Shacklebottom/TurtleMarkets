@@ -40,6 +40,7 @@ namespace TurtleSQL.MarketStatusForecast
                     Exchange = rdr["Exchange"].ToString(),
                     LocalOpen = rdr.ParseNullable<DateTime>("LocalOpen"),
                     LocalClose = rdr.ParseNullable<DateTime>("LocalClose"),
+                    TimeOffset = rdr.ParseNullable<int>("TimeOffset"),
                     Status = rdr["Status"].ToString(),
                     Notes = rdr["Notes"].ToString()
                 }; 

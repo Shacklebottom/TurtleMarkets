@@ -15,6 +15,7 @@ namespace MarketDomain
         public string? Exchange { get; set; }
         public DateTime? LocalOpen { get; set; }
         public DateTime? LocalClose { get; set; }
+        public int? TimeOffset { get; set; }
         public string? Status { get; set; }
         public string? Notes { get; set; }
         public int Id { get; set; }

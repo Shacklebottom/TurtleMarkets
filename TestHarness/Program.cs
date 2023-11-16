@@ -17,7 +17,10 @@ using BusinessLogic;
 using BusinessLogic.Logging;
 using TurtleAPI.BaseClasses;
 
+#region SHARED WORKSPACE
 Console.WriteLine($"-=≡> TURTLE START <≡=-\n\n");
+var marketService = new MarketService();
+#endregion
 
 #region ATARI WORKSPACE
 
@@ -27,6 +30,7 @@ Console.WriteLine($"-=≡> TURTLE START <≡=-\n\n");
 #endregion
 
 #region SHACKLE WORKSPACE
+
 
 #endregion
 

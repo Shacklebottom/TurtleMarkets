@@ -7,9 +7,12 @@ using TurtleAPI.AlphaVantage;
 using TurtleSQL.Interfaces;
 using TurtleSQL.TickerRepositories;
 using TurtleSQL.MarketStatusForecast;
+using MarketDomain.Extensions;
+using System.Diagnostics.CodeAnalysis;
 
 namespace BusinessLogic
 {
+    [SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "<Pending>")]
     public class MarketService
     {
         private void log(string message) { _logger.Log(message); }
@@ -22,6 +25,8 @@ namespace BusinessLogic
         private readonly IRepository<TickerDetail> _tickerDetailRepo;
         private readonly IRepository<MarketHoliday> _marketHolidayRepo;
         private readonly IRepository<MarketStatus> _marketStatusRepo;
+        private readonly IRepository<TrackedTicker> _trackedTickerRepo;
+        private readonly IRepository<PreviousClose> _snapShotRepo;
         private readonly IFinnhubAPI _finnhubAPI;
         private readonly IPolygonAPI _polygonAPI;
         private readonly IAlphaVantageAPI _alphavantageAPI;
@@ -36,6 +41,8 @@ namespace BusinessLogic
             IRepository<TickerDetail>? tdRepo = null,
             IRepository<MarketHoliday>? mhRepo = null,
             IRepository<MarketStatus>? msRepo = null,
+            IRepository<TrackedTicker>? ttRepo = null,
+            IRepository<PreviousClose>? ssRepo = null,
             IFinnhubAPI? finnhubAPI = null,
             IPolygonAPI? polygonAPI = null,
             IAlphaVantageAPI? alphaVantageAPI = null,
@@ -49,10 +56,23 @@ namespace BusinessLogic
             _tickerDetailRepo = tdRepo ?? new TickerDetailRepository();
             _marketHolidayRepo = mhRepo ?? new MarketHolidayRepository();
             _marketStatusRepo = msRepo ?? new MarketStatusRepository();
+            _trackedTickerRepo = ttRepo ?? new TrackedTickerRepository();
+            _snapShotRepo = ssRepo ?? new SnapshotRepository();
             _finnhubAPI = finnhubAPI ?? new FinnhubAPI();
             _polygonAPI = polygonAPI ?? new PolygonAPI();
             _alphavantageAPI = alphaVantageAPI ?? new AlphaVantageAPI();
             _logger = logger ?? new ConsoleLogger();
+        }
+
+        public IEnumerable<PreviousClose> GetFilteredTickers(int high, int low)
+        {
+            var x = _snapShotRepo.GetAll().Where(x => x.High < high && x.Low > low).ToList();
+            log($"This range has {x.Count} entries");
+            return x;
+        }
+        public void RecordFilteredTickers(IEnumerable<PreviousClose> ft)
+        {
+            ft.ForEach(i => _trackedTickerRepo.Save(new TrackedTicker { Ticker = i.Ticker }));
         }
 
 
@@ -63,10 +83,10 @@ namespace BusinessLogic
             {
                 log("Starting RecordPreviousClose()");
 
-                var lsRepo = _listedStatusRepo.GetAll().ToList();
-                log($"...working on {lsRepo.Count} records.");
+                var ttRepo = _trackedTickerRepo.GetAll().ToList();
+                log($"...working on {ttRepo.Count} records.");
 
-                lsRepo.ForEach(x =>
+                ttRepo.ForEach(x =>
                 {
                     log($"...Querying {x.Ticker}");
                     _previousCloseRepo.Save(_finnhubAPI.GetPreviousClose(x.Ticker));
@@ -74,7 +94,7 @@ namespace BusinessLogic
 
                 log("RecordPreviousClose() complete.");
             }
-            catch( Exception ex )
+            catch (Exception ex)
             {
                 log($"EXCEPTION:\n{ex.Message}\n\n{ex.StackTrace}");
             }
@@ -86,14 +106,14 @@ namespace BusinessLogic
             {
                 log("Starting RecordDividendDetails");
 
-                var lsRepo = _listedStatusRepo.GetAll().ToList();
+                var ttRepo = _trackedTickerRepo.GetAll().ToList();
 
-                log($"...working on {lsRepo.Count} records.");
-                
-                lsRepo.ForEach(x =>
+                log($"...working on {ttRepo.Count} records.");
+
+                ttRepo.ForEach(x =>
                 {
                     log($"...Querying {x.Ticker}");
-                    
+
                     foreach (var item in _polygonAPI.GetDividendDetails(x.Ticker))
                     {
                         _dividedDetailsRepo.Save(item);
@@ -101,21 +121,21 @@ namespace BusinessLogic
                 });
 
                 log("RecordDividendDetails() complete.");
-            } 
-            catch( Exception ex ) 
+            }
+            catch (Exception ex)
             {
                 log($"EXCEPTION:\n{ex.Message}\n\n{ex.StackTrace}");
             }
         }
 
         public void RecordDailyProminence()
-        { //may refactor?
+        {
             try
             {
                 log("Starting RecordDailyProminence()");
-                
+
                 var prominence = _alphavantageAPI.GetPolarizedMarkets().Values.ToList();
-                
+
                 prominence.ForEach(x =>
                 {
                     foreach (var item in x)
@@ -125,7 +145,7 @@ namespace BusinessLogic
                 });
                 log("RecordDailyProminence() complete.");
             }
-            catch (Exception ex )
+            catch (Exception ex)
             {
                 log($"EXCEPTION:\n{ex.Message}\n\n{ex.StackTrace}");
             }
@@ -140,9 +160,9 @@ namespace BusinessLogic
                 {
                     _marketStatusRepo.Save(item);
                 }
-                
+
                 log("CheckMarketStatus() complete.");
-                
+
 
             }
             catch (Exception ex)
@@ -176,11 +196,11 @@ namespace BusinessLogic
             {
                 log("Starting RecordRecommendedTrend()");
 
-                var lsRepo = _listedStatusRepo.GetAll().ToList();
+                var ttRepo = _trackedTickerRepo.GetAll().ToList();
 
-                log($"...working on {lsRepo.Count} records.");
+                log($"...working on {ttRepo.Count} records.");
 
-                lsRepo.ForEach(x => 
+                ttRepo.ForEach(x =>
                 {
                     log($"...Querying {x.Ticker}");
                     foreach (var item in _finnhubAPI.GetRecommendedTrend($"{x.Ticker}"))
@@ -202,11 +222,11 @@ namespace BusinessLogic
             {
                 log("Starting RecordTickerDetails()");
 
-                var lsRepo = _listedStatusRepo.GetAll().ToList();
+                var ttRepo = _trackedTickerRepo.GetAll().ToList();
 
-                log($"...working on {lsRepo.Count} records.");
+                log($"...working on {ttRepo.Count} records.");
 
-                lsRepo.ForEach(x =>
+                ttRepo.ForEach(x =>
                 {
                     log($"...Querying {x.Ticker}");
                     _tickerDetailRepo.Save(_polygonAPI.GetTickerDetails(x.Ticker));
@@ -218,7 +238,7 @@ namespace BusinessLogic
                 log($"EXCEPTION:\n{ex.Message}\n\n{ex.StackTrace}");
             }
         }
-        
+
         public void RecordMarketHoliday()
         {
             try

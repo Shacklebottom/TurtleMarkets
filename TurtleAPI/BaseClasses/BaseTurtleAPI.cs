@@ -39,6 +39,7 @@ namespace TurtleAPI.BaseClasses
             customHeaders?.ForEach(h => client.DefaultRequestHeaders.Add(h.Key, h.Value));
 
             var response = client.GetAsync(uri).Result;
+            _logger.Log($"{response.StatusCode}");
             if (response.StatusCode != HttpStatusCode.OK) // 200 == OK
             {
                 var message = $"Unexpected status code: {response.StatusCode}\nURI: {uri}\n{response.Content.ReadAsStringAsync().Result}";

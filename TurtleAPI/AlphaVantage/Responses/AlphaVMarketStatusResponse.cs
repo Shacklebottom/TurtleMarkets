@@ -7,6 +7,6 @@ namespace TurtleAPI.AlphaVantage.Responses
     internal class AlphaVMarketStatusResponse
     {
         [JsonProperty("markets")]
-        public AlphaVMarketStatusResult[]? results { get; set; }
+        public AlphaVMarketStatusResult[] results { get; set; } = Array.Empty<AlphaVMarketStatusResult>();
     }
 }

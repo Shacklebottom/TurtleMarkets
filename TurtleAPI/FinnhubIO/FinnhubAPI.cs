@@ -65,7 +65,7 @@ namespace TurtleAPI.FinnhubIO
 
             var baseData = CallAPI<List<FinnhubTrendResponse>>(uri, requestHeaders).First();
 
-            var recommendedTrend = baseData?.Select(r => new RecommendedTrend
+            var recommendedTrend = baseData.Select(r => new RecommendedTrend
             {
                 Ticker = ticker,
                 Buy = r.buy,
