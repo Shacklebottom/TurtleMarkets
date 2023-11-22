@@ -9,6 +9,7 @@ using TurtleSQL.TickerRepositories;
 using TurtleSQL.MarketStatusForecast;
 using MarketDomain.Extensions;
 using System.Diagnostics.CodeAnalysis;
+using TurtleSQL.BaseClasses;
 
 namespace BusinessLogic
 {
@@ -75,8 +76,36 @@ namespace BusinessLogic
             ft.ForEach(i => _trackedTickerRepo.Save(new TrackedTicker { Ticker = i.Ticker }));
         }
 
+        public IEnumerable<PreviousClose> GetByMath(int y)
+        {   var x = _snapShotRepo.GetAll().Where(s => s.High - s.Low > y && s.High > s.Low).ToList();
+            log($"This range has {x.Count} entries");
+            return x;
+        }
 
         #region APIcalls
+
+        public void RecordSnapshot()
+        { //this should probably delete the previous snapshop so we only have one instance of a snapshot at a time :)
+            try
+            {
+                log("Starting RecordSnapshot()");
+
+                var lsRepo = _listedStatusRepo.GetAll().ToList();
+                log($"...working on {lsRepo.Count} records.");
+
+                lsRepo.ForEach(x =>
+                {
+                    log($"...Querying {x.Ticker}");
+                    _snapShotRepo.Save(_finnhubAPI.GetPreviousClose(x.Ticker));
+                });
+
+                log("RecordSnapshot() complete.");
+            }
+            catch (Exception ex)
+            {
+                log($"EXCEPTION:\n{ex.Message}\n\n{ex.StackTrace}");
+            }
+        }
         public void RecordPreviousClose()
         {
             try
@@ -93,28 +122,6 @@ namespace BusinessLogic
                 });
 
                 log("RecordPreviousClose() complete.");
-            }
-            catch (Exception ex)
-            {
-                log($"EXCEPTION:\n{ex.Message}\n\n{ex.StackTrace}");
-            }
-        }
-        public void RecordSnapshot()
-        {
-            try
-            {
-                log("Starting RecordSnapshot()");
-
-                var lsRepo = _listedStatusRepo.GetAll().ToList();
-                log($"...working on {lsRepo.Count} records.");
-
-                lsRepo.ForEach(x =>
-                {
-                    log($"...Querying {x.Ticker}");
-                    _snapShotRepo.Save(_finnhubAPI.GetPreviousClose(x.Ticker));
-                });
-
-                log("RecordSnapshot() complete.");
             }
             catch (Exception ex)
             {

@@ -16,6 +16,7 @@ using TurtleSQL.TickerRepositories;
 using BusinessLogic;
 using BusinessLogic.Logging;
 using TurtleAPI.BaseClasses;
+using MarketDomain.Extensions;
 
 #region SHARED WORKSPACE
 Console.WriteLine($"-=≡> TURTLE START <≡=-\n\n");
@@ -30,6 +31,8 @@ var marketService = new MarketService();
 #endregion
 
 #region SHACKLE WORKSPACE
+marketService.RecordPreviousClose();
+marketService.RecordRecommendedTrend();
 
 
 #endregion
