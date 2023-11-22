@@ -65,6 +65,12 @@ namespace BusinessLogic
             _logger = logger ?? new ConsoleLogger();
         }
 
+        #region Market Workshop
+        /*
+         * Using this space for multi-track conceptualization.
+         *      (I see our ability to filter as a strong option, so there may be several ways of accomplishing this);
+         */
+
         public IEnumerable<PreviousClose> GetFilteredTickers(int high, int low)
         {
             var x = _snapShotRepo.GetAll().Where(x => x.High < high && x.Low > low).ToList();
@@ -76,11 +82,19 @@ namespace BusinessLogic
             ft.ForEach(i => _trackedTickerRepo.Save(new TrackedTicker { Ticker = i.Ticker }));
         }
 
-        public IEnumerable<PreviousClose> GetByMath(int y)
-        {   var x = _snapShotRepo.GetAll().Where(s => s.High - s.Low > y && s.High > s.Low).ToList();
+        public IEnumerable<PreviousClose> GetByMath(IEnumerable<PreviousClose> filteredCloses, int y)
+        {   
+            var x = filteredCloses.Where(ss => ss.High - ss.Low > y && ss.High > ss.Low).ToList();
             log($"This range has {x.Count} entries");
             return x;
         }
+
+        public ListedStatus GetListedStatus(string ticker)
+        {
+            var x = _listedStatusRepo.GetAll().Where(ls => ls.Ticker  == ticker).First();
+            return x;
+        }
+        #endregion
 
         #region APIcalls
 
@@ -219,7 +233,7 @@ namespace BusinessLogic
         }
 
         public void RecordRecommendedTrend()
-        {
+        { //This gives us weekly information
             try
             {
                 log("Starting RecordRecommendedTrend()");
