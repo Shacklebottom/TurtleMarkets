@@ -17,6 +17,7 @@ using BusinessLogic;
 using BusinessLogic.Logging;
 using TurtleAPI.BaseClasses;
 using MarketDomain.Extensions;
+using System.Text.RegularExpressions;
 
 #region SHARED WORKSPACE
 Console.WriteLine($"-=≡> TURTLE START <≡=-\n\n");
@@ -31,10 +32,26 @@ var marketService = new MarketService();
 #endregion
 
 #region SHACKLE WORKSPACE
-marketService.RecordPreviousClose();
-marketService.RecordRecommendedTrend();
+//var x = new ListedStatusRepository();
+//var y = new SnapshotRepository();
+//var nasdaq = x.GetAll().Where(x => x.Exchange == "NASDAQ").ToList();
+//var underhundred = marketService.GetFilteredTickers(100, 50).ToList();
+//var filteredList = new List<PreviousClose>();
+//foreach (var uf in underhundred)
+//{
+//	foreach (var nsdq in nasdaq)
+//	{
+//		if (uf.Ticker == nsdq.Ticker)
+//		{
+//			filteredList.Add(uf);
+//		}
+//	}
+//}
+//Console.WriteLine($"under fifty has {underhundred.Count} entries");
+//Console.WriteLine($"NASDAQ has {nasdaq.Count} entries");
+//Console.WriteLine($"list has {filteredList.Count} entries");
 
-
+marketService.RecordDividendDetails();
 #endregion
 
 #region FUNCTION CHECK

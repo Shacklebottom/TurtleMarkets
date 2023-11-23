@@ -10,6 +10,7 @@ using TurtleSQL.MarketStatusForecast;
 using MarketDomain.Extensions;
 using System.Diagnostics.CodeAnalysis;
 using TurtleSQL.BaseClasses;
+using System.Globalization;
 
 namespace BusinessLogic
 {
@@ -64,6 +65,65 @@ namespace BusinessLogic
             _alphavantageAPI = alphaVantageAPI ?? new AlphaVantageAPI();
             _logger = logger ?? new ConsoleLogger();
         }
+
+        #region AUI Layer?
+        CultureInfo culture = new("en-US");
+        Calendar calendar = CultureInfo.CurrentCulture.Calendar;
+        DateTime Today = DateTime.Now;
+
+        public void RunsOnA_Monday()
+        {
+            try
+            {
+                DayOfWeek DayToday = calendar.GetDayOfWeek(Today);
+                if (calendar.GetDayOfWeek(Today) == DayOfWeek.Monday)
+                {
+                    RecordRecommendedTrend();
+                }
+
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+        public void RunsOnA_Close()
+        {
+            try
+            {
+                DateTime expectedClose = DateTime.ParseExact("5:00 PM", "h:mm tt", culture);
+                TimeSpan closingTime = expectedClose.TimeOfDay;
+                if (Today.TimeOfDay >= closingTime)
+                {
+                    RecordPreviousClose();
+                    RecordRecommendedTrend();
+                    RecordDailyProminence();
+                }
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+        }
+        public void RunsOnA_FirstOfMonth()
+        {
+            try
+            {
+
+                if (Today.Date.Day == 1)
+                {
+                    RecordSnapshot();
+                }
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+        }
+        #endregion
+
 
         #region Market Workshop
         /*
@@ -148,11 +208,22 @@ namespace BusinessLogic
             {
                 log("Starting RecordDividendDetails");
 
-                var ttRepo = _trackedTickerRepo.GetAll().ToList();
+                var ttRepo = _listedStatusRepo.GetAll().Where(x => x.Exchange == "NASDAQ").ToList();
+                var underhundred = GetFilteredTickers(100, 50).ToList();
+                var filteredList = new List<PreviousClose>();
+                foreach (var uf in underhundred)
+                {
+                    foreach (var nsdq in ttRepo)
+                    {
+                        if (uf.Ticker == nsdq.Ticker)
+                        {
+                            filteredList.Add(uf);
+                        }
+                    }
+                }
+                log($"...working on {filteredList.Count} records.");
 
-                log($"...working on {ttRepo.Count} records.");
-
-                ttRepo.ForEach(x =>
+                filteredList.ForEach(x =>
                 {
                     log($"...Querying {x.Ticker}");
 

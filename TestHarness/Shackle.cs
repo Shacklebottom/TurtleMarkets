@@ -1,4 +1,5 @@
-﻿using MarketDomain;
+﻿using BusinessLogic;
+using MarketDomain;
 using MarketDomain.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -18,7 +19,7 @@ namespace TestHarness
 {
     public class Shackle
     {
-
+    
     }
     public static class Dumbell
     {
