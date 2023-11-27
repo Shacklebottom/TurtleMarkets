@@ -86,7 +86,7 @@ namespace BusinessLogic
         }
 
         public IEnumerable<PreviousClose> GetByMath(IEnumerable<PreviousClose> filteredCloses, int y)
-        {   
+        {
             var x = filteredCloses.Where(ss => ss.High - ss.Low > y && ss.High > ss.Low).ToList();
             log($"This range has {x.Count} entries");
             return x;
@@ -94,8 +94,17 @@ namespace BusinessLogic
 
         public ListedStatus GetListedStatus(string ticker)
         {
-            var x = _listedStatusRepo.GetAll().Where(ls => ls.Ticker  == ticker).First();
+            var x = _listedStatusRepo.GetAll().Where(ls => ls.Ticker == ticker).First();
             return x;
+        }
+        public IEnumerable<ListedStatus> GetListedStatuses()
+        {
+            var x = _listedStatusRepo.GetAll().Where(
+                ls => (ls.Exchange.Contains("NYSE") ||
+                ls.Exchange.Contains("NASDAQ")) &&
+                ls.Type == "Stock").ToList();
+            return x;
+
         }
         #endregion
 
@@ -152,11 +161,21 @@ namespace BusinessLogic
                 log("Starting RecordDividendDetails");
 
                 var lsRepo = _listedStatusRepo.GetAll().ToList();
+
+                var ddRepo = _dividedDetailsRepo.GetAll().GroupBy(x => x.Ticker).Select(y => y.First()).ToList();
+
+                var x = new List<string>();
+                
+                ddRepo.ForEach(z => x.Add(z.Ticker));
+                
+
                 var filteredRepo = lsRepo
                     .Where(
-                    ex => (ex.Exchange.Contains("NYSE") ||
-                    ex.Exchange.Contains("NASDAQ")) && 
-                    ex.Type == "Stock").ToList();
+                    ls => (ls.Exchange.Contains("NYSE") ||
+                    ls.Exchange.Contains("NASDAQ")) &&
+                    ls.Type == "Stock" &&
+                    !x.Contains(ls.Ticker))
+                    .Take(100).ToList();
 
                 log($"...working on {filteredRepo.Count} records.");
 
