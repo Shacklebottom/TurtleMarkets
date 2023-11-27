@@ -28,7 +28,7 @@ namespace TurtleTests
         protected Mock<IRepository<TickerDetail>> _mockTickerDetailRepo;
         protected Mock<IRepository<TrackedTicker>> _mockTrackedTickerRepo;
         protected Mock<IRepository<PreviousClose>> _mockSnapshotRepo;
-        
+
         protected MarketService _service; // UNIT UNDER TEST
 
         [TestInitialize]
@@ -54,10 +54,17 @@ namespace TurtleTests
                 ls => ls.GetAll())
                 .Returns(new List<TrackedTicker> { new() { Ticker = "MSFT" }, new() { Ticker = "WYNN" } });
 
+            _mockListedStatusRepo.Setup(ls => ls.GetAll())
+                .Returns(new List<ListedStatus> 
+                { 
+                    new() { Ticker = "MSFT", Exchange = "NYSE", Type = "Stock" },
+                    new() { Ticker = "WYNN", Exchange = "NASDAQ", Type = "Stock" }
+                });
+
             _mockAlphaVantageAPI.Setup(av => av.GetPolarizedMarkets())
-                .Returns(new Dictionary<MarketDomain.Enums.PrestigeType, IEnumerable<Prominence>>
+                .Returns(new Dictionary<PrestigeType, IEnumerable<Prominence>>
                 {
-                    { MarketDomain.Enums.PrestigeType.TopGainer, new List<Prominence>
+                    { PrestigeType.TopGainer, new List<Prominence>
                     { new() { PrestigeType = "TopGainer" }, new() { PrestigeType = "TopGainer" } } },
                 });
 

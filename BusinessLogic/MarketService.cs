@@ -151,22 +151,16 @@ namespace BusinessLogic
             {
                 log("Starting RecordDividendDetails");
 
-                var ttRepo = _listedStatusRepo.GetAll().Where(x => x.Exchange == "NASDAQ").ToList();
-                var underhundred = GetFilteredTickers(100, 50).ToList();
-                var filteredList = new List<PreviousClose>();
-                foreach (var uf in underhundred)
-                {
-                    foreach (var nsdq in ttRepo)
-                    {
-                        if (uf.Ticker == nsdq.Ticker)
-                        {
-                            filteredList.Add(uf);
-                        }
-                    }
-                }
-                log($"...working on {filteredList.Count} records.");
+                var lsRepo = _listedStatusRepo.GetAll().ToList();
+                var filteredRepo = lsRepo
+                    .Where(
+                    ex => (ex.Exchange.Contains("NYSE") ||
+                    ex.Exchange.Contains("NASDAQ")) && 
+                    ex.Type == "Stock").ToList();
 
-                filteredList.ForEach(x =>
+                log($"...working on {filteredRepo.Count} records.");
+
+                filteredRepo.ForEach(x =>
                 {
                     log($"...Querying {x.Ticker}");
 

@@ -61,6 +61,7 @@ namespace MarketSpider
             {
                 if (_today.Date.Day == 1)
                 {
+                    _marketService.RecordListedStatus();
                     _marketService.RecordSnapshot();
                 }
             }
