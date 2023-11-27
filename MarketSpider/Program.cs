@@ -26,6 +26,13 @@ namespace MarketSpider
                     _marketService.RecordSnapshot();
                     break;
                 case "YearlyDividends":
+                    /*
+                     * there are almost 8000 entries, and we get 300 calls an hour, 
+                     * so this needs to run a total of 26+ hours.
+                     * it's currently set up so it will run for an hour,
+                     * therefore sql server agent needs to run it for 26 days in a row 
+                     * and it may not be set up proper.
+                     */
                     _marketService.RecordDividendDetails();
                     break;
                 case "WeeklyTickerDetails":
