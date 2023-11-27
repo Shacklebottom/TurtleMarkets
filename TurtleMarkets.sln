@@ -15,7 +15,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BusinessLogic", "BusinessLo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TurtleTests", "TurtleTests\TurtleTests.csproj", "{8AA8394F-B47D-473A-867A-B2148EE4875A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Turtilities", "Turtilities\Turtilities.csproj", "{406214B6-37E4-45A6-9ADE-6601CC70259B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Turtilities", "Turtilities\Turtilities.csproj", "{406214B6-37E4-45A6-9ADE-6601CC70259B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MarketSpider", "MarketSpider\MarketSpider.csproj", "{383EC02A-266E-4E6C-8C78-314B0CBDE6F8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,6 +53,10 @@ Global
 		{406214B6-37E4-45A6-9ADE-6601CC70259B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{406214B6-37E4-45A6-9ADE-6601CC70259B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{406214B6-37E4-45A6-9ADE-6601CC70259B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{383EC02A-266E-4E6C-8C78-314B0CBDE6F8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{383EC02A-266E-4E6C-8C78-314B0CBDE6F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{383EC02A-266E-4E6C-8C78-314B0CBDE6F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{383EC02A-266E-4E6C-8C78-314B0CBDE6F8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -51,7 +51,7 @@ var marketService = new MarketService();
 //Console.WriteLine($"NASDAQ has {nasdaq.Count} entries");
 //Console.WriteLine($"list has {filteredList.Count} entries");
 
-marketService.RecordDividendDetails();
+//marketService.RecordDividendDetails();
 #endregion
 
 #region FUNCTION CHECK
