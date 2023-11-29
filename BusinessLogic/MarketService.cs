@@ -138,10 +138,16 @@ namespace BusinessLogic
             {
                 log("Starting RecordPreviousClose()");
 
-                var ttRepo = _trackedTickerRepo.GetAll().ToList();
-                log($"...working on {ttRepo.Count} records.");
+                var lsRepo = _listedStatusRepo.GetAll().ToList();
 
-                ttRepo.ForEach(x =>
+                var filteredRepo = lsRepo.Where(
+                    ls => (ls.Exchange.Contains("NYSE") || 
+                    ls.Exchange.Contains("NASDAQ")) && 
+                    ls.Type == "Stock").ToList();
+
+                log($"...working on {filteredRepo.Count} records.");
+
+                filteredRepo.ForEach(x =>
                 {
                     log($"...Querying {x.Ticker}");
                     _previousCloseRepo.Save(_finnhubAPI.GetPreviousClose(x.Ticker));
@@ -164,18 +170,16 @@ namespace BusinessLogic
 
                 var ddRepo = _dividedDetailsRepo.GetAll().GroupBy(x => x.Ticker).Select(y => y.First()).ToList();
 
-                var x = new List<string>();
-                
-                ddRepo.ForEach(z => x.Add(z.Ticker));
-                
+                var capturedTicker = new List<string>();
+                ddRepo.ForEach(z => capturedTicker.Add(z.Ticker));
 
                 var filteredRepo = lsRepo
                     .Where(
                     ls => (ls.Exchange.Contains("NYSE") ||
                     ls.Exchange.Contains("NASDAQ")) &&
                     ls.Type == "Stock" &&
-                    !x.Contains(ls.Ticker))
-                    .Take(100).ToList();
+                    !capturedTicker.Contains(ls.Ticker))
+                    .Take(600).ToList();
 
                 log($"...working on {filteredRepo.Count} records.");
 
@@ -265,11 +269,16 @@ namespace BusinessLogic
             {
                 log("Starting RecordRecommendedTrend()");
 
-                var ttRepo = _trackedTickerRepo.GetAll().ToList();
+                var lsRepo = _listedStatusRepo.GetAll().ToList();
 
-                log($"...working on {ttRepo.Count} records.");
+                var filteredRepo = lsRepo.Where(
+                    ls => (ls.Exchange.Contains("NYSE") ||
+                    ls.Exchange.Contains("NASDAQ")) &&
+                    ls.Type == "Stock").ToList();
 
-                ttRepo.ForEach(x =>
+                log($"...working on {filteredRepo.Count} records.");
+
+                filteredRepo.ForEach(x =>
                 {
                     log($"...Querying {x.Ticker}");
                     foreach (var item in _finnhubAPI.GetRecommendedTrend($"{x.Ticker}"))
@@ -291,11 +300,23 @@ namespace BusinessLogic
             {
                 log("Starting RecordTickerDetails()");
 
-                var ttRepo = _trackedTickerRepo.GetAll().ToList();
+                var lsRepo = _listedStatusRepo.GetAll().ToList();
 
-                log($"...working on {ttRepo.Count} records.");
+                var tdRepo = _tickerDetailRepo.GetAll().ToList();
 
-                ttRepo.ForEach(x =>
+                var capturedTicker = new List<string>();
+                tdRepo.ForEach(z => capturedTicker.Add(z.Ticker));
+
+
+                var filteredRepo = lsRepo.Where(
+                    ls => (ls.Exchange.Contains("NYSE") ||
+                    ls.Exchange.Contains("NASDAQ")) &&
+                    ls.Type == "Stock" && !capturedTicker.Contains(ls.Ticker))
+                    .Take(600).ToList();
+
+                log($"...working on {filteredRepo.Count} records.");
+
+                filteredRepo.ForEach(x =>
                 {
                     log($"...Querying {x.Ticker}");
                     _tickerDetailRepo.Save(_polygonAPI.GetTickerDetails(x.Ticker));
