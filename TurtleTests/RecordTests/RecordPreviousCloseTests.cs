@@ -45,7 +45,7 @@ namespace TurtleTests.RecordTests
             _service.RecordPreviousClose();
 
             // Assert
-            _mockTrackedTickerRepo.Verify(
+            _mockListedStatusRepo.Verify(
                 g => g.GetAll(),
                 Times.Once,
                 "GetAll() was not called exactly once");

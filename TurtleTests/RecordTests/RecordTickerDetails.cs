@@ -30,7 +30,7 @@ namespace TurtleTests.RecordTests
             _service.RecordTickerDetails();
 
             // Assert
-            _mockTrackedTickerRepo.Verify(ls => ls.GetAll(),
+            _mockListedStatusRepo.Verify(ls => ls.GetAll(),
                 Times.Once,
                 "GetAll() was not called exactly once");
         }
