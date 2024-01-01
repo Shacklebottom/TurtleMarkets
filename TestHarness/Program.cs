@@ -33,8 +33,7 @@ var marketService = new MarketService();
 
 #region SHACKLE WORKSPACE
 
-marketService.RecordDividendDetails();
-
+marketService.RecordTickerDetails();
 #endregion
 
 #region FUNCTION CHECK
