@@ -33,7 +33,10 @@ var marketService = new MarketService();
 
 #region SHACKLE WORKSPACE
 
-marketService.RecordTickerDetails();
+marketService.RecordMarketStatus();
+
+Console.WriteLine($"-=≡> TURTLE END <≡=-");
+
 #endregion
 
 #region FUNCTION CHECK

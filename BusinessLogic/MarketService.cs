@@ -11,6 +11,7 @@ using MarketDomain.Extensions;
 using System.Diagnostics.CodeAnalysis;
 using TurtleSQL.BaseClasses;
 using System.Globalization;
+using System.Data.SqlTypes;
 
 namespace BusinessLogic
 {
@@ -249,6 +250,8 @@ namespace BusinessLogic
             try
             {
                 log("Starting RecordListedStatus()");
+
+                _listedStatusRepo.TruncateTable();
 
                 foreach (var item in _alphavantageAPI.GetListedStatus())
                 {

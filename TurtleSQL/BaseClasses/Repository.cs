@@ -40,6 +40,16 @@ namespace TurtleSQL.BaseClasses
         protected virtual IEnumerable<T> AllFromReader(SqlDataReader rdr) => new List<T>();
         #endregion
 
+        public void TruncateTable()
+        {
+            var cmd = _sqlConnection.CreateCommand();
+            cmd.CommandText = $"TRUNCATE TABLE {TableName}";
+
+            _sqlConnection.Open();
+            cmd.ExecuteNonQuery();
+            _sqlConnection.Close();
+        }
+
         public IEnumerable<T> GetAll()
         {
             var cmd = _sqlConnection.CreateCommand();
