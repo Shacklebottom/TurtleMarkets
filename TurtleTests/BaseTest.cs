@@ -30,7 +30,7 @@ namespace TurtleTests
         protected Mock<IRepository<PreviousClose>> _mockSnapshotRepo;
 
         protected MarketService _service; // UNIT UNDER TEST
-
+        
         [TestInitialize]
         public void RunBeforeEachTest()
         {

@@ -249,9 +249,15 @@ namespace BusinessLogic
         {
             try
             {
-                log("Starting RecordListedStatus()");
+                log("Truncating ListedStatus Repo");
 
                 _listedStatusRepo.TruncateTable();
+
+                log("Truncating Complete\n\n");
+
+                log("Starting RecordListedStatus()");
+
+
 
                 foreach (var item in _alphavantageAPI.GetListedStatus())
                 {
