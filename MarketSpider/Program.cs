@@ -46,6 +46,7 @@ namespace MarketSpider
 
                 case "MonthlySnapshot":
                     //this records a PreviousClose snapshot of the _entire_ market. We prob dont need this.
+                    //Shackle to Shackle: if we don't need this then why does it exist?
                     _marketService.RecordSnapshot(); //finnhub 
                     break;
 
