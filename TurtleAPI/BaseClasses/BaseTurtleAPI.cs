@@ -1,4 +1,6 @@
-﻿using BusinessLogic.Logging;
+﻿using LoggerModule;
+using LoggerModule.DerivedClasses;
+using LoggerModule.Interfaces;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -21,11 +23,12 @@ namespace TurtleAPI.BaseClasses
         //    _logger = new ConsoleLogger();
         //}
 
-        protected BaseTurtleAPI(ILogger? logger = null) : this(0, logger ?? new ConsoleLogger()) { }
+        //protected BaseTurtleAPI(ILogger? logger = null) : this(0, logger ?? new ConsoleLogger()) { }
 
         protected BaseTurtleAPI(int msToSleep, ILogger? logger = null)
         {
-            _logger = logger ?? new ConsoleLogger();
+            var debugDirectory = new DebugDirectory($"{Environment.GetFolderPath(Environment.SpecialFolder.Desktop)}", "APIDebugLogs");
+            _logger = logger ?? new DebugLogger(debugDirectory);
             _msToSleep = msToSleep;
         }
 

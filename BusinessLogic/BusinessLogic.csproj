@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Code_Library\LoggerLib\LoggerModule\LoggerModule.csproj" />
     <ProjectReference Include="..\MarketDomain\MarketDomain.csproj" />
     <ProjectReference Include="..\TurtleAPI\TurtleAPI.csproj" />
     <ProjectReference Include="..\TurtleSQL\TurtleSQL.csproj" />

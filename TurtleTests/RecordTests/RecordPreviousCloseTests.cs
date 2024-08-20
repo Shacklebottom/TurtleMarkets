@@ -1,5 +1,5 @@
 using BusinessLogic;
-using BusinessLogic.Logging;
+using LoggerModule;
 using MarketDomain;
 using MarketDomain.Enums;
 using Microsoft.VisualStudio.TestTools.UnitTesting;

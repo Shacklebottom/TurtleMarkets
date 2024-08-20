@@ -1,5 +1,6 @@
 ﻿using BusinessLogic;
-using BusinessLogic.Logging;
+using LoggerModule;
+using LoggerModule.Interfaces;
 using MarketDomain;
 using MarketDomain.Enums;
 using Moq;

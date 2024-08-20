@@ -1,4 +1,5 @@
-﻿using BusinessLogic.Logging;
+﻿using LoggerModule.DerivedClasses;
+using LoggerModule.Interfaces;
 using MarketDomain;
 using System.Xml.Linq;
 using TurtleAPI.FinnhubIO;
@@ -18,7 +19,7 @@ namespace BusinessLogic
     [SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "<Pending>")]
     public class MarketService
     {
-        private void log(string message) { _logger.Log(message); }
+        private void log(string message) { _logger.Chat(message); }
 
         private readonly IRepository<PreviousClose> _previousCloseRepo;
         private readonly IRepository<DividendDetails> _dividedDetailsRepo;
@@ -34,6 +35,7 @@ namespace BusinessLogic
         private readonly IPolygonAPI _polygonAPI;
         private readonly IAlphaVantageAPI _alphavantageAPI;
         private readonly ILogger _logger;
+        private readonly DebugDirectory _debugDirectory = new($"{Environment.GetFolderPath(Environment.SpecialFolder.Desktop)}", "MarketDebugLogs");
 
         public MarketService(
             IRepository<PreviousClose>? pcRepo = null,
@@ -64,7 +66,7 @@ namespace BusinessLogic
             _finnhubAPI = finnhubAPI ?? new FinnhubAPI();
             _polygonAPI = polygonAPI ?? new PolygonAPI();
             _alphavantageAPI = alphaVantageAPI ?? new AlphaVantageAPI();
-            _logger = logger ?? new ConsoleLogger();
+            _logger = logger ?? new DebugLogger(_debugDirectory);
         }
 
 

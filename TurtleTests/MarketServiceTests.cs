@@ -1,5 +1,5 @@
 using BusinessLogic;
-using BusinessLogic.Logging;
+using LoggerModule;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.ComponentModel;
 using System.Data.SqlClient;
