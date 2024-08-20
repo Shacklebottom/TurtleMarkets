@@ -16,10 +16,10 @@ namespace TurtleAPI.BaseClasses
         protected readonly ILogger _logger;
         protected int _msToSleep;
 
-        private BaseTurtleAPI()
-        {
-            _logger = new ConsoleLogger();
-        }
+        //private BaseTurtleAPI()
+        //{
+        //    _logger = new ConsoleLogger();
+        //}
 
         protected BaseTurtleAPI(ILogger? logger = null) : this(0, logger ?? new ConsoleLogger()) { }
 
