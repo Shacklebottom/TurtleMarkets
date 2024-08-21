@@ -5,10 +5,8 @@ using TurtleAPI.FinnhubIO.Responses;
 
 namespace TurtleAPI.FinnhubIO
 {
-    public class FinnhubAPI : ApiBaseClass, IFinnhubAPI
+    public class FinnhubAPI(ILogger logger, int msSleepTime = 1000) : ApiBaseClass(logger, msSleepTime), IFinnhubAPI
     {
-        public FinnhubAPI(ILogger logger, int msSleepTime = 1000) : base(logger, msSleepTime) { }
-
         //IMPORTANT! FINNHUB API HAS 60 CALLS / MINUTE
         public async Task<PreviousClose?> GetPreviousClose(string ticker)
         {

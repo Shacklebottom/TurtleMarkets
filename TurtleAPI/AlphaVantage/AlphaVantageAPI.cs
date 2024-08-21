@@ -6,11 +6,9 @@ using TurtleAPI.AlphaVantage.Responses;
 
 namespace TurtleAPI.AlphaVantage
 {
-    public class AlphaVantageAPI : ApiBaseClass, IAlphaVantageAPI
+    public class AlphaVantageAPI(ILogger logger, int msToSleep = 0) : ApiBaseClass(logger, msToSleep), IAlphaVantageAPI
     {
         //IMPORTANT! ALPHA VANTAGE API HAS 25 CALLS ===>PER DAY<===
-        public AlphaVantageAPI(ILogger logger, int msToSleep = 0) : base(logger, msToSleep) { }
-
         public async Task<PreviousClose> GetPreviousClose(string ticker)
         {
             //has a repository : Validated! (we'll probably never use this?)

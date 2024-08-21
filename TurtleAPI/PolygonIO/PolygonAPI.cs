@@ -5,10 +5,8 @@ using TurtleAPI.PolygonIO.Responses;
 
 namespace TurtleAPI.PolygonIO
 {
-    public class PolygonAPI : ApiBaseClass, IPolygonAPI
+    public class PolygonAPI(ILogger logger, int msToSleep = 12000) : ApiBaseClass(logger, msToSleep), IPolygonAPI
     {
-        public PolygonAPI(ILogger logger, int msToSleep = 12000) : base(logger, msToSleep) { }
-
         //IMPORTANT! POLYGON API HAS 5 CALLS / MINUTE
         public async Task<PreviousClose?> GetPreviousClose(string ticker)
         {
@@ -93,6 +91,7 @@ namespace TurtleAPI.PolygonIO
             
             var response = await CallAPIAsync<PolygonDividendResponse>(uri);
             var results = response?.First();
+
             var dividendDetail = results?.results.Select(r =>
                 new DividendDetails
                 {
