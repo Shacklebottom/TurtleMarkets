@@ -9,6 +9,6 @@ namespace MarketDomain.Enums
     public enum ListedStatusTypes
     {
         Active,
-        Deslisted
+        Delisted
     }
 }

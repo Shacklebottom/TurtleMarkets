@@ -1,11 +1,10 @@
 ﻿using MarketDomain;
-using TurtleAPI.BaseClasses;
 
 namespace TurtleAPI.FinnhubIO
 {
-    public interface IFinnhubAPI : ITurtleAPI
+    public interface IFinnhubAPI
     {
-        PreviousClose GetPreviousClose(string ticker);
-        IEnumerable<RecommendedTrend> GetRecommendedTrend(string ticker);
+        Task<PreviousClose?> GetPreviousClose(string ticker);
+        Task<IEnumerable<RecommendedTrend>?> GetRecommendedTrend(string ticker);
     }
 }

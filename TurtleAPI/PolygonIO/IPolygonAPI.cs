@@ -1,12 +1,11 @@
 ﻿using MarketDomain;
-using TurtleAPI.BaseClasses;
 
 namespace TurtleAPI.PolygonIO
 {
-    public interface IPolygonAPI : ITurtleAPI
+    public interface IPolygonAPI
     {
-        IEnumerable<DividendDetails> GetDividendDetails(string ticker);
-        TickerDetail GetTickerDetails(string ticker);
-        IEnumerable<MarketHoliday> GetMarketHoliday();
+        Task<IEnumerable<DividendDetails>?> GetDividendDetails(string ticker);
+        Task<TickerDetail?> GetTickerDetails(string ticker);
+        Task<IEnumerable<MarketHoliday>?> GetMarketHoliday();
     }
 }

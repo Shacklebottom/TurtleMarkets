@@ -13,7 +13,6 @@
     <ProjectReference Include="..\MarketDomain\MarketDomain.csproj" />
     <ProjectReference Include="..\TurtleAPI\TurtleAPI.csproj" />
     <ProjectReference Include="..\TurtleSQL\TurtleSQL.csproj" />
-    <ProjectReference Include="..\TurtleTests\TurtleTests.csproj" />
   </ItemGroup>
 
 </Project>

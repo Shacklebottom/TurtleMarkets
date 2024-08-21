@@ -1,13 +1,12 @@
 ﻿using MarketDomain;
 using MarketDomain.Enums;
-using TurtleAPI.BaseClasses;
 
 namespace TurtleAPI.AlphaVantage
 {
-    public interface IAlphaVantageAPI : ITurtleAPI
+    public interface IAlphaVantageAPI
     {
-        IEnumerable<MarketStatus> GetMarketStatus();
-        Dictionary<PrestigeType, IEnumerable<Prominence>> GetPolarizedMarkets();
-        IEnumerable<ListedStatus> GetListedStatus(ListedStatusTypes listingType = ListedStatusTypes.Active);
+        Task<IEnumerable<MarketStatus>?> GetMarketStatus();
+        Task<Dictionary<PrestigeType, IEnumerable<Prominence>>?> GetPolarizedMarkets();
+        Task<IEnumerable<ListedStatus>?> GetListedStatus(ListedStatusTypes listingType = ListedStatusTypes.Active);
     }
 }

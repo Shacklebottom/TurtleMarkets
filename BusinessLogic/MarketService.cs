@@ -63,10 +63,10 @@ namespace BusinessLogic
             _marketStatusRepo = msRepo ?? new MarketStatusRepository();
             _trackedTickerRepo = ttRepo ?? new TrackedTickerRepository();
             _snapShotRepo = ssRepo ?? new SnapshotRepository();
-            _finnhubAPI = finnhubAPI ?? new FinnhubAPI();
-            _polygonAPI = polygonAPI ?? new PolygonAPI();
-            _alphavantageAPI = alphaVantageAPI ?? new AlphaVantageAPI();
             _logger = logger ?? new DebugLogger(_debugDirectory);
+            _finnhubAPI = finnhubAPI ?? new FinnhubAPI(_logger);
+            _polygonAPI = polygonAPI ?? new PolygonAPI(_logger);
+            _alphavantageAPI = alphaVantageAPI ?? new AlphaVantageAPI(_logger);
         }
 
 
@@ -122,10 +122,10 @@ namespace BusinessLogic
                 var lsRepo = _listedStatusRepo.GetAll().ToList();
                 log($"...working on {lsRepo.Count} records.");
 
-                lsRepo.ForEach(x =>
+                lsRepo.ForEach(async x =>
                 {
                     log($"...Querying {x.Ticker}");
-                    _snapShotRepo.Save(_finnhubAPI.GetPreviousClose(x.Ticker));
+                    _snapShotRepo.Save(await _finnhubAPI.GetPreviousClose(x.Ticker));
                 });
 
                 log("RecordSnapshot() complete.");
@@ -150,10 +150,10 @@ namespace BusinessLogic
 
                 log($"...working on {filteredRepo.Count} records.");
 
-                filteredRepo.ForEach(x =>
+                filteredRepo.ForEach(async x =>
                 {
                     log($"...Querying {x.Ticker}");
-                    _previousCloseRepo.Save(_finnhubAPI.GetPreviousClose(x.Ticker));
+                    _previousCloseRepo.Save(await _finnhubAPI.GetPreviousClose(x.Ticker));
                 });
 
                 log("RecordPreviousClose() complete.");
@@ -186,11 +186,11 @@ namespace BusinessLogic
 
                 log($"...working on {filteredRepo.Count} records.");
 
-                filteredRepo.ForEach(x =>
+                filteredRepo.ForEach(async x =>
                 {
                     log($"...Querying {x.Ticker}");
 
-                    foreach (var item in _polygonAPI.GetDividendDetails(x.Ticker))
+                    foreach (var item in await _polygonAPI.GetDividendDetails(x.Ticker))
                     {
                         _dividedDetailsRepo.Save(item);
                     }
@@ -204,15 +204,15 @@ namespace BusinessLogic
             }
         }
 
-        public void RecordDailyProminence()
+        public async void RecordDailyProminence()
         {
             try
             {
                 log("Starting RecordDailyProminence()");
 
-                var prominence = _alphavantageAPI.GetPolarizedMarkets().Values.ToList();
-
-                prominence.ForEach(x =>
+                var results = await _alphavantageAPI.GetPolarizedMarkets();
+                var prominence = results?.Values.ToList();
+                prominence?.ForEach(x =>
                 {
                     foreach (var item in x)
                     {
@@ -227,12 +227,12 @@ namespace BusinessLogic
             }
         }
 
-        public void RecordMarketStatus()
+        public async void RecordMarketStatus()
         {
             try
             {
                 log("Starting CheckMarketStatus()");
-                foreach (var item in _alphavantageAPI.GetMarketStatus())
+                foreach (var item in await _alphavantageAPI.GetMarketStatus())
                 {
                     _marketStatusRepo.Save(item);
                 }
@@ -247,7 +247,7 @@ namespace BusinessLogic
             }
         }
 
-        public void RecordListedStatus()
+        public async void RecordListedStatus()
         {
             try
             {
@@ -261,7 +261,7 @@ namespace BusinessLogic
 
 
 
-                foreach (var item in _alphavantageAPI.GetListedStatus())
+                foreach (var item in await _alphavantageAPI.GetListedStatus())
                 {
                     _listedStatusRepo.Save(item);
                 }
@@ -274,7 +274,7 @@ namespace BusinessLogic
             }
         }
 
-        public void RecordRecommendedTrend()
+        public async void RecordRecommendedTrend()
         { //This gives us weekly information
             try
             {
@@ -289,10 +289,10 @@ namespace BusinessLogic
 
                 log($"...working on {filteredRepo.Count} records.");
 
-                filteredRepo.ForEach(x =>
+                filteredRepo.ForEach(async x =>
                 {
                     log($"...Querying {x.Ticker}");
-                    foreach (var item in _finnhubAPI.GetRecommendedTrend($"{x.Ticker}"))
+                    foreach (var item in await _finnhubAPI.GetRecommendedTrend($"{x.Ticker}"))
                     {
                         _recommendedTrendRepo.Save(item);
                     }
@@ -327,10 +327,10 @@ namespace BusinessLogic
 
                 log($"...working on {filteredRepo.Count} records.");
 
-                filteredRepo.ForEach(x =>
+                filteredRepo.ForEach(async x =>
                 {
                     log($"...Querying {x.Ticker}");
-                    _tickerDetailRepo.Save(_polygonAPI.GetTickerDetails(x.Ticker));
+                    _tickerDetailRepo.Save(await _polygonAPI.GetTickerDetails(x.Ticker));
                 });
                 log("RecordTickerDetail() complete.");
             }
@@ -340,12 +340,12 @@ namespace BusinessLogic
             }
         }
 
-        public void RecordMarketHoliday()
+        public async void RecordMarketHoliday()
         {
             try
             {
                 log("Starting RecordMarketHoliday()");
-                foreach (var item in _polygonAPI.GetMarketHoliday())
+                foreach (var item in await _polygonAPI.GetMarketHoliday())
                 {
                     _marketHolidayRepo.Save(item);
                 }
