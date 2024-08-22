@@ -104,8 +104,8 @@ namespace BusinessLogic
         public IEnumerable<ListedStatus> GetListedStatuses()
         {
             var x = _listedStatusRepo.GetAll().Where(
-                ls => (ls.Exchange.Contains("NYSE") ||
-                ls.Exchange.Contains("NASDAQ")) &&
+                ls => (ls.Exchange?.Contains("NYSE") == true ||
+                ls.Exchange?.Contains("NASDAQ") == true) &&
                 ls.Type == "Stock").ToList();
             return x;
 
