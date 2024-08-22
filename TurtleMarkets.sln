@@ -17,6 +17,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LoggerModule", "..\..\Code_
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApiModule", "..\..\Code_Library\APILib\APIModule\ApiModule.csproj", "{2CD9FD1F-D309-4D59-B8DA-70CD34DB48D2}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestHarness", "TestHarness\TestHarness.csproj", "{3BF162BC-1304-4136-AA3E-269621F40FC1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +53,10 @@ Global
 		{2CD9FD1F-D309-4D59-B8DA-70CD34DB48D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2CD9FD1F-D309-4D59-B8DA-70CD34DB48D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2CD9FD1F-D309-4D59-B8DA-70CD34DB48D2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3BF162BC-1304-4136-AA3E-269621F40FC1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3BF162BC-1304-4136-AA3E-269621F40FC1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3BF162BC-1304-4136-AA3E-269621F40FC1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3BF162BC-1304-4136-AA3E-269621F40FC1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

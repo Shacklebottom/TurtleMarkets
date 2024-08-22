@@ -1,27 +1,19 @@
-﻿using MarketDomain;
-using TurtleAPI;
+﻿using BusinessLogic;
+using LoggerModule.DerivedClasses;
 using TurtleAPI.PolygonIO;
-using TurtleAPI.AlphaVantage;
-using TurtleAPI.FinnhubIO;
-using CsvHelper;
-using System.Globalization;
-using System.Net;
-using TestHarness;
-using MarketDomain.Enums;
-using MarketDomain.Interfaces;
-using System.Linq.Expressions;
-using TurtleAPI.Exceptions;
-using System.Diagnostics;
-using TurtleSQL.TickerRepositories;
-using BusinessLogic;
-using BusinessLogic.Logging;
-using TurtleAPI.BaseClasses;
-using MarketDomain.Extensions;
-using System.Text.RegularExpressions;
+
+
+
 
 #region SHARED WORKSPACE
+
 Console.WriteLine($"-=≡> TURTLE START <≡=-\n\n");
 var marketService = new MarketService();
+
+var debugDir = new DebugDirectory($"{Environment.GetFolderPath(Environment.SpecialFolder.Desktop)}", "TrutleHarnss");
+var debugLogger = new DebugLogger(debugDir);
+var polyAPI = new PolygonAPI(debugLogger);
+
 #endregion
 
 #region ATARI WORKSPACE
@@ -33,7 +25,7 @@ var marketService = new MarketService();
 
 #region SHACKLE WORKSPACE
 
-marketService.RecordMarketStatus();
+await marketService.RecordMarketHoliday();
 
 Console.WriteLine($"-=≡> TURTLE END <≡=-");
 

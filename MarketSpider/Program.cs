@@ -13,7 +13,7 @@ namespace MarketSpider
          * Once a year: DividendDetails recorded (2h worth of calls for 13 days).
          * Fresh sql server: ListedStatus and MarketHoliday once, TickerDetails & DividendDetails: one and then the other, over 26 days.
          */
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             MarketService _marketService = new();
             switch (args[0])
@@ -26,46 +26,46 @@ namespace MarketSpider
                  */
                 case "WeeklyTrend":
                     //this records last week's Recommended Action of each stock in only american _stock_ exchanges.
-                    _marketService.RecordRecommendedTrend(); //finnhub
+                    await _marketService.RecordRecommendedTrend(); //finnhub
                     break;
 
                 case "DailyClose":
                     //this records a PreviousClose snapshot of only american _stock_ exchanges.
-                    _marketService.RecordPreviousClose(); //finnhub
+                    await _marketService.RecordPreviousClose(); //finnhub
                     break;
 
                 case "DailyProminence":
                     //this records the top 20: gainers, losers, and most traded.
-                    _marketService.RecordDailyProminence(); //alphavantage
+                    await _marketService.RecordDailyProminence(); //alphavantage
                     break;
 
                 case "MonthlyListings":
                     //this records all _active_ publicly traded companies.
-                    _marketService.RecordListedStatus(); //alphavantage
+                    await _marketService.RecordListedStatus(); //alphavantage
                     break;
 
                 case "MonthlySnapshot":
                     //this records a PreviousClose snapshot of the _entire_ market. We prob dont need this.
                     //Shackle to Shackle: if we don't need this then why does it exist?
-                    _marketService.RecordSnapshot(); //finnhub 
+                    await _marketService.RecordSnapshot(); //finnhub 
                     break;
 
                 case "YearlyDividends":
                     //!!Read polygon note (above).
                     //this records a DividendDetails forecast of only american _stock_ exchanges
-                    _marketService.RecordDividendDetails(); //polygon
+                    await _marketService.RecordDividendDetails(); //polygon
                     break;
 
                 case "MonthlyTickerDetails":
                     //!!Read polygon note (above).
                     //For this in particular: once we get a TickerDetails snapshot,
                         //items that get appended to it will become increasingly few.
-                    _marketService.RecordTickerDetails(); //polygon
+                    await _marketService.RecordTickerDetails(); //polygon
                     break;
 
                 case "BiannualMarketHoliday":
                     //this makes a single call to record an instance of the Market Holiday forecast.
-                    _marketService.RecordMarketHoliday(); //polygon
+                    await _marketService.RecordMarketHoliday(); //polygon
                     break;
 
                 default:

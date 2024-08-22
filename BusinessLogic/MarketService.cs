@@ -1,5 +1,6 @@
 ﻿using LoggerModule.DerivedClasses;
 using LoggerModule.Interfaces;
+using ApiModule.CustomExceptions;
 using MarketDomain;
 using System.Xml.Linq;
 using TurtleAPI.FinnhubIO;
@@ -113,20 +114,26 @@ namespace BusinessLogic
 
         #region APIcalls
 
-        public void RecordSnapshot()
+        public async Task RecordSnapshot()
         { //this should probably delete the previous snapshop so we only have one instance of a snapshot at a time :)
             try
             {
                 log("Starting RecordSnapshot()");
 
                 var lsRepo = _listedStatusRepo.GetAll().ToList();
+
                 log($"...working on {lsRepo.Count} records.");
 
-                lsRepo.ForEach(async x =>
+                foreach (var item in lsRepo)
                 {
-                    log($"...Querying {x.Ticker}");
-                    _snapShotRepo.Save(await _finnhubAPI.GetPreviousClose(x.Ticker));
-                });
+                    log($"...Querying {item.Ticker}");
+                    var result = await _finnhubAPI.GetPreviousClose(item.Ticker);
+
+                    if (result != null)
+                    {
+                        _snapShotRepo.Save(result); 
+                    }
+                }
 
                 log("RecordSnapshot() complete.");
             }
@@ -135,7 +142,7 @@ namespace BusinessLogic
                 log($"EXCEPTION:\n{ex.Message}\n\n{ex.StackTrace}");
             }
         }
-        public void RecordPreviousClose()
+        public async Task RecordPreviousClose()
         {
             try
             {
@@ -144,17 +151,22 @@ namespace BusinessLogic
                 var lsRepo = _listedStatusRepo.GetAll().ToList();
 
                 var filteredRepo = lsRepo.Where(
-                    ls => (ls.Exchange.Contains("NYSE") || 
-                    ls.Exchange.Contains("NASDAQ")) && 
+                    ls => (ls.Exchange?.Contains("NYSE") == true || 
+                    ls.Exchange?.Contains("NASDAQ") == true) && 
                     ls.Type == "Stock").ToList();
 
                 log($"...working on {filteredRepo.Count} records.");
 
-                filteredRepo.ForEach(async x =>
+                foreach (var item in filteredRepo)
                 {
-                    log($"...Querying {x.Ticker}");
-                    _previousCloseRepo.Save(await _finnhubAPI.GetPreviousClose(x.Ticker));
-                });
+                    log($"...Querying {item.Ticker}");
+                    var result = await _finnhubAPI.GetPreviousClose(item.Ticker);
+
+                    if (result != null)
+                    {
+                        _previousCloseRepo.Save(result);
+                    }
+                }
 
                 log("RecordPreviousClose() complete.");
             }
@@ -163,7 +175,8 @@ namespace BusinessLogic
                 log($"EXCEPTION:\n{ex.Message}\n\n{ex.StackTrace}");
             }
         }
-        public void RecordDividendDetails()
+
+        public async Task RecordDividendDetails()
         {
             try
             {
@@ -178,23 +191,27 @@ namespace BusinessLogic
 
                 var filteredRepo = lsRepo
                     .Where(
-                    ls => (ls.Exchange.Contains("NYSE") ||
-                    ls.Exchange.Contains("NASDAQ")) &&
+                    ls => (ls.Exchange?.Contains("NYSE") == true ||
+                    ls.Exchange?.Contains("NASDAQ") == true) &&
                     ls.Type == "Stock" &&
                     !capturedTicker.Contains(ls.Ticker))
                     .Take(600).ToList();
 
                 log($"...working on {filteredRepo.Count} records.");
 
-                filteredRepo.ForEach(async x =>
+                foreach (var item in filteredRepo)
                 {
-                    log($"...Querying {x.Ticker}");
+                    log($"...Querying {item.Ticker}");
+                    var result = await _polygonAPI.GetDividendDetails(item.Ticker);
 
-                    foreach (var item in await _polygonAPI.GetDividendDetails(x.Ticker))
+                    if (result != null)
                     {
-                        _dividedDetailsRepo.Save(item);
+                        foreach (var detail in result)
+                        {
+                            _dividedDetailsRepo.Save(detail);
+                        }
                     }
-                });
+                }
 
                 log("RecordDividendDetails() complete.");
             }
@@ -204,21 +221,25 @@ namespace BusinessLogic
             }
         }
 
-        public async void RecordDailyProminence()
+        public async Task RecordDailyProminence()
         {
             try
             {
                 log("Starting RecordDailyProminence()");
 
                 var results = await _alphavantageAPI.GetPolarizedMarkets();
-                var prominence = results?.Values.ToList();
-                prominence?.ForEach(x =>
+                if (results != null)
                 {
-                    foreach (var item in x)
+                    var prominence = results.Values.ToList();
+                    prominence.ForEach(item =>
                     {
-                        _prominenceRepo.Save(item);
-                    }
-                });
+                        foreach (var i in item)
+                        {
+                            _prominenceRepo.Save(i);
+                        }
+                    });
+                }
+                
                 log("RecordDailyProminence() complete.");
             }
             catch (Exception ex)
@@ -227,19 +248,21 @@ namespace BusinessLogic
             }
         }
 
-        public async void RecordMarketStatus()
+        public async Task RecordMarketStatus()
         {
             try
             {
                 log("Starting CheckMarketStatus()");
-                foreach (var item in await _alphavantageAPI.GetMarketStatus())
+
+                var results = await _alphavantageAPI.GetMarketStatus();
+                if (results != null)
                 {
-                    _marketStatusRepo.Save(item);
+                    foreach (var item in results)
+                    {
+                        _marketStatusRepo.Save(item);
+                    }
                 }
-
                 log("CheckMarketStatus() complete.");
-
-
             }
             catch (Exception ex)
             {
@@ -247,7 +270,7 @@ namespace BusinessLogic
             }
         }
 
-        public async void RecordListedStatus()
+        public async Task RecordListedStatus()
         {
             try
             {
@@ -259,13 +282,17 @@ namespace BusinessLogic
 
                 log("Starting RecordListedStatus()");
 
+                var results = await _alphavantageAPI.GetListedStatus();
 
 
-                foreach (var item in await _alphavantageAPI.GetListedStatus())
+                if (results != null)
                 {
-                    _listedStatusRepo.Save(item);
-                }
+                    foreach (var item in results)
+                    {
+                        _listedStatusRepo.Save(item);
+                    }
 
+                }
                 log("RecordListedStatus() complete.");
             }
             catch (Exception ex)
@@ -274,7 +301,7 @@ namespace BusinessLogic
             }
         }
 
-        public async void RecordRecommendedTrend()
+        public async Task RecordRecommendedTrend()
         { //This gives us weekly information
             try
             {
@@ -283,20 +310,25 @@ namespace BusinessLogic
                 var lsRepo = _listedStatusRepo.GetAll().ToList();
 
                 var filteredRepo = lsRepo.Where(
-                    ls => (ls.Exchange.Contains("NYSE") ||
-                    ls.Exchange.Contains("NASDAQ")) &&
+                    ls => (ls.Exchange?.Contains("NYSE") == true ||
+                    ls.Exchange?.Contains("NASDAQ") == true) &&
                     ls.Type == "Stock").ToList();
 
                 log($"...working on {filteredRepo.Count} records.");
 
-                filteredRepo.ForEach(async x =>
+                foreach (var item in filteredRepo)
                 {
-                    log($"...Querying {x.Ticker}");
-                    foreach (var item in await _finnhubAPI.GetRecommendedTrend($"{x.Ticker}"))
+                    log($"...Querying {item.Ticker}");
+                    var result = await _finnhubAPI.GetRecommendedTrend(item.Ticker);
+                    if (result != null)
                     {
-                        _recommendedTrendRepo.Save(item);
+                        foreach (var trend in result)
+                        {
+                            _recommendedTrendRepo.Save(trend);
+                        }
                     }
-                });
+                }
+
                 log("RecordRecommendedTrend() complete.");
             }
             catch (Exception ex)
@@ -305,7 +337,7 @@ namespace BusinessLogic
             }
         }
 
-        public void RecordTickerDetails()
+        public async Task RecordTickerDetails()
         {
             try
             {
@@ -315,23 +347,27 @@ namespace BusinessLogic
 
                 var tdRepo = _tickerDetailRepo.GetAll().ToList();
 
-                var capturedTicker = new List<string>();
+                List<string> capturedTicker = [];
                 tdRepo.ForEach(z => capturedTicker.Add(z.Ticker));
 
-
                 var filteredRepo = lsRepo.Where(
-                    ls => (ls.Exchange.Contains("NYSE") ||
-                    ls.Exchange.Contains("NASDAQ")) &&
+                    ls => (ls.Exchange?.Contains("NYSE") == true ||
+                    ls.Exchange?.Contains("NASDAQ") == true) &&
                     ls.Type == "Stock" && !capturedTicker.Contains(ls.Ticker))
                     .Take(600).ToList();
 
                 log($"...working on {filteredRepo.Count} records.");
 
-                filteredRepo.ForEach(async x =>
+                foreach (var item in filteredRepo)
                 {
-                    log($"...Querying {x.Ticker}");
-                    _tickerDetailRepo.Save(await _polygonAPI.GetTickerDetails(x.Ticker));
-                });
+                    log($"...Querying {item.Ticker}");
+                    var result = await _polygonAPI.GetTickerDetails(item.Ticker);
+                    if (result != null)
+                    {
+                        _tickerDetailRepo.Save(result);
+                    }
+                }
+
                 log("RecordTickerDetail() complete.");
             }
             catch (Exception ex)
@@ -340,17 +376,22 @@ namespace BusinessLogic
             }
         }
 
-        public async void RecordMarketHoliday()
+        public async Task RecordMarketHoliday()
         {
             try
             {
                 log("Starting RecordMarketHoliday()");
-                foreach (var item in await _polygonAPI.GetMarketHoliday())
-                {
-                    _marketHolidayRepo.Save(item);
-                }
-                log("RecordMarketHoliday() complete.");
 
+                var results = await _polygonAPI.GetMarketHoliday();
+
+                if (results != null)
+                {
+                    foreach (var item in results)
+                    {
+                        _marketHolidayRepo.Save(item);
+                    }
+                    log("RecordMarketHoliday() complete.");
+                }
             }
             catch (Exception ex)
             {
