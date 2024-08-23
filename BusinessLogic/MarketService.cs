@@ -385,6 +385,12 @@ namespace BusinessLogic
 
             try
             {
+                log("Truncating MarketHoliday Repo");
+
+                marketHolidayRepo.TruncateTable();
+
+                log("Truncate complete");
+
                 log("Starting RecordMarketHoliday()");
 
                 var results = await polygonAPI.GetMarketHoliday();
