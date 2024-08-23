@@ -70,8 +70,6 @@ namespace BusinessLogic
             _alphavantageAPI = alphaVantageAPI ?? new AlphaVantageAPI(_logger);
         }
 
-
-
         #region Market Workshop
         /*
          * Using this space for multi-track conceptualization.
@@ -115,9 +113,15 @@ namespace BusinessLogic
         #region APIcalls
 
         public async Task RecordSnapshot()
-        { //this should probably delete the previous snapshop so we only have one instance of a snapshot at a time :)
+        { 
             try
             {
+                log("Truncating the Snapshot Repo");
+
+                _snapShotRepo.TruncateTable();
+
+                log("Truncate complete");
+
                 log("Starting RecordSnapshot()");
 
                 var lsRepo = _listedStatusRepo.GetAll().ToList();
@@ -283,7 +287,6 @@ namespace BusinessLogic
                 log("Starting RecordListedStatus()");
 
                 var results = await _alphavantageAPI.GetListedStatus();
-
 
                 if (results != null)
                 {
