@@ -10,6 +10,7 @@ namespace TurtleAPI.PolygonIO
         //IMPORTANT! POLYGON API HAS 5 CALLS / MINUTE
         public async Task<PreviousClose?> GetPreviousClose(string ticker)
         {
+            Thread.Sleep(SleepDuration);
             //maybe unnecessary??
             //has a repository : >Validated!<
             var uri = new Uri($"https://api.polygon.io/v2/aggs/ticker/{ticker}/prev?adjusted=true&apiKey={AuthData.API_KEY_POLYGON}");
@@ -31,6 +32,7 @@ namespace TurtleAPI.PolygonIO
 
         public async Task<TickerDetail?> GetTickerDetails(string ticker)
         {
+            Thread.Sleep(SleepDuration);
             //has repository : >Validated!<
             var uri = new Uri($"https://api.polygon.io/v3/reference/tickers/{ticker}?apiKey={AuthData.API_KEY_POLYGON}");
             
@@ -66,6 +68,7 @@ namespace TurtleAPI.PolygonIO
 
         public async Task<IEnumerable<MarketHoliday>?> GetMarketHoliday()
         {
+            Thread.Sleep(SleepDuration);
             //has a repository : >Validated!<
             var uri = new Uri($"https://api.polygon.io/v1/marketstatus/upcoming?apiKey={AuthData.API_KEY_POLYGON}");
 
@@ -86,6 +89,7 @@ namespace TurtleAPI.PolygonIO
 
         public async Task<IEnumerable<DividendDetails>?> GetDividendDetails(string ticker)
         {
+            Thread.Sleep(SleepDuration);
             //has a repository! : Validated
             var uri = new Uri($"https://api.polygon.io/v3/reference/dividends?ticker={ticker}&apiKey={AuthData.API_KEY_POLYGON}");
             

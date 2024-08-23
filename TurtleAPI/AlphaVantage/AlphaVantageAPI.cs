@@ -53,7 +53,7 @@ namespace TurtleAPI.AlphaVantage
             return marketStatus;
         }
 
-        public async Task<Dictionary<PrestigeType, IEnumerable<Prominence>>> GetPolarizedMarkets()
+        public async Task<Dictionary<PrestigeType, IEnumerable<Prominence>>?> GetPolarizedMarkets()
         {
             //has a repository : Validated!
             //returns the top and bottom 20 tickers, and the 20 most traded.

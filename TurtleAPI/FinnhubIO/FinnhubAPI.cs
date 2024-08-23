@@ -10,6 +10,8 @@ namespace TurtleAPI.FinnhubIO
         //IMPORTANT! FINNHUB API HAS 60 CALLS / MINUTE
         public async Task<PreviousClose?> GetPreviousClose(string ticker)
         {
+            Thread.Sleep(SleepDuration);
+
             var uri = new Uri($"https://finnhub.io/api/v1/quote?symbol={ticker}");
 
             var requestHeaders = new List<KeyValuePair<string, string>>
@@ -50,7 +52,8 @@ namespace TurtleAPI.FinnhubIO
 
         public async Task<IEnumerable<RecommendedTrend>?> GetRecommendedTrend(string ticker)
         {
-            //has a repository : Validated!
+            Thread.Sleep(SleepDuration);
+
             var uri = new Uri($"https://finnhub.io/api/v1/stock/recommendation?symbol={ticker}&token={AuthData.API_KEY_FINNHUB}");
 
             var requestHeaders = new List<KeyValuePair<string, string>>
