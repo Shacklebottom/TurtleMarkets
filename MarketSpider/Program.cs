@@ -30,10 +30,6 @@ namespace MarketSpider
                  * it's currently set up so it will run for 2 hours at a time,
                  * therefore sql server agent needs to run it for 13 days in a row 
                  */
-                case "WeeklyTrend":
-                    //this records last week's Recommended Action of each stock in only american _stock_ exchanges.
-                    await marketService.RecordRecommendedTrend(); //finnhub
-                    break;
 
                 case "DailyClose":
                     //this records a PreviousClose snapshot of only american _stock_ exchanges.
@@ -43,6 +39,11 @@ namespace MarketSpider
                 case "DailyProminence":
                     //this records the top 20: gainers, losers, and most traded.
                     await marketService.RecordDailyProminence(); //alphavantage
+                    break;
+
+                case "WeeklyTrend":
+                    //this records last week's Recommended Action of each stock in only american _stock_ exchanges.
+                    await marketService.RecordRecommendedTrend(); //finnhub
                     break;
 
                 case "MonthlyListings":

@@ -1,5 +1,6 @@
 ﻿using BusinessLogic;
 using LoggerModule.DerivedClasses;
+using MarketDomain.Objects;
 using TurtleAPI.PolygonIO;
 
 
@@ -8,11 +9,11 @@ using TurtleAPI.PolygonIO;
 #region SHARED WORKSPACE
 
 Console.WriteLine($"-=≡> TURTLE START <≡=-\n\n");
-var marketService = new MarketService();
 
-var debugDir = new DebugDirectory($"{Environment.GetFolderPath(Environment.SpecialFolder.Desktop)}", "TrutleHarnss");
-var debugLogger = new DebugLogger(debugDir);
-var polyAPI = new PolygonAPI(debugLogger);
+DebugDirectory debugDirectory = new($"{Environment.GetFolderPath(Environment.SpecialFolder.Desktop)}", "MarketDebugLogs");
+DebugLogger debugLogger = new(debugDirectory);
+MarketServiceLocator serviceLocator = new();
+MarketService marketService = new(serviceLocator, debugLogger);
 
 #endregion
 
