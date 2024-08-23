@@ -1,4 +1,4 @@
-﻿using MarketDomain;
+﻿using MarketDomain.Objects;
 
 namespace TurtleAPI.FinnhubIO
 {

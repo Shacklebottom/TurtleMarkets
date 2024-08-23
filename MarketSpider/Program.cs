@@ -1,5 +1,7 @@
 ﻿using System;
 using BusinessLogic;
+using LoggerModule.DerivedClasses;
+using MarketDomain.Objects;
 
 namespace MarketSpider
 {
@@ -15,7 +17,11 @@ namespace MarketSpider
          */
         public static async Task Main(string[] args)
         {
-            MarketService _marketService = new();
+            DebugDirectory debugDirectory = new($"{Environment.GetFolderPath(Environment.SpecialFolder.Desktop)}", "MarketDebugLogs");
+            DebugLogger debugLogger = new(debugDirectory);
+            MarketServiceLocator serviceLocator = new();
+            MarketService marketService = new(serviceLocator, debugLogger);
+
             switch (args[0])
             {
                 /* IMPORTANT! POLYGON API NOTE!
@@ -26,46 +32,46 @@ namespace MarketSpider
                  */
                 case "WeeklyTrend":
                     //this records last week's Recommended Action of each stock in only american _stock_ exchanges.
-                    await _marketService.RecordRecommendedTrend(); //finnhub
+                    await marketService.RecordRecommendedTrend(); //finnhub
                     break;
 
                 case "DailyClose":
                     //this records a PreviousClose snapshot of only american _stock_ exchanges.
-                    await _marketService.RecordPreviousClose(); //finnhub
+                    await marketService.RecordPreviousClose(); //finnhub
                     break;
 
                 case "DailyProminence":
                     //this records the top 20: gainers, losers, and most traded.
-                    await _marketService.RecordDailyProminence(); //alphavantage
+                    await marketService.RecordDailyProminence(); //alphavantage
                     break;
 
                 case "MonthlyListings":
                     //this records all _active_ publicly traded companies.
-                    await _marketService.RecordListedStatus(); //alphavantage
+                    await marketService.RecordListedStatus(); //alphavantage
                     break;
 
                 case "MonthlySnapshot":
                     //this records a PreviousClose snapshot of the _entire_ market. We prob dont need this.
                     //Shackle to Shackle: if we don't need this then why does it exist?
-                    await _marketService.RecordSnapshot(); //finnhub 
+                    await marketService.RecordSnapshot(); //finnhub 
                     break;
 
                 case "YearlyDividends":
                     //!!Read polygon note (above).
                     //this records a DividendDetails forecast of only american _stock_ exchanges
-                    await _marketService.RecordDividendDetails(); //polygon
+                    await marketService.RecordDividendDetails(); //polygon
                     break;
 
                 case "MonthlyTickerDetails":
                     //!!Read polygon note (above).
                     //For this in particular: once we get a TickerDetails snapshot,
                         //items that get appended to it will become increasingly few.
-                    await _marketService.RecordTickerDetails(); //polygon
+                    await marketService.RecordTickerDetails(); //polygon
                     break;
 
                 case "BiannualMarketHoliday":
                     //this makes a single call to record an instance of the Market Holiday forecast.
-                    await _marketService.RecordMarketHoliday(); //polygon
+                    await marketService.RecordMarketHoliday(); //polygon
                     break;
 
                 default:

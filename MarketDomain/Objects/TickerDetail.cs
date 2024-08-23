@@ -1,8 +1,6 @@
-﻿
+﻿using MarketDomain.Interfaces;
 
-using MarketDomain.Interfaces;
-
-namespace MarketDomain
+namespace MarketDomain.Objects
 {
     public class TickerDetail : ITicker
     {

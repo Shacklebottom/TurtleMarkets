@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using MarketDomain.Interfaces;
 
-namespace MarketDomain
+namespace MarketDomain.Objects
 {
     /*
  * "cash_amount": 0.22,

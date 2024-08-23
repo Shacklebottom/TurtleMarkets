@@ -1,6 +1,6 @@
 ﻿using ApiModule.BaseClasses;
 using LoggerModule.Interfaces;
-using MarketDomain;
+using MarketDomain.Objects;
 using TurtleAPI.FinnhubIO.Responses;
 
 namespace TurtleAPI.FinnhubIO

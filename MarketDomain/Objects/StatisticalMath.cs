@@ -1,6 +1,4 @@
-﻿
-
-namespace MarketDomain
+﻿namespace MarketDomain.Objects
 {
     public class StatisticalMath
     {

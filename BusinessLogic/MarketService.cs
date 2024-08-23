@@ -1,141 +1,114 @@
-﻿using LoggerModule.DerivedClasses;
-using LoggerModule.Interfaces;
-using ApiModule.CustomExceptions;
-using MarketDomain;
-using System.Xml.Linq;
+﻿using LoggerModule.Interfaces;
 using TurtleAPI.FinnhubIO;
 using TurtleAPI.PolygonIO;
 using TurtleAPI.AlphaVantage;
 using TurtleSQL.Interfaces;
 using TurtleSQL.TickerRepositories;
 using TurtleSQL.MarketStatusForecast;
-using MarketDomain.Extensions;
 using System.Diagnostics.CodeAnalysis;
-using TurtleSQL.BaseClasses;
-using System.Globalization;
-using System.Data.SqlTypes;
+using MarketDomain.Objects;
+using MarketDomain.Interfaces;
+using MarketDomain.Enums;
 
 namespace BusinessLogic
 {
     [SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "<Pending>")]
     public class MarketService
     {
+        private readonly IServiceLocator _serviceLocator;
+        private readonly ILogger _logger;
         private void log(string message) { _logger.Chat(message); }
 
-        private readonly IRepository<PreviousClose> _previousCloseRepo;
-        private readonly IRepository<DividendDetails> _dividedDetailsRepo;
-        private readonly IRepository<ListedStatus> _listedStatusRepo;
-        private readonly IRepository<RecommendedTrend> _recommendedTrendRepo;
-        private readonly IRepository<Prominence> _prominenceRepo;
-        private readonly IRepository<TickerDetail> _tickerDetailRepo;
-        private readonly IRepository<MarketHoliday> _marketHolidayRepo;
-        private readonly IRepository<MarketStatus> _marketStatusRepo;
-        private readonly IRepository<TrackedTicker> _trackedTickerRepo;
-        private readonly IRepository<PreviousClose> _snapShotRepo;
-        private readonly IFinnhubAPI _finnhubAPI;
-        private readonly IPolygonAPI _polygonAPI;
-        private readonly IAlphaVantageAPI _alphavantageAPI;
-        private readonly ILogger _logger;
-        private readonly DebugDirectory _debugDirectory = new($"{Environment.GetFolderPath(Environment.SpecialFolder.Desktop)}", "MarketDebugLogs");
-
-        public MarketService(
-            IRepository<PreviousClose>? pcRepo = null,
-            IRepository<DividendDetails>? ddRepo = null,
-            IRepository<ListedStatus>? lsRepo = null,
-            IRepository<Prominence>? proRepo = null,
-            IRepository<RecommendedTrend>? rtRepo = null,
-            IRepository<TickerDetail>? tdRepo = null,
-            IRepository<MarketHoliday>? mhRepo = null,
-            IRepository<MarketStatus>? msRepo = null,
-            IRepository<TrackedTicker>? ttRepo = null,
-            IRepository<PreviousClose>? ssRepo = null,
-            IFinnhubAPI? finnhubAPI = null,
-            IPolygonAPI? polygonAPI = null,
-            IAlphaVantageAPI? alphaVantageAPI = null,
-            ILogger? logger = null)
+        public MarketService(IServiceLocator serviceLocator, ILogger logger)
         {
-            _previousCloseRepo = pcRepo ?? new PreviousCloseRepository();
-            _dividedDetailsRepo = ddRepo ?? new DividendDetailRepository();
-            _listedStatusRepo = lsRepo ?? new ListedStatusRepository();
-            _prominenceRepo = proRepo ?? new ProminenceRepository();
-            _recommendedTrendRepo = rtRepo ?? new RecommendedTrendRepository();
-            _tickerDetailRepo = tdRepo ?? new TickerDetailRepository();
-            _marketHolidayRepo = mhRepo ?? new MarketHolidayRepository();
-            _marketStatusRepo = msRepo ?? new MarketStatusRepository();
-            _trackedTickerRepo = ttRepo ?? new TrackedTickerRepository();
-            _snapShotRepo = ssRepo ?? new SnapshotRepository();
-            _logger = logger ?? new DebugLogger(_debugDirectory);
-            _finnhubAPI = finnhubAPI ?? new FinnhubAPI(_logger);
-            _polygonAPI = polygonAPI ?? new PolygonAPI(_logger);
-            _alphavantageAPI = alphaVantageAPI ?? new AlphaVantageAPI(_logger);
+            _logger = logger;
+            _serviceLocator = serviceLocator;
+
+            _serviceLocator.RegisterService<IRepository<PreviousClose>>($"{EnumMarketService.PreviousClose}", () => new PreviousCloseRepository());
+            _serviceLocator.RegisterService<IRepository<DividendDetails>>($"{EnumMarketService.DividendDetails}", () => new DividendDetailRepository());
+            _serviceLocator.RegisterService<IRepository<ListedStatus>>($"{EnumMarketService.ListedStatus}", () => new ListedStatusRepository());
+            _serviceLocator.RegisterService<IRepository<RecommendedTrend>>($"{EnumMarketService.RecommendedTrend}", () => new RecommendedTrendRepository());
+            _serviceLocator.RegisterService<IRepository<Prominence>>($"{EnumMarketService.Prominence}", () => new ProminenceRepository());
+            _serviceLocator.RegisterService<IRepository<TickerDetail>>($"{EnumMarketService.TickerDetail}", () => new TickerDetailRepository());
+            _serviceLocator.RegisterService<IRepository<MarketHoliday>>($"{EnumMarketService.MarketHoliday}", () => new MarketHolidayRepository());
+            _serviceLocator.RegisterService<IRepository<MarketStatus>>($"{EnumMarketService.MarketStatus}", () => new MarketStatusRepository());
+            _serviceLocator.RegisterService<IRepository<TrackedTicker>>($"{EnumMarketService.TrackedTicker}", () => new TrackedTickerRepository());
+            _serviceLocator.RegisterService<IRepository<PreviousClose>>($"{EnumMarketService.Snapshot}", () => new SnapshotRepository());
+            _serviceLocator.RegisterService<IFinnhubAPI>($"{EnumMarketService.FinnhubAPI}", () => new FinnhubAPI(_logger));
+            _serviceLocator.RegisterService<IAlphaVantageAPI>($"{EnumMarketService.AlphaVantageAPI}", () => new AlphaVantageAPI(_logger));
+            _serviceLocator.RegisterService<IPolygonAPI>($"{EnumMarketService.PolygonAPI}", () => new PolygonAPI(_logger));
         }
 
         #region Market Workshop
-        /*
-         * Using this space for multi-track conceptualization.
-         *      (I see our ability to filter as a strong option, so there may be several ways of accomplishing this);
-         */
+        ///*
+        // * Using this space for multi-track conceptualization.
+        // *      (I see our ability to filter as a strong option, so there may be several ways of accomplishing this);
+        // */
 
-        public IEnumerable<PreviousClose> GetFilteredTickers(int high, int low)
-        {
-            var x = _snapShotRepo.GetAll().Where(x => x.High < high && x.Low > low).ToList();
-            log($"This range has {x.Count} entries");
-            return x;
-        }
-        public void RecordFilteredTickers(IEnumerable<PreviousClose> ft)
-        {
-            ft.ForEach(i => _trackedTickerRepo.Save(new TrackedTicker { Ticker = i.Ticker }));
-        }
+        //public IEnumerable<PreviousClose> GetFilteredTickers(int high, int low)
+        //{
+        //    var x = _snapShotRepo.GetAll().Where(x => x.High < high && x.Low > low).ToList();
+        //    log($"This range has {x.Count} entries");
+        //    return x;
+        //}
+        //public void RecordFilteredTickers(IEnumerable<PreviousClose> ft)
+        //{
+        //    ft.ForEach(i => _trackedTickerRepo.Save(new TrackedTicker { Ticker = i.Ticker }));
+        //}
 
-        public IEnumerable<PreviousClose> GetByMath(IEnumerable<PreviousClose> filteredCloses, int y)
-        {
-            var x = filteredCloses.Where(ss => ss.High - ss.Low > y && ss.High > ss.Low).ToList();
-            log($"This range has {x.Count} entries");
-            return x;
-        }
+        //public IEnumerable<PreviousClose> GetByMath(IEnumerable<PreviousClose> filteredCloses, int y)
+        //{
+        //    var x = filteredCloses.Where(ss => ss.High - ss.Low > y && ss.High > ss.Low).ToList();
+        //    log($"This range has {x.Count} entries");
+        //    return x;
+        //}
 
-        public ListedStatus GetListedStatus(string ticker)
-        {
-            var x = _listedStatusRepo.GetAll().Where(ls => ls.Ticker == ticker).First();
-            return x;
-        }
-        public IEnumerable<ListedStatus> GetListedStatuses()
-        {
-            var x = _listedStatusRepo.GetAll().Where(
-                ls => (ls.Exchange?.Contains("NYSE") == true ||
-                ls.Exchange?.Contains("NASDAQ") == true) &&
-                ls.Type == "Stock").ToList();
-            return x;
+        //public ListedStatus GetListedStatus(string ticker)
+        //{
+        //    var x = _listedStatusRepo.GetAll().Where(ls => ls.Ticker == ticker).First();
+        //    return x;
+        //}
+        //public IEnumerable<ListedStatus> GetListedStatuses()
+        //{
+        //    var x = _listedStatusRepo.GetAll().Where(
+        //        ls => (ls.Exchange?.Contains("NYSE") == true ||
+        //        ls.Exchange?.Contains("NASDAQ") == true) &&
+        //        ls.Type == "Stock").ToList();
+        //    return x;
 
-        }
+        //}
         #endregion
 
         #region APIcalls
 
         public async Task RecordSnapshot()
-        { 
+        {
+            var snapShotRepo = _serviceLocator.GetService<IRepository<PreviousClose>>($"{EnumMarketService.Snapshot}");
+            var listedStatusRepo = _serviceLocator.GetService<IRepository<ListedStatus>>($"{EnumMarketService.ListedStatus}");
+            var finnhubAPI = _serviceLocator.GetService<IFinnhubAPI>($"{EnumMarketService.FinnhubAPI}");
+
             try
             {
                 log("Truncating the Snapshot Repo");
 
-                _snapShotRepo.TruncateTable();
+                snapShotRepo.TruncateTable();
 
                 log("Truncate complete");
 
                 log("Starting RecordSnapshot()");
 
-                var lsRepo = _listedStatusRepo.GetAll().ToList();
+                var lsRepo = listedStatusRepo.GetAll().ToList();
 
                 log($"...working on {lsRepo.Count} records.");
 
                 foreach (var item in lsRepo)
                 {
                     log($"...Querying {item.Ticker}");
-                    var result = await _finnhubAPI.GetPreviousClose(item.Ticker);
+                    var result = await finnhubAPI.GetPreviousClose(item.Ticker);
 
                     if (result != null)
                     {
-                        _snapShotRepo.Save(result); 
+                        snapShotRepo.Save(result); 
                     }
                 }
 
@@ -146,13 +119,18 @@ namespace BusinessLogic
                 log($"EXCEPTION:\n{ex.Message}\n\n{ex.StackTrace}");
             }
         }
+
         public async Task RecordPreviousClose()
         {
+            var listedStatusRepo = _serviceLocator.GetService<IRepository<ListedStatus>>($"{EnumMarketService.ListedStatus}");
+            var previousCloseRepo = _serviceLocator.GetService<IRepository<PreviousClose>>($"{EnumMarketService.PreviousClose}");
+            var finnhubAPI = _serviceLocator.GetService<IFinnhubAPI>($"{EnumMarketService.FinnhubAPI}");
+
             try
             {
                 log("Starting RecordPreviousClose()");
 
-                var lsRepo = _listedStatusRepo.GetAll().ToList();
+                var lsRepo = listedStatusRepo.GetAll().ToList();
 
                 var filteredRepo = lsRepo.Where(
                     ls => (ls.Exchange?.Contains("NYSE") == true || 
@@ -164,11 +142,11 @@ namespace BusinessLogic
                 foreach (var item in filteredRepo)
                 {
                     log($"...Querying {item.Ticker}");
-                    var result = await _finnhubAPI.GetPreviousClose(item.Ticker);
+                    var result = await finnhubAPI.GetPreviousClose(item.Ticker);
 
                     if (result != null)
                     {
-                        _previousCloseRepo.Save(result);
+                        previousCloseRepo.Save(result);
                     }
                 }
 
@@ -182,13 +160,17 @@ namespace BusinessLogic
 
         public async Task RecordDividendDetails()
         {
+            var listedStatusRepo = _serviceLocator.GetService<IRepository<ListedStatus>>($"{EnumMarketService.ListedStatus}");
+            var dividendDetailsRepo = _serviceLocator.GetService<IRepository<DividendDetails>>($"{EnumMarketService.DividendDetails}");
+            var polygonAPI = _serviceLocator.GetService<IPolygonAPI>($"{EnumMarketService.PolygonAPI}");
+            
             try
             {
                 log("Starting RecordDividendDetails");
 
-                var lsRepo = _listedStatusRepo.GetAll().ToList();
+                var lsRepo = listedStatusRepo.GetAll().ToList();
 
-                var ddRepo = _dividedDetailsRepo.GetAll().GroupBy(x => x.Ticker).Select(y => y.First()).ToList();
+                var ddRepo = dividendDetailsRepo.GetAll().GroupBy(x => x.Ticker).Select(y => y.First()).ToList();
 
                 var capturedTicker = new List<string>();
                 ddRepo.ForEach(z => capturedTicker.Add(z.Ticker));
@@ -206,13 +188,13 @@ namespace BusinessLogic
                 foreach (var item in filteredRepo)
                 {
                     log($"...Querying {item.Ticker}");
-                    var result = await _polygonAPI.GetDividendDetails(item.Ticker);
+                    var result = await polygonAPI.GetDividendDetails(item.Ticker);
 
                     if (result != null)
                     {
                         foreach (var detail in result)
                         {
-                            _dividedDetailsRepo.Save(detail);
+                            dividendDetailsRepo.Save(detail);
                         }
                     }
                 }
@@ -227,11 +209,14 @@ namespace BusinessLogic
 
         public async Task RecordDailyProminence()
         {
+            var prominenceRepo = _serviceLocator.GetService<IRepository<Prominence>>($"{EnumMarketService.Prominence}");
+            var alphaVantageAPI = _serviceLocator.GetService<IAlphaVantageAPI>($"{EnumMarketService.AlphaVantageAPI}");
+            
             try
             {
                 log("Starting RecordDailyProminence()");
 
-                var results = await _alphavantageAPI.GetPolarizedMarkets();
+                var results = await alphaVantageAPI.GetPolarizedMarkets();
                 if (results != null)
                 {
                     var prominence = results.Values.ToList();
@@ -239,7 +224,7 @@ namespace BusinessLogic
                     {
                         foreach (var i in item)
                         {
-                            _prominenceRepo.Save(i);
+                            prominenceRepo.Save(i);
                         }
                     });
                 }
@@ -254,16 +239,19 @@ namespace BusinessLogic
 
         public async Task RecordMarketStatus()
         {
+            var marketStatusRepo = _serviceLocator.GetService<IRepository<MarketStatus>>($"{EnumMarketService.MarketStatus}");
+            var alphaVantageAPI = _serviceLocator.GetService<IAlphaVantageAPI>($"{EnumMarketService.AlphaVantageAPI}");
+
             try
             {
                 log("Starting CheckMarketStatus()");
 
-                var results = await _alphavantageAPI.GetMarketStatus();
+                var results = await alphaVantageAPI.GetMarketStatus();
                 if (results != null)
                 {
                     foreach (var item in results)
                     {
-                        _marketStatusRepo.Save(item);
+                        marketStatusRepo.Save(item);
                     }
                 }
                 log("CheckMarketStatus() complete.");
@@ -276,23 +264,26 @@ namespace BusinessLogic
 
         public async Task RecordListedStatus()
         {
+            var listedStatusRepo = _serviceLocator.GetService<IRepository<ListedStatus>>($"{EnumMarketService.ListedStatus}");
+            var alphaVantageAPI = _serviceLocator.GetService<IAlphaVantageAPI>($"{EnumMarketService.AlphaVantageAPI}");
+
             try
             {
                 log("Truncating ListedStatus Repo");
 
-                _listedStatusRepo.TruncateTable();
+                listedStatusRepo.TruncateTable();
 
                 log("Truncating Complete\n\n");
 
                 log("Starting RecordListedStatus()");
 
-                var results = await _alphavantageAPI.GetListedStatus();
+                var results = await alphaVantageAPI.GetListedStatus();
 
                 if (results != null)
                 {
                     foreach (var item in results)
                     {
-                        _listedStatusRepo.Save(item);
+                        listedStatusRepo.Save(item);
                     }
 
                 }
@@ -306,11 +297,15 @@ namespace BusinessLogic
 
         public async Task RecordRecommendedTrend()
         { //This gives us weekly information
+            var listedStatusRepo = _serviceLocator.GetService<IRepository<ListedStatus>>($"{EnumMarketService.ListedStatus}");
+            var recommendedTrendRepo = _serviceLocator.GetService<IRepository<RecommendedTrend>>($"{EnumMarketService.RecommendedTrend}");
+            var finnhubAPI = _serviceLocator.GetService<IFinnhubAPI>($"{EnumMarketService.FinnhubAPI}");
+
             try
             {
                 log("Starting RecordRecommendedTrend()");
 
-                var lsRepo = _listedStatusRepo.GetAll().ToList();
+                var lsRepo = listedStatusRepo.GetAll().ToList();
 
                 var filteredRepo = lsRepo.Where(
                     ls => (ls.Exchange?.Contains("NYSE") == true ||
@@ -322,12 +317,12 @@ namespace BusinessLogic
                 foreach (var item in filteredRepo)
                 {
                     log($"...Querying {item.Ticker}");
-                    var result = await _finnhubAPI.GetRecommendedTrend(item.Ticker);
+                    var result = await finnhubAPI.GetRecommendedTrend(item.Ticker);
                     if (result != null)
                     {
                         foreach (var trend in result)
                         {
-                            _recommendedTrendRepo.Save(trend);
+                            recommendedTrendRepo.Save(trend);
                         }
                     }
                 }
@@ -342,13 +337,17 @@ namespace BusinessLogic
 
         public async Task RecordTickerDetails()
         {
+            var listedStatusRepo = _serviceLocator.GetService<IRepository<ListedStatus>>($"{EnumMarketService.ListedStatus}");
+            var tickerDetailRepo = _serviceLocator.GetService<IRepository<TickerDetail>>($"{EnumMarketService.TickerDetail}");
+            var polygonAPI = _serviceLocator.GetService<IPolygonAPI>($"{EnumMarketService.PolygonAPI}");
+
             try
             {
                 log("Starting RecordTickerDetails()");
 
-                var lsRepo = _listedStatusRepo.GetAll().ToList();
+                var lsRepo = listedStatusRepo.GetAll().ToList();
 
-                var tdRepo = _tickerDetailRepo.GetAll().ToList();
+                var tdRepo = tickerDetailRepo.GetAll().ToList();
 
                 List<string> capturedTicker = [];
                 tdRepo.ForEach(z => capturedTicker.Add(z.Ticker));
@@ -364,10 +363,10 @@ namespace BusinessLogic
                 foreach (var item in filteredRepo)
                 {
                     log($"...Querying {item.Ticker}");
-                    var result = await _polygonAPI.GetTickerDetails(item.Ticker);
+                    var result = await polygonAPI.GetTickerDetails(item.Ticker);
                     if (result != null)
                     {
-                        _tickerDetailRepo.Save(result);
+                        tickerDetailRepo.Save(result);
                     }
                 }
 
@@ -381,17 +380,20 @@ namespace BusinessLogic
 
         public async Task RecordMarketHoliday()
         {
+            var marketHolidayRepo = _serviceLocator.GetService<IRepository<MarketHoliday>>($"{EnumMarketService.MarketHoliday}");
+            var polygonAPI = _serviceLocator.GetService<IPolygonAPI>($"{EnumMarketService.PolygonAPI}");
+
             try
             {
                 log("Starting RecordMarketHoliday()");
 
-                var results = await _polygonAPI.GetMarketHoliday();
+                var results = await polygonAPI.GetMarketHoliday();
 
                 if (results != null)
                 {
                     foreach (var item in results)
                     {
-                        _marketHolidayRepo.Save(item);
+                        marketHolidayRepo.Save(item);
                     }
                     log("RecordMarketHoliday() complete.");
                 }
@@ -402,7 +404,5 @@ namespace BusinessLogic
             }
         }
         #endregion
-
-
     }
 }

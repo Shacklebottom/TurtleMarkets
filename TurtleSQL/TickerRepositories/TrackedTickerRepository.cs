@@ -1,4 +1,4 @@
-﻿using MarketDomain;
+﻿using MarketDomain.Objects;
 using Microsoft.Data.SqlClient;
 using System;
 using System.Collections.Generic;
@@ -12,7 +12,7 @@ using TurtleSQL.Interfaces;
 namespace TurtleSQL.TickerRepositories
 {
 
-        public class TrackedTickerRepository : TickerRepository<TrackedTicker>, ITickerRepository<TrackedTicker>
+    public class TrackedTickerRepository : TickerRepository<TrackedTicker>, ITickerRepository<TrackedTicker>
         {
             protected override string TableName => "TrackedTicker";
             protected override IEnumerable<SqlParameter> SqlParameters(TrackedTicker entity)

@@ -1,8 +1,6 @@
-﻿
+﻿using MarketDomain.Interfaces;
 
-using MarketDomain.Interfaces;
-
-namespace MarketDomain
+namespace MarketDomain.Objects
 {
     public class PreviousClose : ITicker
     {
@@ -22,7 +20,7 @@ namespace MarketDomain
         public double? Low { get; set; }
 
         public long? Volume { get; set; }
-        
+
         public int Id { get; set; }
     }
 }

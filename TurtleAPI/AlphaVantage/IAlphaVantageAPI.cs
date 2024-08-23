@@ -1,5 +1,5 @@
-﻿using MarketDomain;
-using MarketDomain.Enums;
+﻿using MarketDomain.Enums;
+using MarketDomain.Objects;
 
 namespace TurtleAPI.AlphaVantage
 {

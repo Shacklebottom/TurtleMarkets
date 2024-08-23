@@ -1,4 +1,4 @@
-﻿using MarketDomain;
+﻿using MarketDomain.Objects;
 using Microsoft.Data.SqlClient;
 using System;
 using System.Collections.Generic;

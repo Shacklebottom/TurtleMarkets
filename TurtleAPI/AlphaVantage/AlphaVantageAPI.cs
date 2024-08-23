@@ -1,7 +1,7 @@
 ﻿using ApiModule.BaseClasses;
 using LoggerModule.Interfaces;
-using MarketDomain;
 using MarketDomain.Enums;
+using MarketDomain.Objects;
 using TurtleAPI.AlphaVantage.Responses;
 
 namespace TurtleAPI.AlphaVantage

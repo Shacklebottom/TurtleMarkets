@@ -1,8 +1,6 @@
-﻿
+﻿using MarketDomain.Interfaces;
 
-using MarketDomain.Interfaces;
-
-namespace MarketDomain
+namespace MarketDomain.Objects
 {
     public class ListedStatus : ITicker
     {
@@ -13,7 +11,7 @@ namespace MarketDomain
         }
         public string Ticker { get; set; } = string.Empty;
         public string? Name { get; set; }
-        public string? Exchange { get; set; } 
+        public string? Exchange { get; set; }
         public string? Type { get; set; }
         public DateTime? IPOdate { get; set; }
         public DateTime? DelistingDate { get; set; }
