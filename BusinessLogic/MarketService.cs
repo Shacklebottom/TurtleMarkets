@@ -5,14 +5,13 @@ using TurtleAPI.AlphaVantage;
 using TurtleSQL.Interfaces;
 using TurtleSQL.TickerRepositories;
 using TurtleSQL.MarketStatusForecast;
-using System.Diagnostics.CodeAnalysis;
 using MarketDomain.Objects;
 using MarketDomain.Interfaces;
 using MarketDomain.Enums;
 
 namespace BusinessLogic
 {
-    [SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "<Pending>")]
+    #pragma warning disable IDE1006 //naming styles
     public class MarketService
     {
         private readonly IServiceLocator _serviceLocator;
@@ -80,7 +79,6 @@ namespace BusinessLogic
         #endregion
 
         #region APIcalls
-
         public async Task RecordSnapshot()
         {
             var snapShotRepo = _serviceLocator.GetService<IRepository<PreviousClose>>($"{EnumMarketService.Snapshot}");
@@ -108,7 +106,7 @@ namespace BusinessLogic
 
                     if (result != null)
                     {
-                        snapShotRepo.Save(result); 
+                        snapShotRepo.Save(result);
                     }
                 }
 
@@ -133,8 +131,8 @@ namespace BusinessLogic
                 var lsRepo = listedStatusRepo.GetAll().ToList();
 
                 var filteredRepo = lsRepo.Where(
-                    ls => (ls.Exchange?.Contains("NYSE") == true || 
-                    ls.Exchange?.Contains("NASDAQ") == true) && 
+                    ls => (ls.Exchange?.Contains("NYSE") == true ||
+                    ls.Exchange?.Contains("NASDAQ") == true) &&
                     ls.Type == "Stock").ToList();
 
                 log($"...working on {filteredRepo.Count} records.");
@@ -163,7 +161,7 @@ namespace BusinessLogic
             var listedStatusRepo = _serviceLocator.GetService<IRepository<ListedStatus>>($"{EnumMarketService.ListedStatus}");
             var dividendDetailsRepo = _serviceLocator.GetService<IRepository<DividendDetails>>($"{EnumMarketService.DividendDetails}");
             var polygonAPI = _serviceLocator.GetService<IPolygonAPI>($"{EnumMarketService.PolygonAPI}");
-            
+
             try
             {
                 log("Truncating DividendDetails Repo");
@@ -217,7 +215,7 @@ namespace BusinessLogic
         {
             var prominenceRepo = _serviceLocator.GetService<IRepository<Prominence>>($"{EnumMarketService.Prominence}");
             var alphaVantageAPI = _serviceLocator.GetService<IAlphaVantageAPI>($"{EnumMarketService.AlphaVantageAPI}");
-            
+
             try
             {
                 log("Truncating Prominence Repo");
@@ -240,7 +238,7 @@ namespace BusinessLogic
                         }
                     });
                 }
-                
+
                 log("RecordDailyProminence() complete.");
             }
             catch (Exception ex)
@@ -326,7 +324,7 @@ namespace BusinessLogic
                 recommendedTrendRepo.TruncateTable();
 
                 log("Truncate complete");
-                
+
                 log("Starting RecordRecommendedTrend()");
 
                 var lsRepo = listedStatusRepo.GetAll().ToList();

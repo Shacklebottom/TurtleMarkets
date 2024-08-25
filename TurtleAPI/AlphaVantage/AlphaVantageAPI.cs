@@ -20,7 +20,6 @@ namespace TurtleAPI.AlphaVantage
         }
 
         //IMPORTANT! ALPHA VANTAGE API HAS 25 CALLS ===>PER DAY<===
-
         #region API CALLS
         public async Task<IEnumerable<MarketStatus>?> GetMarketStatus()
         {

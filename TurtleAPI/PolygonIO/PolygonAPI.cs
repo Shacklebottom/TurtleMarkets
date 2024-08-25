@@ -9,7 +9,6 @@ namespace TurtleAPI.PolygonIO
     {
         private readonly HttpClient _httpClient;
 
-
         //constructor
         public PolygonAPI(ILogger logger, int msToSleep = 12000) : base(logger, msToSleep)
         {
@@ -24,7 +23,6 @@ namespace TurtleAPI.PolygonIO
             };
             requestHeaders.ForEach(h => _httpClient.DefaultRequestHeaders.Add(h.Key, h.Value));
         }
-
 
         //IMPORTANT! POLYGON API HAS 5 CALLS / MINUTE
         #region API CALLS

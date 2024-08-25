@@ -7,7 +7,9 @@ namespace TurtleAPI.FinnhubIO
 {
     public class FinnhubAPI : ApiBaseClass, IFinnhubAPI
     {
-        private HttpClient _httpClient;
+        private readonly HttpClient _httpClient;
+
+        //constructor
         public FinnhubAPI(ILogger logger, int msSleepTime = 1000) : base(logger, msSleepTime)
         {
             _httpClient = new HttpClient()
@@ -25,6 +27,7 @@ namespace TurtleAPI.FinnhubIO
         }
 
         //IMPORTANT! FINNHUB API HAS 60 CALLS / MINUTE
+        #region API CALLS
         public async Task<PreviousClose?> GetPreviousClose(string ticker)
         {
             Thread.Sleep(SleepDuration);
@@ -78,5 +81,6 @@ namespace TurtleAPI.FinnhubIO
 
             return recommendedTrend;
         }
+        #endregion
     }
 }
