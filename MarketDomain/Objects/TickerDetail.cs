@@ -4,7 +4,6 @@ namespace MarketDomain.Objects
 {
     public class TickerDetail : ITicker
     {
-        //has a repository
         public override string ToString()
         {
             return $"Id: {Id}\tTicker: {Ticker}\tListDate: {ListDate}\tName: {Name}\tDescription: {Description}";

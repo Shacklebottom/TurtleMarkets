@@ -1,4 +1,5 @@
-﻿namespace MarketDomain.Interfaces
+﻿
+namespace MarketDomain.Interfaces
 {
     public interface IEntity
     {

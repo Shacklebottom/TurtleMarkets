@@ -4,7 +4,6 @@ namespace MarketDomain.Objects
 {
     public class RecommendedTrend : ITicker
     {
-        //this has a repository
         public override string ToString()
         {
             return $"Ticker: {Ticker}\tPeriod: {Period}\tBuy: {Buy}\tHold: {Hold}\tSell {Sell}";

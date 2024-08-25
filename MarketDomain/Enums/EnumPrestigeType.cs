@@ -1,4 +1,5 @@
-﻿namespace MarketDomain.Enums
+﻿
+namespace MarketDomain.Enums
 {
     public enum EnumPrestigeType
     {

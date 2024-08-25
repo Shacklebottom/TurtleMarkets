@@ -4,7 +4,6 @@ namespace MarketDomain.Objects
 {
     public class Prominence : ITicker
     {
-        //has a repository
         public override string ToString()
         {
             return $"Ticker: {Ticker}\tPrice {Price}\tChange Amount {ChangeAmount}";

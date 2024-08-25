@@ -1,5 +1,4 @@
-﻿using System;
-using BusinessLogic;
+﻿using BusinessLogic;
 using LoggerModule.DerivedClasses;
 using MarketDomain.Objects;
 
