@@ -1,6 +1,6 @@
 ﻿namespace MarketDomain.Enums
 {
-    public enum PrestigeType
+    public enum EnumPrestigeType
     {
         TopGainer,
         TopLoser,

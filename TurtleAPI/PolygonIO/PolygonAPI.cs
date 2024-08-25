@@ -52,7 +52,6 @@ namespace TurtleAPI.PolygonIO
         {
             Thread.Sleep(SleepDuration);
             //has a repository : >Validated!<
-            //var uri = new Uri($"https://api.polygon.io/v1/marketstatus/upcoming?apiKey={AuthData.API_KEY_POLYGON}");
 
             var response = await CallAPIAsync<List<PolygonMarketHolidayResponse>>(_httpClient, "v1/marketstatus/upcoming");
             var results = response?.First();
@@ -73,7 +72,6 @@ namespace TurtleAPI.PolygonIO
         {
             Thread.Sleep(SleepDuration);
             //has a repository! : Validated
-            //var uri = new Uri($"https://api.polygon.io/v3/reference/dividends?ticker={ticker}&apiKey={AuthData.API_KEY_POLYGON}");
 
             var response = await CallAPIAsync<PolygonDividendResponse>(_httpClient, $"v3/reference/dividends?ticker={ticker}");
             var results = response?.First();
@@ -111,21 +109,6 @@ namespace TurtleAPI.PolygonIO
                 return emptyDetail;
             }
             return dividendDetail;
-        }
-        #endregion
-
-        #region HELPER FUNCTIONS
-        private static DateTime? ParseUnixTimestamp(decimal? t)
-        {
-            if (t != null)
-            {
-                var epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
-
-                var dateTime = epoch.AddMilliseconds((double)t);
-
-                return dateTime;
-            }
-            return null;
         }
         #endregion
     }

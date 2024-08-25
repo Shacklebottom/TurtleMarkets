@@ -48,20 +48,6 @@ namespace TurtleAPI.FinnhubIO
             return marketDetail;
         }
 
-        private static DateTime? ParseUnixTimestamp(decimal? t)
-        {
-            if (t != null)
-            {
-                var epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
-
-                var dateTime = epoch.AddSeconds((double)t);
-
-                return dateTime;
-            }
-
-            return null;
-        }
-
         public async Task<IEnumerable<RecommendedTrend>?> GetRecommendedTrend(string ticker)
         {
             Thread.Sleep(SleepDuration);
@@ -80,6 +66,22 @@ namespace TurtleAPI.FinnhubIO
             });
 
             return recommendedTrend;
+        }
+        #endregion
+
+        #region HELPER FUNCTIONS
+        private static DateTime? ParseUnixTimestamp(decimal? t)
+        {
+            if (t != null)
+            {
+                var epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+
+                var dateTime = epoch.AddSeconds((double)t);
+
+                return dateTime;
+            }
+
+            return null;
         }
         #endregion
     }

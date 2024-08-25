@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MarketDomain.Enums
 {
-    public enum ListedStatusTypes
+    public enum EnumListedStatusTypes
     {
         Active,
         Delisted

@@ -24,7 +24,6 @@ namespace TurtleAPI.AlphaVantage
         public async Task<IEnumerable<MarketStatus>?> GetMarketStatus()
         {
             //has a repository! : Validated!
-            //var uri = new Uri($"https://www.alphavantage.co/query?function=MARKET_STATUS&apikey={AuthData.API_KEY_ALPHAVANTAGE}");
             var response = await CallAPIAsync<AlphaVMarketStatusResponse>(_httpClient, $"query?function=MARKET_STATUS");
 
             var results = response?.First().results;
@@ -43,21 +42,21 @@ namespace TurtleAPI.AlphaVantage
             return marketStatus;
         }
 
-        public async Task<Dictionary<PrestigeType, IEnumerable<Prominence>>?> GetPolarizedMarkets()
+        public async Task<Dictionary<EnumPrestigeType, IEnumerable<Prominence>>?> GetPolarizedMarkets()
         {
             //has a repository : Validated!
             //returns the top and bottom 20 tickers, and the 20 most traded.
-            Dictionary<PrestigeType, IEnumerable<Prominence>> prominenceDetail = new();
+            Dictionary<EnumPrestigeType, IEnumerable<Prominence>> prominenceDetail = new();
 
             var response = await CallAPIAsync<AlphaVProminenceResponse>(_httpClient, $"query?function=TOP_GAINERS_LOSERS&apikey={AuthData.API_KEY_ALPHAVANTAGE}");
             var results = response?.First();
 
 
-            prominenceDetail.Add(PrestigeType.TopGainer, results.top_gainers.Select(tg => BuildProminence(tg, PrestigeType.TopGainer)));
+            prominenceDetail.Add(EnumPrestigeType.TopGainer, results.top_gainers.Select(tg => BuildProminence(tg, EnumPrestigeType.TopGainer)));
 
-            prominenceDetail.Add(PrestigeType.TopLoser, results.top_losers.Select(tl => BuildProminence(tl, PrestigeType.TopLoser)));
+            prominenceDetail.Add(EnumPrestigeType.TopLoser, results.top_losers.Select(tl => BuildProminence(tl, EnumPrestigeType.TopLoser)));
 
-            prominenceDetail.Add(PrestigeType.MostTraded, results.most_actively_traded.Select(m => BuildProminence(m, PrestigeType.MostTraded)));
+            prominenceDetail.Add(EnumPrestigeType.MostTraded, results.most_actively_traded.Select(m => BuildProminence(m, EnumPrestigeType.MostTraded)));
 
             return prominenceDetail;
         }
@@ -67,7 +66,7 @@ namespace TurtleAPI.AlphaVantage
         /// </summary>
         /// <param name="statusRequest">ListedStatusType.Active or ListedStatusType.Delisted</param>
         /// <returns>IEnumberable of all active or delisted tickers</returns>
-        public async Task<IEnumerable<ListedStatus>?> GetListedStatus(ListedStatusTypes listingType = ListedStatusTypes.Active)
+        public async Task<IEnumerable<ListedStatus>?> GetListedStatus(EnumListedStatusTypes listingType = EnumListedStatusTypes.Active)
         {
             //has a repository : Validated!
             var results = await CallAPIAsync(_httpClient, $"query?function=LISTING_STATUS&state={listingType.ToString().ToLower()}&apikey={AuthData.API_KEY_ALPHAVANTAGE}", parser: ParseListedStatus);
@@ -77,7 +76,7 @@ namespace TurtleAPI.AlphaVantage
         #endregion
 
         #region HELPER FUNCTIONS
-        private static Prominence BuildProminence(AlphaVProminenceResult r, PrestigeType pt)
+        private static Prominence BuildProminence(AlphaVProminenceResult r, EnumPrestigeType pt)
         {
             return new Prominence
             {
