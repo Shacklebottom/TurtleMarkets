@@ -1,6 +1,5 @@
 ﻿using MarketDomain.Interfaces;
 
-
 namespace MarketDomain.Objects
 {
     public class MarketServiceLocator : IServiceLocator

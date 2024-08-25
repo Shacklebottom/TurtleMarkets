@@ -46,17 +46,18 @@ namespace TurtleAPI.AlphaVantage
         {
             //has a repository : Validated!
             //returns the top and bottom 20 tickers, and the 20 most traded.
-            Dictionary<EnumPrestigeType, IEnumerable<Prominence>> prominenceDetail = new();
+            Dictionary<EnumPrestigeType, IEnumerable<Prominence>> prominenceDetail = [];
 
             var response = await CallAPIAsync<AlphaVProminenceResponse>(_httpClient, $"query?function=TOP_GAINERS_LOSERS&apikey={AuthData.API_KEY_ALPHAVANTAGE}");
             var results = response?.First();
 
+            var topGainers = results?.top_gainers.Select(tg => BuildProminence(tg, EnumPrestigeType.TopGainer));
+            var topLosers = results?.top_losers.Select(tl => BuildProminence(tl, EnumPrestigeType.TopLoser));
+            var mostActivelyTraded = results?.most_actively_traded.Select(m => BuildProminence(m, EnumPrestigeType.MostTraded));
 
-            prominenceDetail.Add(EnumPrestigeType.TopGainer, results.top_gainers.Select(tg => BuildProminence(tg, EnumPrestigeType.TopGainer)));
-
-            prominenceDetail.Add(EnumPrestigeType.TopLoser, results.top_losers.Select(tl => BuildProminence(tl, EnumPrestigeType.TopLoser)));
-
-            prominenceDetail.Add(EnumPrestigeType.MostTraded, results.most_actively_traded.Select(m => BuildProminence(m, EnumPrestigeType.MostTraded)));
+            prominenceDetail.Add(EnumPrestigeType.TopGainer, topGainers == null ? [] : new List<Prominence>(topGainers));
+            prominenceDetail.Add(EnumPrestigeType.TopLoser, topLosers == null ? [] : new List<Prominence>(topLosers));
+            prominenceDetail.Add(EnumPrestigeType.MostTraded, mostActivelyTraded == null ? [] : new List<Prominence>(mostActivelyTraded));
 
             return prominenceDetail;
         }

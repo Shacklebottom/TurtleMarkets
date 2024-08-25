@@ -54,6 +54,7 @@ namespace TurtleAPI.FinnhubIO
 
             var response = await CallAPIAsync<List<FinnhubTrendResponse>>(_httpClient, $"stock/recommendation?symbol={ticker}");
             var results = response?.First();
+
             var recommendedTrend = results?.Select(r => new RecommendedTrend
             {
                 Ticker = ticker,
