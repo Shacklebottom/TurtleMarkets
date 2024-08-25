@@ -214,6 +214,12 @@ namespace BusinessLogic
             
             try
             {
+                log("Truncating Prominence Repo");
+
+                prominenceRepo.TruncateTable();
+
+                log("Truncate complete");
+
                 log("Starting RecordDailyProminence()");
 
                 var results = await alphaVantageAPI.GetPolarizedMarkets();
@@ -244,6 +250,12 @@ namespace BusinessLogic
 
             try
             {
+                log("Truncating MarketStatus Repo");
+
+                marketStatusRepo.TruncateTable();
+
+                log("Truncate complete");
+
                 log("Starting CheckMarketStatus()");
 
                 var results = await alphaVantageAPI.GetMarketStatus();
