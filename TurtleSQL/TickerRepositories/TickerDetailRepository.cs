@@ -6,26 +6,28 @@ using TurtleSQL.Interfaces;
 
 namespace TurtleSQL.TickerRepositories
 {
-    //This should work, but needs to be validated! FURTHER, I think I did the 'AllFromReader' TickerDetail properly.
     public class TickerDetailRepository : TickerRepository<TickerDetail>, ITickerRepository<TickerDetail>
     {
         protected override string TableName => "TickerDetail";
-        protected override List<string> FieldList => new() { "Ticker", "Name", "Description", "Address", "City", "State", "TotalEmployees", "ListDate" };
+
+        protected override List<string> FieldList => ["Ticker", "Name", "Description", "Address", "City", "State", "TotalEmployees", "ListDate"];
+        
         protected override IEnumerable<SqlParameter> SqlParameters(TickerDetail entity)
         {
             var parms = new List<SqlParameter>
             {
-                new SqlParameter("Ticker", entity.Ticker.DBValue()),
-                new SqlParameter("Name", entity.Name.DBValue()),
-                new SqlParameter("Description", entity.Description.DBValue()),
-                new SqlParameter("Address", entity.Address?.DBValue()),
-                new SqlParameter("City", entity.City?.DBValue()),
-                new SqlParameter("State", entity.State?.DBValue()),
-                new SqlParameter("TotalEmployees", entity.TotalEmployees.DBValue()),
-                new SqlParameter("ListDate", entity.ListDate.DBValue())
+                new("Ticker", entity.Ticker.DBValue()),
+                new("Name", entity.Name.DBValue()),
+                new("Description", entity.Description.DBValue()),
+                new("Address", entity.Address?.DBValue()),
+                new("City", entity.City?.DBValue()),
+                new("State", entity.State?.DBValue()),
+                new("TotalEmployees", entity.TotalEmployees.DBValue()),
+                new("ListDate", entity.ListDate.DBValue())
             };
             return parms;
         }
+
         protected override IEnumerable<TickerDetail> AllFromReader(SqlDataReader rdr)
         {
             while (rdr.Read())

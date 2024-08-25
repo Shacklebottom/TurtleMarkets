@@ -9,22 +9,24 @@ namespace TurtleSQL.TickerRepositories
     public class PreviousCloseRepository : TickerRepository<PreviousClose>, ITickerRepository<PreviousClose>
     {
         protected override string TableName => "PreviousClose";
+
+        protected override List<string> FieldList => ["Close", "Date", "High", "Low", "Open", "Ticker", "Volume"];
+
         protected override IEnumerable<SqlParameter> SqlParameters(PreviousClose entity)
         {
             var parms = new List<SqlParameter>
             {
-                new SqlParameter("@Close", entity.Close.DBValue()),
-                new SqlParameter("@Date", entity.Date.DBValue()),
-                new SqlParameter("@High", entity.High.DBValue()),
-                new SqlParameter("@Low", entity.Low.DBValue()),
-                new SqlParameter("@Open", entity.Open.DBValue()),
-                new SqlParameter("@Ticker", entity.Ticker.DBValue()),
-                new SqlParameter("@Volume", entity.Volume.DBValue())
+                new("@Close", entity.Close.DBValue()),
+                new("@Date", entity.Date.DBValue()),
+                new("@High", entity.High.DBValue()),
+                new("@Low", entity.Low.DBValue()),
+                new("@Open", entity.Open.DBValue()),
+                new("@Ticker", entity.Ticker.DBValue()),
+                new("@Volume", entity.Volume.DBValue())
             };
 
             return parms;
         }
-        protected override List<string> FieldList => new() { "Close", "Date", "High", "Low", "Open", "Ticker", "Volume" };
 
         protected override IEnumerable<PreviousClose> AllFromReader(SqlDataReader rdr)
         {

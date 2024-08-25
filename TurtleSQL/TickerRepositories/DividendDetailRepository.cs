@@ -6,12 +6,12 @@ using TurtleSQL.Interfaces;
 
 namespace TurtleSQL.TickerRepositories
 {
-
     public class DividendDetailRepository : TickerRepository<DividendDetails>, ITickerRepository<DividendDetails>
     {
         protected override string TableName => "DividendDetails";
-        protected override List<string> FieldList => new()
-        {
+        
+        protected override List<string> FieldList =>
+        [
             "Ticker",
             "PayoutPerShare",
             "DividendType",
@@ -20,22 +20,24 @@ namespace TurtleSQL.TickerRepositories
             "OpenBeforeDividend",
             "PayoutDate",
             "OwnBeforeDate"
-        };
+        ];
+
         protected override IEnumerable<SqlParameter> SqlParameters(DividendDetails entity)
         {
             var parms = new List<SqlParameter>
             {
-                new SqlParameter("@Ticker", entity.Ticker.DBValue()),
-                new SqlParameter("@PayoutPerShare", entity.PayoutPerShare.DBValue()),
-                new SqlParameter("@DividendType", entity.DividendType.DBValue()),
-                new SqlParameter("@PayoutFrequency", entity.PayoutFrequency.DBValue()),
-                new SqlParameter("@DividendDeclaration", entity.DividendDeclaration.DBValue()),
-                new SqlParameter("@OpenBeforeDividend", entity.OpenBeforeDividend.DBValue()),
-                new SqlParameter("@PayoutDate", entity.PayoutDate.DBValue()),
-                new SqlParameter("@OwnBeforeDate", entity.OwnBeforeDate.DBValue())
+                new("@Ticker", entity.Ticker.DBValue()),
+                new("@PayoutPerShare", entity.PayoutPerShare.DBValue()),
+                new("@DividendType", entity.DividendType.DBValue()),
+                new("@PayoutFrequency", entity.PayoutFrequency.DBValue()),
+                new("@DividendDeclaration", entity.DividendDeclaration.DBValue()),
+                new("@OpenBeforeDividend", entity.OpenBeforeDividend.DBValue()),
+                new("@PayoutDate", entity.PayoutDate.DBValue()),
+                new("@OwnBeforeDate", entity.OwnBeforeDate.DBValue())
             };
             return parms;
         }
+
         protected override IEnumerable<DividendDetails> AllFromReader(SqlDataReader rdr)
         {
             while (rdr.Read())

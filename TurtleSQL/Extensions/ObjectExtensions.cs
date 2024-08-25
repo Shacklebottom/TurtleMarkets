@@ -1,5 +1,4 @@
 ﻿
-
 namespace TurtleSQL.Extensions
 {
     internal static class ObjectExtensions

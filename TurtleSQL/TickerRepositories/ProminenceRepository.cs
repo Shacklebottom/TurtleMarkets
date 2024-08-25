@@ -8,23 +8,25 @@ namespace TurtleSQL.TickerRepositories
 {
     public class ProminenceRepository : TickerRepository<Prominence>, ITickerRepository<Prominence>
     {
-        //This should work, but needs to be validated!
         protected override string TableName => "Prominence";
-        protected override List<string> FieldList => new() { "PrestigeType", "Date", "Ticker", "Price", "ChangeAmount", "ChangePercentage", "Volume" };
+     
+        protected override List<string> FieldList => ["PrestigeType", "Date", "Ticker", "Price", "ChangeAmount", "ChangePercentage", "Volume"];
+        
         protected override IEnumerable<SqlParameter> SqlParameters(Prominence entity)
         {
             var parms = new List<SqlParameter>
             {
-                new SqlParameter("PrestigeType", entity.PrestigeType.DBValue()),
-                new SqlParameter("Date", entity.Date.DBValue()),
-                new SqlParameter("@Ticker", entity.Ticker.DBValue()),
-                new SqlParameter("@Price", entity.Price.DBValue()),
-                new SqlParameter("@ChangeAmount", entity.ChangeAmount.DBValue()),
-                new SqlParameter("@ChangePercentage", entity.ChangePercentage.DBValue()),
-                new SqlParameter("@Volume", entity.Volume.DBValue())
+                new("PrestigeType", entity.PrestigeType.DBValue()),
+                new("Date", entity.Date.DBValue()),
+                new("@Ticker", entity.Ticker.DBValue()),
+                new("@Price", entity.Price.DBValue()),
+                new("@ChangeAmount", entity.ChangeAmount.DBValue()),
+                new("@ChangePercentage", entity.ChangePercentage.DBValue()),
+                new("@Volume", entity.Volume.DBValue())
             };
             return parms;
         }
+
         protected override IEnumerable<Prominence> AllFromReader(SqlDataReader rdr)
         {
             while (rdr.Read())
