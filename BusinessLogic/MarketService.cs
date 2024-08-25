@@ -166,6 +166,12 @@ namespace BusinessLogic
             
             try
             {
+                log("Truncating DividendDetails Repo");
+
+                dividendDetailsRepo.TruncateTable();
+
+                log("Truncate complete");
+
                 log("Starting RecordDividendDetails");
 
                 var lsRepo = listedStatusRepo.GetAll().ToList();
@@ -361,6 +367,12 @@ namespace BusinessLogic
 
             try
             {
+                log("Truncating TickerDetail Repo");
+
+                tickerDetailRepo.TruncateTable();
+
+                log("Truncate complete");
+
                 log("Starting RecordTickerDetails()");
 
                 var lsRepo = listedStatusRepo.GetAll().ToList();

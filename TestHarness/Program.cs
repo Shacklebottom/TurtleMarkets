@@ -26,7 +26,10 @@ MarketService marketService = new(serviceLocator, debugLogger);
 
 #region SHACKLE WORKSPACE
 
-await marketService.RecordListedStatus();
+await marketService.RecordDividendDetails();
+//await marketService.RecordMarketHoliday();
+//await marketService.RecordTickerDetails();
+//await marketService.RecordListedStatus();
 //await marketService.RecordDailyProminence();
 
 Console.WriteLine($"\n\n-=≡> TURTLE END <≡=-");
