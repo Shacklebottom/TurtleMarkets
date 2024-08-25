@@ -61,31 +61,22 @@ namespace TurtleAPI.FinnhubIO
 
         public async Task<IEnumerable<RecommendedTrend>?> GetRecommendedTrend(string ticker)
         {
-            return [];
-            //Thread.Sleep(SleepDuration);
+            Thread.Sleep(SleepDuration);
 
-            //var uri = new Uri($"https://finnhub.io/api/v1/stock/recommendation?symbol={ticker}&token={AuthData.API_KEY_FINNHUB}");
+            var response = await CallAPIAsync<List<FinnhubTrendResponse>>(_httpClient, $"stock/recommendation?symbol={ticker}");
+            var results = response?.First();
+            var recommendedTrend = results?.Select(r => new RecommendedTrend
+            {
+                Ticker = ticker,
+                Buy = r.buy,
+                Hold = r.hold,
+                Period = r.period,
+                Sell = r.sell,
+                StrongBuy = r.strongBuy,
+                StrongSell = r.strongSell
+            });
 
-            //var requestHeaders = new List<KeyValuePair<string, string>>
-            //{
-            //    new("X-Finnhub-Token", AuthData.API_KEY_FINNHUB),
-            //    new("X-Finnhub-Secret", AuthData.SECRET_FINNHUB)
-            //};
-
-            //var response = await CallAPIAsync<List<FinnhubTrendResponse>>(uri, requestHeaders);
-            //var results = response?.First();
-            //var recommendedTrend = results?.Select(r => new RecommendedTrend
-            //{
-            //    Ticker = ticker,
-            //    Buy = r.buy,
-            //    Hold = r.hold,
-            //    Period = r.period,
-            //    Sell = r.sell,
-            //    StrongBuy = r.strongBuy,
-            //    StrongSell = r.strongSell
-            //});
-
-            //return recommendedTrend;
+            return recommendedTrend;
         }
     }
 }

@@ -26,7 +26,8 @@ MarketService marketService = new(serviceLocator, debugLogger);
 
 #region SHACKLE WORKSPACE
 
-await marketService.RecordSnapshot();
+await marketService.RecordRecommendedTrend();
+//await marketService.RecordSnapshot();
 
 Console.WriteLine($"\n\n-=≡> TURTLE END <≡=-");
 

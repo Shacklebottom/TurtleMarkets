@@ -303,6 +303,12 @@ namespace BusinessLogic
 
             try
             {
+                log("Truncating RecommendedTrend Repo");
+
+                recommendedTrendRepo.TruncateTable();
+
+                log("Truncate complete");
+                
                 log("Starting RecordRecommendedTrend()");
 
                 var lsRepo = listedStatusRepo.GetAll().ToList();
