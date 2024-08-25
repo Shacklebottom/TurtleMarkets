@@ -11,67 +11,70 @@ namespace TurtleAPI.AlphaVantage
         //IMPORTANT! ALPHA VANTAGE API HAS 25 CALLS ===>PER DAY<===
         public async Task<PreviousClose> GetPreviousClose(string ticker)
         {
-            //has a repository : Validated! (we'll probably never use this?)
-            var uri = new Uri($"https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol={ticker}&apikey={AuthData.API_KEY_ALPHAVANTAGE}");
-            
-            var response = await CallAPIAsync<AlphaVPrevCloseResponse>(uri);
-            var results = response?.First().results;
+            return new PreviousClose();
+            //    //has a repository : Validated! (we'll probably never use this?)
+            //    var uri = new Uri($"https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol={ticker}&apikey={AuthData.API_KEY_ALPHAVANTAGE}");
 
-            var marketDetails = new PreviousClose
-            {
-                Ticker = ticker,
-                Date = results?.latest,
-                Open = results?.open,
-                Close = results?.price,
-                High = results?.high,
-                Low = results?.low,
-                Volume = results?.volume
-            };
+            //    var response = await CallAPIAsync<AlphaVPrevCloseResponse>(uri);
+            //    var results = response?.First().results;
 
-            return marketDetails;
+            //    var marketDetails = new PreviousClose
+            //    {
+            //        Ticker = ticker,
+            //        Date = results?.latest,
+            //        Open = results?.open,
+            //        Close = results?.price,
+            //        High = results?.high,
+            //        Low = results?.low,
+            //        Volume = results?.volume
+            //    };
+
+            //    return marketDetails;
         }
 
         public async Task<IEnumerable<MarketStatus>?> GetMarketStatus()
         {
-            //has a repository! : Validated!
-            var uri = new Uri($"https://www.alphavantage.co/query?function=MARKET_STATUS&apikey={AuthData.API_KEY_ALPHAVANTAGE}");
-            var response = await CallAPIAsync<AlphaVMarketStatusResponse>(uri);
+            return [];
+            ////has a repository! : Validated!
+            //var uri = new Uri($"https://www.alphavantage.co/query?function=MARKET_STATUS&apikey={AuthData.API_KEY_ALPHAVANTAGE}");
+            //var response = await CallAPIAsync<AlphaVMarketStatusResponse>(uri);
 
-            var results = response?.First().results;
+            //var results = response?.First().results;
 
-            var marketStatus = results?.Select(r => new MarketStatus
-            {
-                MarketType = r.market_type,
-                Region = r.region,
-                Exchange = r.primary_exchanges,
-                LocalOpen = r.local_open,
-                LocalClose = r.local_close,
-                Status = r.current_status,
-                Notes = r.notes
-            });
+            //var marketStatus = results?.Select(r => new MarketStatus
+            //{
+            //    MarketType = r.market_type,
+            //    Region = r.region,
+            //    Exchange = r.primary_exchanges,
+            //    LocalOpen = r.local_open,
+            //    LocalClose = r.local_close,
+            //    Status = r.current_status,
+            //    Notes = r.notes
+            //});
 
-            return marketStatus;
+            //return marketStatus;
         }
 
         public async Task<Dictionary<PrestigeType, IEnumerable<Prominence>>?> GetPolarizedMarkets()
         {
-            //has a repository : Validated!
-            //returns the top and bottom 20 tickers, and the 20 most traded.
-            Dictionary<PrestigeType, IEnumerable<Prominence>> prominenceDetail = new();
+            return [];
+            ////has a repository : Validated!
+            ////returns the top and bottom 20 tickers, and the 20 most traded.
+            //Dictionary<PrestigeType, IEnumerable<Prominence>> prominenceDetail = new();
 
-            var uri = new Uri($"https://www.alphavantage.co/query?function=TOP_GAINERS_LOSERS&apikey={AuthData.API_KEY_ALPHAVANTAGE}");
+            //var uri = new Uri($"https://www.alphavantage.co/query?function=TOP_GAINERS_LOSERS&apikey={AuthData.API_KEY_ALPHAVANTAGE}");
             
-            var response = await CallAPIAsync<AlphaVProminenceResponse>(uri);
-            var results = response?.First();
+            //var response = await CallAPIAsync<AlphaVProminenceResponse>(uri);
+            //var results = response?.First();
 
 
-            prominenceDetail.Add(PrestigeType.TopGainer, results.top_gainers.Select(tg => BuildProminence(tg, PrestigeType.TopGainer)));
+            //prominenceDetail.Add(PrestigeType.TopGainer, results.top_gainers.Select(tg => BuildProminence(tg, PrestigeType.TopGainer)));
             
-            prominenceDetail.Add(PrestigeType.TopLoser, results.top_losers.Select(tl => BuildProminence(tl, PrestigeType.TopLoser)));
+            //prominenceDetail.Add(PrestigeType.TopLoser, results.top_losers.Select(tl => BuildProminence(tl, PrestigeType.TopLoser)));
             
-            prominenceDetail.Add(PrestigeType.MostTraded, results.most_actively_traded.Select(m => BuildProminence(m, PrestigeType.MostTraded)));
+            //prominenceDetail.Add(PrestigeType.MostTraded, results.most_actively_traded.Select(m => BuildProminence(m, PrestigeType.MostTraded)));
 
-            return prominenceDetail;
+            //return prominenceDetail;
         }
         private static Prominence BuildProminence(AlphaVProminenceResult r, PrestigeType pt)
         {
@@ -94,12 +97,13 @@ namespace TurtleAPI.AlphaVantage
         /// <returns>IEnumberable of all active or delisted tickers</returns>
         public async Task<IEnumerable<ListedStatus>?> GetListedStatus(ListedStatusTypes listingType = ListedStatusTypes.Active)
         {
-            //has a repository : Validated!
-            var uri = new Uri($"https://www.alphavantage.co/query?function=LISTING_STATUS&state={listingType.ToString().ToLower()}&apikey={AuthData.API_KEY_ALPHAVANTAGE}");
+            return [];
+            ////has a repository : Validated!
+            //var uri = new Uri($"https://www.alphavantage.co/query?function=LISTING_STATUS&state={listingType.ToString().ToLower()}&apikey={AuthData.API_KEY_ALPHAVANTAGE}");
             
-            var results = await CallAPIAsync(uri, parser: ParseListedStatus);
+            //var results = await CallAPIAsync(uri, parser: ParseListedStatus);
             
-            return results;
+            //return results;
         }
 
         private static IEnumerable<ListedStatus> ParseListedStatus(string csvData)

@@ -10,47 +10,49 @@ namespace TurtleAPI.PolygonIO
         //IMPORTANT! POLYGON API HAS 5 CALLS / MINUTE
         public async Task<PreviousClose?> GetPreviousClose(string ticker)
         {
-            Thread.Sleep(SleepDuration);
-            //maybe unnecessary??
-            //has a repository : >Validated!<
-            var uri = new Uri($"https://api.polygon.io/v2/aggs/ticker/{ticker}/prev?adjusted=true&apiKey={AuthData.API_KEY_POLYGON}");
-            var response = await CallAPIAsync<PolygonPrevCloseResponse>(uri);
-            var results = response?.First().results?[0];
+            return new PreviousClose();
+            //Thread.Sleep(SleepDuration);
+            ////maybe unnecessary??
+            ////has a repository : >Validated!<
+            //var uri = new Uri($"https://api.polygon.io/v2/aggs/ticker/{ticker}/prev?adjusted=true&apiKey={AuthData.API_KEY_POLYGON}");
+            //var response = await CallAPIAsync<PolygonPrevCloseResponse>(uri);
+            //var results = response?.First().results?[0];
 
-            var marketDetails = new PreviousClose
-            {
-                Ticker = ticker,
-                Close = results?.c,
-                Date = ParseUnixTimestamp(results?.t),
-                High = results?.h,
-                Low = results?.l,
-                Open = results?.o,
-                Volume = results?.v,
-            };
-            return marketDetails;
+            //var marketDetails = new PreviousClose
+            //{
+            //    Ticker = ticker,
+            //    Close = results?.c,
+            //    Date = ParseUnixTimestamp(results?.t),
+            //    High = results?.h,
+            //    Low = results?.l,
+            //    Open = results?.o,
+            //    Volume = results?.v,
+            //};
+            //return marketDetails;
         }
 
         public async Task<TickerDetail?> GetTickerDetails(string ticker)
         {
-            Thread.Sleep(SleepDuration);
-            //has repository : >Validated!<
-            var uri = new Uri($"https://api.polygon.io/v3/reference/tickers/{ticker}?apiKey={AuthData.API_KEY_POLYGON}");
+            return new TickerDetail();
+            //Thread.Sleep(SleepDuration);
+            ////has repository : >Validated!<
+            //var uri = new Uri($"https://api.polygon.io/v3/reference/tickers/{ticker}?apiKey={AuthData.API_KEY_POLYGON}");
             
-            var response = await CallAPIAsync<PolygonTickerDetailResponse>(uri);
-            var results = response?.First().results;
+            //var response = await CallAPIAsync<PolygonTickerDetailResponse>(uri);
+            //var results = response?.First().results;
 
-            var tickerDetail = new TickerDetail
-            {
-                Ticker = ticker,
-                Name = results?.name,
-                Description = results?.description,
-                Address = results?.address?.Address1,
-                City = results?.address?.City,
-                State = results?.address?.State,
-                TotalEmployees = results?.total_employees,
-                ListDate = results?.list_date
-            };
-            return tickerDetail;
+            //var tickerDetail = new TickerDetail
+            //{
+            //    Ticker = ticker,
+            //    Name = results?.name,
+            //    Description = results?.description,
+            //    Address = results?.address?.Address1,
+            //    City = results?.address?.City,
+            //    State = results?.address?.State,
+            //    TotalEmployees = results?.total_employees,
+            //    ListDate = results?.list_date
+            //};
+            //return tickerDetail;
         }
 
         private static DateTime? ParseUnixTimestamp(decimal? t)
@@ -68,67 +70,69 @@ namespace TurtleAPI.PolygonIO
 
         public async Task<IEnumerable<MarketHoliday>?> GetMarketHoliday()
         {
-            Thread.Sleep(SleepDuration);
-            //has a repository : >Validated!<
-            var uri = new Uri($"https://api.polygon.io/v1/marketstatus/upcoming?apiKey={AuthData.API_KEY_POLYGON}");
+            return [];
+            //Thread.Sleep(SleepDuration);
+            ////has a repository : >Validated!<
+            //var uri = new Uri($"https://api.polygon.io/v1/marketstatus/upcoming?apiKey={AuthData.API_KEY_POLYGON}");
 
-            var response = await CallAPIAsync<List<PolygonMarketHolidayResponse>>(uri);
-            var results = response?.First();
+            //var response = await CallAPIAsync<List<PolygonMarketHolidayResponse>>(uri);
+            //var results = response?.First();
 
-            var holidayDetail = results?.Select(r => new MarketHoliday
-            {
-                Exchange = r?.exchange,
-                Date = r?.date,
-                Holiday = r?.name,
-                Status = r?.status,
-                Open = r?.open,
-                Close = r?.close,
-            });
-            return holidayDetail;
+            //var holidayDetail = results?.Select(r => new MarketHoliday
+            //{
+            //    Exchange = r?.exchange,
+            //    Date = r?.date,
+            //    Holiday = r?.name,
+            //    Status = r?.status,
+            //    Open = r?.open,
+            //    Close = r?.close,
+            //});
+            //return holidayDetail;
         }
 
         public async Task<IEnumerable<DividendDetails>?> GetDividendDetails(string ticker)
         {
-            Thread.Sleep(SleepDuration);
-            //has a repository! : Validated
-            var uri = new Uri($"https://api.polygon.io/v3/reference/dividends?ticker={ticker}&apiKey={AuthData.API_KEY_POLYGON}");
+            return [];
+            //Thread.Sleep(SleepDuration);
+            ////has a repository! : Validated
+            //var uri = new Uri($"https://api.polygon.io/v3/reference/dividends?ticker={ticker}&apiKey={AuthData.API_KEY_POLYGON}");
             
-            var response = await CallAPIAsync<PolygonDividendResponse>(uri);
-            var results = response?.First();
+            //var response = await CallAPIAsync<PolygonDividendResponse>(uri);
+            //var results = response?.First();
 
-            var dividendDetail = results?.results.Select(r =>
-                new DividendDetails
-                {
-                    Ticker = ticker,
-                    PayoutPerShare = r.cash_amount,
-                    DividendType = r.dividend_type,
-                    PayoutFrequency = r.frequency,
-                    DividendDeclaration = r.declaration_date,
-                    OpenBeforeDividend = r.ex_dividend_date,
-                    PayoutDate = r.pay_date,
-                    OwnBeforeDate = r.record_date
-                });
+            //var dividendDetail = results?.results.Select(r =>
+            //    new DividendDetails
+            //    {
+            //        Ticker = ticker,
+            //        PayoutPerShare = r.cash_amount,
+            //        DividendType = r.dividend_type,
+            //        PayoutFrequency = r.frequency,
+            //        DividendDeclaration = r.declaration_date,
+            //        OpenBeforeDividend = r.ex_dividend_date,
+            //        PayoutDate = r.pay_date,
+            //        OwnBeforeDate = r.record_date
+            //    });
             
-            if (!dividendDetail.Any())
-            {
-                var emptyDetail = new List<DividendDetails>();
+            //if (!dividendDetail.Any())
+            //{
+            //    var emptyDetail = new List<DividendDetails>();
                 
-                var x = new DividendDetails
-                {
-                    Ticker = ticker,
-                    PayoutPerShare = 0,
-                    DividendType = "",
-                    PayoutFrequency = 0,
-                    DividendDeclaration = DateTime.Today,
-                    OpenBeforeDividend = DateTime.Today,
-                    PayoutDate = DateTime.Today,
-                    OwnBeforeDate = DateTime.Today
-                };
-                emptyDetail.Add(x);
+            //    var x = new DividendDetails
+            //    {
+            //        Ticker = ticker,
+            //        PayoutPerShare = 0,
+            //        DividendType = "",
+            //        PayoutFrequency = 0,
+            //        DividendDeclaration = DateTime.Today,
+            //        OpenBeforeDividend = DateTime.Today,
+            //        PayoutDate = DateTime.Today,
+            //        OwnBeforeDate = DateTime.Today
+            //    };
+            //    emptyDetail.Add(x);
                 
-                return emptyDetail;
-            }
-            return dividendDetail;
+            //    return emptyDetail;
+            //}
+            //return dividendDetail;
         }
     }
 }
