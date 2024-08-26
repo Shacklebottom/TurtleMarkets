@@ -14,7 +14,7 @@ DebugDirectory debugDirectory = new($"{Environment.GetFolderPath(Environment.Spe
 DebugLogger debugLogger = new(debugDirectory);
 MarketServiceLocator serviceLocator = new();
 MarketService marketService = new(serviceLocator, debugLogger);
-
+//var polygonAPI = new PolygonAPI(debugLogger);
 #endregion
 
 #region ATARI WORKSPACE
@@ -26,9 +26,13 @@ MarketService marketService = new(serviceLocator, debugLogger);
 
 #region SHACKLE WORKSPACE
 
-await marketService.RecordDividendDetails();
+//var x = await polygonAPI.GetTickerDetails("AACG");
+
+//debugLogger.Chat($"{x}");
+
+//await marketService.RecordDividendDetails();
 //await marketService.RecordMarketHoliday();
-//await marketService.RecordTickerDetails();
+await marketService.RecordTickerDetails();
 //await marketService.RecordListedStatus();
 //await marketService.RecordDailyProminence();
 

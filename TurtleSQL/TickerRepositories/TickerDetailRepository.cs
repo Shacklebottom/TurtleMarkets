@@ -19,9 +19,9 @@ namespace TurtleSQL.TickerRepositories
                 new("Ticker", entity.Ticker.DBValue()),
                 new("Name", entity.Name.DBValue()),
                 new("Description", entity.Description.DBValue()),
-                new("Address", entity.Address?.DBValue()),
-                new("City", entity.City?.DBValue()),
-                new("State", entity.State?.DBValue()),
+                new("Address", entity.Address.DBValue()),
+                new("City", entity.City.DBValue()),
+                new("State", entity.State.DBValue()),
                 new("TotalEmployees", entity.TotalEmployees.DBValue()),
                 new("ListDate", entity.ListDate.DBValue())
             };
