@@ -26,7 +26,7 @@ MarketService marketService = new(serviceLocator, debugLogger);
 
 #region SHACKLE WORKSPACE
 
-//var x = await polygonAPI.GetTickerDetails("AACG");
+//var x = await polygonAPI.GetTickerDetails("CREX");
 
 //debugLogger.Chat($"{x}");
 

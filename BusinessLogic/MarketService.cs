@@ -365,12 +365,6 @@ namespace BusinessLogic
 
             try
             {
-                log("Truncating TickerDetail Repo");
-
-                tickerDetailRepo.TruncateTable();
-
-                log("Truncate complete");
-
                 log("Starting RecordTickerDetails()");
 
                 var lsRepo = listedStatusRepo.GetAll().ToList();
