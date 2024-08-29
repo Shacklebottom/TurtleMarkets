@@ -1,6 +1,7 @@
 ﻿using BusinessLogic;
 using LoggerModule.DerivedClasses;
 using MarketDomain.Objects;
+using TurtleAPI.AlphaVantage;
 using TurtleAPI.PolygonIO;
 
 
@@ -15,6 +16,7 @@ DebugLogger debugLogger = new(debugDirectory);
 MarketServiceLocator serviceLocator = new();
 MarketService marketService = new(serviceLocator, debugLogger);
 //var polygonAPI = new PolygonAPI(debugLogger);
+var alphavantageAPI = new AlphaVantageAPI(debugLogger);
 #endregion
 
 #region ATARI WORKSPACE
@@ -26,13 +28,17 @@ MarketService marketService = new(serviceLocator, debugLogger);
 
 #region SHACKLE WORKSPACE
 
-//var x = await polygonAPI.GetTickerDetails("CREX");
+var y = await alphavantageAPI.GetMarketStatus();
 
-//debugLogger.Chat($"{x}");
+//var x = await polygonAPI.GetTickerDetails("CREX");
+foreach (var item in y)
+{
+    debugLogger.Chat($"{item}");
+}
 
 //await marketService.RecordDividendDetails();
 //await marketService.RecordMarketHoliday();
-await marketService.RecordTickerDetails();
+//await marketService.RecordTickerDetails();
 //await marketService.RecordListedStatus();
 //await marketService.RecordDailyProminence();
 

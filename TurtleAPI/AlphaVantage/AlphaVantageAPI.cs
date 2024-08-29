@@ -9,6 +9,7 @@ namespace TurtleAPI.AlphaVantage
     public class AlphaVantageAPI : ApiBaseClass, IAlphaVantageAPI
     {
         private readonly HttpClient _httpClient;
+        private readonly string _apiKey;
 
         //constructor
         public AlphaVantageAPI(ILogger logger, int msToSleep = 0) : base(logger, msToSleep)
@@ -17,6 +18,7 @@ namespace TurtleAPI.AlphaVantage
             { 
                 BaseAddress = new Uri("https://www.alphavantage.co/")
             };
+            _apiKey = Environment.GetEnvironmentVariable("AlphaVantage_API_KEY") ?? throw new NullReferenceException("API KEY was not found!");
         }
 
         //IMPORTANT! ALPHA VANTAGE API HAS 25 CALLS ===>PER DAY<===
@@ -24,7 +26,7 @@ namespace TurtleAPI.AlphaVantage
         public async Task<IEnumerable<MarketStatus>?> GetMarketStatus()
         {
             //has a repository! : Validated!
-            var response = await CallAPIAsync<AlphaVMarketStatusResponse>(_httpClient, $"query?function=MARKET_STATUS");
+            var response = await CallAPIAsync<AlphaVMarketStatusResponse>(_httpClient, $"query?function=MARKET_STATUS&apikey={_apiKey}");
 
             var results = response?.First().results;
 
@@ -48,7 +50,7 @@ namespace TurtleAPI.AlphaVantage
             //returns the top and bottom 20 tickers, and the 20 most traded.
             Dictionary<EnumPrestigeType, IEnumerable<Prominence>> prominenceDetail = [];
 
-            var response = await CallAPIAsync<AlphaVProminenceResponse>(_httpClient, $"query?function=TOP_GAINERS_LOSERS&apikey={AuthData.API_KEY_ALPHAVANTAGE}");
+            var response = await CallAPIAsync<AlphaVProminenceResponse>(_httpClient, $"query?function=TOP_GAINERS_LOSERS&apikey={_apiKey}");
             var results = response?.First();
 
             var topGainers = results?.top_gainers.Select(tg => BuildProminence(tg, EnumPrestigeType.TopGainer));
@@ -70,7 +72,7 @@ namespace TurtleAPI.AlphaVantage
         public async Task<IEnumerable<ListedStatus>?> GetListedStatus(EnumListedStatusTypes listingType = EnumListedStatusTypes.Active)
         {
             //has a repository : Validated!
-            var results = await CallAPIAsync(_httpClient, $"query?function=LISTING_STATUS&state={listingType.ToString().ToLower()}&apikey={AuthData.API_KEY_ALPHAVANTAGE}", parser: ParseListedStatus);
+            var results = await CallAPIAsync(_httpClient, $"query?function=LISTING_STATUS&state={listingType.ToString().ToLower()}&apikey={_apiKey}", parser: ParseListedStatus);
 
             return results;
         }

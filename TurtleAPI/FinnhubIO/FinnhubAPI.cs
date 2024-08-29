@@ -8,6 +8,8 @@ namespace TurtleAPI.FinnhubIO
     public class FinnhubAPI : ApiBaseClass, IFinnhubAPI
     {
         private readonly HttpClient _httpClient;
+        private readonly string _apiKey;
+        private readonly string _apiKeySecret;
 
         //constructor
         public FinnhubAPI(ILogger logger, int msSleepTime = 1000) : base(logger, msSleepTime)
@@ -17,10 +19,13 @@ namespace TurtleAPI.FinnhubIO
                 BaseAddress = new Uri("https://finnhub.io/api/v1/")
             };
 
+            _apiKey = Environment.GetEnvironmentVariable("Finnhub_API_KEY") ?? throw new NullReferenceException("API KEY was not found!");
+            _apiKeySecret = Environment.GetEnvironmentVariable("Finnhub_Secret") ?? throw new NullReferenceException("API SECRET was not found!");
+
             var requestHeaders = new List<KeyValuePair<string, string>>
             {
-                new("X-Finnhub-Token", AuthData.API_KEY_FINNHUB),
-                new("X-Finnhub-Secret", AuthData.SECRET_FINNHUB)
+                new("X-Finnhub-Token", _apiKey),
+                new("X-Finnhub-Secret", _apiKeySecret)
             };
 
             requestHeaders.ForEach(h => _httpClient.DefaultRequestHeaders.Add(h.Key, h.Value));

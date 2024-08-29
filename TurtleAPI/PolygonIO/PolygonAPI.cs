@@ -8,6 +8,7 @@ namespace TurtleAPI.PolygonIO
     public class PolygonAPI : ApiBaseClass, IPolygonAPI
     {
         private readonly HttpClient _httpClient;
+        private readonly string _apiKey;
 
         //constructor
         public PolygonAPI(ILogger logger, int msToSleep = 12000) : base(logger, msToSleep)
@@ -17,9 +18,11 @@ namespace TurtleAPI.PolygonIO
                 BaseAddress = new Uri("https://api.polygon.io/")
             };
 
+            _apiKey = Environment.GetEnvironmentVariable("PolygonIO_API_KEY") ?? throw new NullReferenceException("API KEY not found!");
+
             var requestHeaders = new List<KeyValuePair<string, string>>
             {
-                new("Authorization", $"Bearer {AuthData.API_KEY_POLYGON}")
+                new("Authorization", $"Bearer {_apiKey}")
             };
             requestHeaders.ForEach(h => _httpClient.DefaultRequestHeaders.Add(h.Key, h.Value));
         }
