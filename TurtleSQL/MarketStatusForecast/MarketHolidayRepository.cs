@@ -6,7 +6,6 @@ using TurtleSQL.Interfaces;
 
 namespace TurtleSQL.MarketStatusForecast
 {
-    //This should work, but needs to be validated!
     public class MarketHolidayRepository : Repository<MarketHoliday>, IRepository<MarketHoliday>
     {
         protected override string TableName => "MarketHoliday";
@@ -24,9 +23,10 @@ namespace TurtleSQL.MarketStatusForecast
                 new("Open", entity.Open.DBValue()),
                 new("Close", entity.Close.DBValue())
             };
+
             return parms;
         }
-        
+            
         protected override IEnumerable<MarketHoliday> AllFromReader(SqlDataReader rdr)
         {
             while (rdr.Read())

@@ -24,6 +24,7 @@ namespace TurtleSQL.TickerRepositories
                 new("StrongBuy", entity.StrongBuy.DBValue()),
                 new("StrongSell", entity.StrongSell.DBValue())
             };
+
             return parms;
         }
 

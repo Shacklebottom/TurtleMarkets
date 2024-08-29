@@ -25,6 +25,7 @@ namespace TurtleSQL.TickerRepositories
                 new("TotalEmployees", entity.TotalEmployees.DBValue()),
                 new("ListDate", entity.ListDate < new DateTime(1753, 1, 1) ? new DateTime(1753, 1, 1) : entity.ListDate.DBValue())
             };
+
             return parms;
         }
 

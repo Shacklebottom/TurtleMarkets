@@ -24,6 +24,7 @@ namespace TurtleSQL.TickerRepositories
                 new("@Ticker", entity.Ticker.DBValue()),
                 new("@Volume", entity.Volume.DBValue())
             };
+
             return parms;
         }
 

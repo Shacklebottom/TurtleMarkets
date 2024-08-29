@@ -24,6 +24,7 @@ namespace TurtleSQL.MarketStatusForecast
                 new("Status", entity.Status.DBValue()),
                 new("Notes", entity.Notes.DBValue())
             };
+
             return parms;
         }
 

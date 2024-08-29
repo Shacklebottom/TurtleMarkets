@@ -1,9 +1,6 @@
-﻿using MarketDomain;
-using MarketDomain.Interfaces;
+﻿using MarketDomain.Interfaces;
 using Microsoft.Data.SqlClient;
 using TurtleSQL.Extensions;
-using TurtleSQL.TickerRepositories;
-using TurtleSQL.MarketStatusForecast;
 using TurtleSQL.Interfaces;
 
 namespace TurtleSQL.BaseClasses
@@ -12,14 +9,21 @@ namespace TurtleSQL.BaseClasses
     {
         internal SqlConnection _sqlConnection;
 
+        #region OVERRIDE THESE METHODS
+        protected virtual string TableName => "";
+        protected virtual List<string> FieldList => [];
+        protected virtual IEnumerable<SqlParameter> SqlParameters(T entity) => [];
+        protected virtual IEnumerable<T> AllFromReader(SqlDataReader rdr) => [];
+        #endregion
 
-        // constructor
+        //constructor
         internal Repository()
         {
             var cnString = "Integrated Security=SSPI;Persist Security Info=False;Initial Catalog=MarketData;Data Source=.;TrustServerCertificate=true";
             _sqlConnection = new SqlConnection(cnString);
         }
 
+        #region GET FROM REPO
         public T? GetById(int id)
         {
             var cmd = _sqlConnection.CreateCommand();
@@ -31,23 +35,6 @@ namespace TurtleSQL.BaseClasses
             _sqlConnection.Close();
 
             return result;
-        }
-
-        #region OVERRIDE THESE METHODS
-        protected virtual string TableName => "";
-        protected virtual List<string> FieldList => new();
-        protected virtual IEnumerable<SqlParameter> SqlParameters(T entity) => new List<SqlParameter>();
-        protected virtual IEnumerable<T> AllFromReader(SqlDataReader rdr) => new List<T>();
-        #endregion
-
-        public void TruncateTable()
-        {
-            var cmd = _sqlConnection.CreateCommand();
-            cmd.CommandText = $"TRUNCATE TABLE {TableName}";
-
-            _sqlConnection.Open();
-            cmd.ExecuteNonQuery();
-            _sqlConnection.Close();
         }
 
         public IEnumerable<T> GetAll()
@@ -62,27 +49,26 @@ namespace TurtleSQL.BaseClasses
 
             return result;
         }
+        #endregion
 
-        public int Save(T entity)
+        #region PUT INTO REPO
+        public void Save(T entity)
         {
             var cmd = _sqlConnection.CreateCommand();
 
             // does it already exist?
             if (GetById(entity.Id) == null)
             {
-                return Insert(entity, cmd);
+                Insert(entity, cmd);
             }
             else
             {
                 Update(entity, cmd);
-                return entity.Id;
             }
         }
 
-        private int Insert(T entity, SqlCommand cmd)
+        private void Insert(T entity, SqlCommand cmd)
         {
-            var fields = FieldList;
-
             var fieldNames = string.Join(',', FieldList.Select(fn => $"[{fn}]"));
             var parameterNames = string.Join(',', FieldList.Select(fn => $"@{fn}"));
 
@@ -91,19 +77,9 @@ namespace TurtleSQL.BaseClasses
 
             _sqlConnection.Open();
             cmd.ExecuteNonQuery();
-            var identity = GetLastIdentity();
             _sqlConnection.Close();
-
-            return identity;
         }
 
-        private int GetLastIdentity()
-        {
-            var cmd = _sqlConnection.CreateCommand();
-            cmd.CommandText = "SELECT CAST(@@IDENTITY AS int)";
-            var identity = (int)cmd.ExecuteScalar();
-            return identity;
-        }
         private void Update(T entity, SqlCommand cmd)
         {
             var fields = FieldList;
@@ -121,8 +97,19 @@ namespace TurtleSQL.BaseClasses
             _sqlConnection.Open();
             cmd.ExecuteNonQuery();
             _sqlConnection.Close();
-
-            return;
         }
+        #endregion
+
+        #region MODIFY REPO
+        public void TruncateTable()
+        {
+            var cmd = _sqlConnection.CreateCommand();
+            cmd.CommandText = $"TRUNCATE TABLE {TableName}";
+
+            _sqlConnection.Open();
+            cmd.ExecuteNonQuery();
+            _sqlConnection.Close();
+        }
+        #endregion
     }
 }

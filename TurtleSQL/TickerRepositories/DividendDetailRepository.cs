@@ -35,6 +35,7 @@ namespace TurtleSQL.TickerRepositories
                 new("@PayoutDate", entity.PayoutDate.DBValue()),
                 new("@OwnBeforeDate", entity.OwnBeforeDate.DBValue())
             };
+
             return parms;
         }
 

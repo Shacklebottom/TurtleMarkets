@@ -24,6 +24,7 @@ namespace TurtleSQL.TickerRepositories
                 new("@DelistingDate", entity.DelistingDate.DBValue()),
                 new("@Status", entity.Status.DBValue())
             };
+
             return parms;
         }
 
